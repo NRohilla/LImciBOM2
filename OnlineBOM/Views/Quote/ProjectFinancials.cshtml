@@ -1,0 +1,299 @@
+﻿
+@model OnlineBOM.Models.BOMFinancialReviewModel
+
+
+@{
+    ViewBag.Title = "BOMList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+}
+<div class="form-horizontal">
+    <h4></h4>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <p>
+        @Html.ActionLink("Back To Quote", "Edit", new { QuoteNo = Model.QuoteNo })
+    </p>
+
+    
+
+    <div class="card border-left-success shadow h-100 px-5 py-5">
+
+        <div class="col-xl-6 col-md-6 mb-4 py-2">
+            <!-- Success Alert -->
+            <div class="alert alert-success" id="Sucessful" style="display:none;">
+                <strong>Project Milestones Saved Sucessfully ! </strong>
+            </div>
+            <!-- Error Alert -->
+            <div class="alert alert-danger" id="Error" style="display:none;">
+                <strong>Error!</strong> Error saving records!
+            </div>
+        </div>
+
+
+        <div class="col-xl-12">
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="card border-left-success shadow h-100 px-5 py-5">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1 px-1 "> Project Details</div>
+
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.HiddenFor(model => model.BOMID, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.HiddenFor(model => model.OpportunityID, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.PONumber, htmlAttributes: new { @class = "control-label col-xl-12" })
+                            <div>
+                                @Html.EditorFor(model => model.PONumber, new { htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.PONumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BOMTotal, htmlAttributes: new { @class = "control-label col-xl-12" })
+                            <div>
+                                @Html.EditorFor(model => model.BOMTotal, new { htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.BOMTotal, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FinalAgreedPrice, htmlAttributes: new { @class = "control-label col-xl-12" })
+                            <div>
+                                @Html.EditorFor(model => model.FinalAgreedPrice, new { htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FinalAgreedPrice, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.CTOCerials, htmlAttributes: new { @class = "control-label col-xl-12" })
+            <div>
+                @Html.EditorFor(model => model.CTOCerials, new { htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CTOCerials, "", new { @class = "text-danger" })
+            </div>*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3">
+                    <div class="card border-left-success shadow h-100 px-5 py-5">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1 px-1 "> Project Milestones</div>
+
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.DepositPerc, htmlAttributes: new { @class = "control-label col-xl-12" })
+                                        <div>
+                                            @Html.EditorFor(model => model.DepositPerc, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @max = "99" } })
+                                            @Html.ValidationMessageFor(model => model.DepositPerc, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Deposit, htmlAttributes: new { @class = "control-label col-xl-12" })
+                                        <div id="Deposit" class="h5 mb-0 font-weight-bold text-gray-800">
+                                            @{var Dformat = String.Format("{0:###,##0.00}", Model.Deposit);}
+                                            @Html.DisplayFor(modelItem => Model.Deposit, Dformat)
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.PreDeliveryPerc, htmlAttributes: new { @class = "control-label col-xl-12" })
+                                        <div>
+                                            @Html.EditorFor(model => model.PreDeliveryPerc, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @max = "99" } })
+                                            @Html.ValidationMessageFor(model => model.PreDeliveryPerc, "", new { @class = "text-danger" })
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.PreDelivery, htmlAttributes: new { @class = "control-label col-xl-12" })
+                                            <div id="PreDelivery" class="h5 mb-0 font-weight-bold text-gray-800">
+                                                @{var PDformat = String.Format("{0:###,##0.00}", Model.PreDelivery);}
+                                                @Html.DisplayFor(modelItem => Model.PreDelivery, PDformat)
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-4">
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FinalPerc, htmlAttributes: new { @class = "control-label col-xl-12" })
+                                        <div id="FinalPerc" class="h-25 mb-0 font-weight-light text-gray-800 ">
+                                            @{var FPformat = String.Format("{0:###,##0.00}", Model.FinalPerc);}
+                                            @Html.DisplayFor(modelItem => Model.FinalPerc, FPformat)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Final, htmlAttributes: new { @class = "control-label col-xl-12" })
+                                            <div id="Final" class="h5 mb-0 font-weight-bold text-gray-800 ">
+                                                @{var Fformat = String.Format("{0:###,##0.00}", Model.Final);}
+                                                @Html.DisplayFor(modelItem => Model.Final, Fformat)
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                             
+                                    <div class="align-content-center">
+                                        <button type="button" id="btnSave" class="btn btn-success">Save Milestones</button>
+                                    </div>
+                            
+                                    
+
+                                </div>
+                                </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1 px-3 py-3"> Capital Assembly</div>
+                    <table id="tblCapitalAssembly" class="table table-striped table-bordered">
+                        <thead>
+
+                            <tr>
+                                <th>
+                                    Model
+                                </th>
+                                <th>
+                                    AssemblyCode
+                                </th>
+                                <th align="center">
+                                    Qty
+                                </th>
+
+                                <th align="center">
+                                    Revenue Allocation($)
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var item in Model.BOMAssemly)
+                            {
+                                var Category = item.Category;
+
+                                if (Category == "Capital")
+                                {
+                                    <tr>
+                                        <td> @Html.DisplayFor(modelItem => item.Device) </td>
+                                        <td> @Html.DisplayFor(modelItem => item.AssemblyCode) </td>
+                                        <td> @Html.DisplayFor(modelItem => item.Qty) </td>
+                                        <td> @Html.DisplayFor(modelItem => item.Revenue) </td>
+
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+
+                    </table>
+
+
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1 px-3 py-3"> Implementation</div>
+                    <div class="row">
+
+                        <div class="col-xl-12">
+
+                            <table id="tblImplementation" class="table table-striped table-bordered">
+                                <thead>
+
+                                    <tr>
+                                        <th>
+                                            Assembly Code
+                                        </th>
+                                        <th>
+                                            Area
+                                        </th>
+
+                                        <th align="center">
+                                            Revenue Allocation($)
+                                        </th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.BOMAssemly)
+                                    {
+                                        var Category = item.Category;
+
+                                        if (Category != "Capital")
+                                        {
+                                            <tr>
+                                                <td> @Html.DisplayFor(modelItem => item.AssemblyCode) </td>
+                                                <td> @Html.DisplayFor(modelItem => item.Area) </td>
+                                                <td> @Html.DisplayFor(modelItem => item.Revenue) </td>
+
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+    
+            <div class="row">
+
+                <div class="col-xl-12">
+
+                  
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @*<input type="submit" value="Create" class="btn btn-default" />*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript" src="~/Scripts/OnlineBOM/Quote/ProjectFinancials.js">
+
+
+    </script>
+
+}

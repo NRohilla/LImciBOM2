@@ -1,0 +1,116 @@
+﻿@model OnlineBOM.Models.QuoteViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+
+    <div class="row">
+        <div class="row col-xl-12">
+            <div class="col-xl-1"></div>
+            <div class="col-xl-9 ">
+
+                <!-- Success Alert -->
+                <div class="alert alert-success" id="SucessfulTS" style="display:none;">
+                    <strong>Record Saved Sucessfully ! </strong>
+                </div>
+                <!-- Error Alert -->
+                <div class="alert alert-danger" id="ErrorTS" style="display:none;">
+                    <strong>Error!</strong> Error saving records!
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-1 col-lg-3">
+        </div>
+        <div class="col-xl-10 col-lg-4">
+
+            <fieldset id="Submitform">
+                <div class="row">
+              
+                        <div class="col-xl-3">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+
+
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        @Html.HiddenFor(model => model.QuoteNo, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+
+                                    </div>
+                                </div>
+
+                                
+                               
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Territory1ID, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @*@Html.DropDownListFor(m => m.Territory1ID, new SelectList(Model.TerritoryListModel, "ID", "Description", new { @class = "selectpicker" }))*@
+
+                                    @Html.DropDownListFor(model => model.Territory1ID,new SelectList(Model.TerritoryListModel, "ID", "Description", Model.Territory1ID), "- Please select the Territory -")
+                                    @Html.ValidationMessageFor(model => model.Territory1ID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Territory1Split, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Territory1Split, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Territory1Split, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Territory2ID, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(model => model.Territory2ID, new SelectList(Model.TerritoryListModel, "ID", "Description",  Model.Territory2ID), "- Please select the Territory -")
+                                    @Html.ValidationMessageFor(model => model.Territory2ID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Territory2Split, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Territory2Split, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Territory2Split, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+</fieldset>
+
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="row col-xl-12">
+            <div class="col-xl-10 col-md-6 mb-4">
+            </div>
+            <div class="row align-content-lg-end">
+                <div class="align-content-center center col-sm">
+                    <button type="button" id="btnSaveTerritorySplit" class="btn btn-success">Save Territory Split</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+}
+

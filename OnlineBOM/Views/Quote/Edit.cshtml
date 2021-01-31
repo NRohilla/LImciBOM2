@@ -1,0 +1,474 @@
+﻿@model OnlineBOM.Models.QuoteViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+}
+<div class="form-horizontal">
+
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <div>
+        @Html.ActionLink("Back To Lead List", "Index")
+    </div>
+       
+    <div class="row">
+        <!-- Content Column -->
+        <div class="col-xl-12 col-lg-7">
+            <!-- Project Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Lead Details</h6>
+                </div>
+
+                @*'--------------Tab Navigation '*@
+                <div class="row">
+                    <div class="card-body col-xl-12 ">
+                        <nav>
+                            <div class="nav nav-tabs nav-fill shadow mb-4 card-body" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active text-xs font-weight-bold text-primary text-uppercase mb-1 " id="nav-cover-tab" data-toggle="tab" href="#nav-cover" role="tab" aria-controls="nav-cover" aria-selected="true">Cover</a>
+                                <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="nav-BOM-tab" data-toggle="tab" href="#nav-BOM" role="tab" aria-controls="nav-BOM" aria-selected="false">BOM</a>
+                                <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="nav-pickingslip-tab" data-toggle="tab" href="#nav-pickingslip" role="tab" aria-controls="nav-pickingslip" aria-selected="false">BOM Summary</a>
+                                <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="nav-PMComments-tab" data-toggle="tab" href="#nav-PMComments" role="tab" aria-controls="nav-PMComments" aria-selected="false">Comments</a>
+                                @*<a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="nav-documents-tab" data-toggle="tab" href="#nav-documents" role="tab" aria-controls="nav-documents" aria-selected="false">Documents</a>*@
+                            </div>
+                        </nav>
+                                               
+
+                        <div class="tab-content  px-3 px-sm-0" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-cover" role="tabpanel" aria-labelledby="nav-cover-tab">
+                                <div class="card" id="BOM">
+                                    <div class="card shadow mb-4 " id="headingOne">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick="CallAjax();return false;">
+                                                <a class="nav-item nav-link text-xs font-weight-light text-primary text-uppercase mb-1">Assembly Details</a>
+                                            </button>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#BOM">
+                                        <div class="card-body">
+
+                                            @{
+                                                Html.RenderPartial("Assembly");
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card" id="CustomerDetails">
+                                    <div class="card shadow mb-4" id="headingTwo">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick="CallAjax();return false;">
+                                                <a class="nav-item nav-link text-xs font-weight-light text-primary text-uppercase mb-1">Customer Details </a>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#BOM">
+                                        <div class="card-body">
+                                            @{
+                                                Html.RenderPartial("Customer");
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card" id="ConsumablesForecast">
+                                    <div class="card shadow mb-4" id="headingThree">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick="CallAjax();return false;">
+                                                <a class="nav-item nav-link text-xs font-weight-light text-primary text-uppercase mb-1">Consumable Forecast</a>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#BOM">
+                                        <div class="card-body">
+
+                                            @{
+                                                Html.RenderPartial("Consumables");
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card" id="TerritorySplit">
+                                    <div class="card shadow mb-4" id="headingFour">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree" onclick="CallAjax();return false;">
+                                                <a class="nav-item nav-link text-xs font-weight-light text-primary text-uppercase mb-1">Territory Split</a>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#BOM">
+                                        <div class="card-body">
+
+                                            @{
+                                                Html.RenderPartial("TerritorySplit");
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card" id="FinancialReview">
+                                    <div class="card shadow mb-4" id="headingFive">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFour" onclick="CallAjax();return false;">
+                                                <a class="nav-item nav-link text-xs font-weight-light text-primary text-uppercase mb-1">Financial Review</a>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#BOM">
+                                        <div class="card-body">
+
+                                            @{
+                                                Html.RenderPartial("FinancialReview");
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card" id="CHOPFeedback">
+                                    <div class="card shadow mb-4" id="headingSix">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick="CallAjax();return false;">
+                                                <a class="nav-item nav-link text-xs font-weight-light text-uppercase mb-1">CHOP Feedback</a>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#BOM">
+                                        <div class="card-body">
+                                            @{
+                                                Html.RenderPartial("CHOPComments");
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="nav-BOM" role="tabpanel" aria-labelledby="nav-BOM-tab">
+                                <div class="row">
+                                    <div class="col-xl-2">
+                                    </div>
+
+                                    <div class="col-xl-8">
+
+                                        <table id="tblLineProfile1" class="table table-striped table-bordered">
+                                            <thead>
+
+                                                <tr>
+                                                    <th style="display:none">
+                                                        QuoteID
+                                                    </th>
+                                                    <th style="display:none">
+                                                        BOMID
+                                                    </th>
+                                                    <th style="display:none">
+                                                        OpportunityBOMListID
+                                                    </th>
+
+                                                    <th class="text-center">
+                                                        BOM
+                                                    </th>
+                                                    <th class="text-center">
+                                                        BOM Total($)
+                                                    </th>
+
+                                                    <th class="text-center">
+                                                        Discount%
+                                                    </th>
+
+                                                    <th class="text-center">
+                                                        After Discount($)
+                                                    </th>
+
+                                                    <th class="text-center">
+                                                        Agreed Price($)
+                                                    </th>
+
+                                                    <th class="text-center">
+                                                        Sales BOM
+                                                    </th>
+                                                    <th class="text-center">
+                                                        Updated BOM
+                                                    </th>
+                                                    <th class="text-center">
+                                                        View BOM
+                                                    </th>
+                                                    <th class="text-center">
+                                                        BOM Download
+                                                    </th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.BOMListModel)
+                                                {
+                                                <tr>
+                                                    <td style="display:none">
+                                                        @Html.DisplayFor(modelItem => item.OpportunityID)
+                                                    </td>
+                                                    <td style="display:none">
+                                                        @Html.DisplayFor(modelItem => item.BOMID)
+                                                    </td>
+
+                                                    <td style="display:none">
+                                                        @Html.DisplayFor(modelItem => item.OpportunityBOMListID)
+                                                    </td>
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => item.Name)
+                                                    </td>
+
+                                                    <td align="right">
+                                                        @Html.DisplayFor(modelItem => item.TotalPrice)
+                                                    </td>
+
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => item.Discount)
+                                                    </td>
+                                                    <td align="right">
+                                                        @Html.DisplayFor(modelItem => item.PriceAfterDiscount)
+                                                    </td>
+
+                                                    <td align="right">
+                                                        @Html.DisplayFor(modelItem => item.FinalAgreedPrice)
+                                                    </td>
+
+                                                        @*Sales BOM*@
+                                                    <td align="center">
+                                                        @if (item.TotalPrice > 0)
+                                                        {
+                                                            if (@Model.ClosedDate == "")
+                                                            {
+                                                                @Html.ActionLink("Edit BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = false })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.ActionLink("Closed", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            if (@Model.ClosedDate == "")
+                                                            {
+                                                                @Html.ActionLink("New BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = true, ViewBOM = false, PMView = false })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.ActionLink("Closed", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })
+                                                            }
+                                                        }
+                                                    </td>
+
+                                                    @*Updated BOM*@
+                                                    <td align="center">
+                                                        @if (@Model.ClosedDate != "" && item.TotalPrice > 0)
+                                                        {
+
+                                                            @Html.ActionLink("Edit BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = true })
+                                                        }
+
+                                                    </td>
+
+                                                    @*View BOM*@
+                                                    <td align="center">
+                                                        @if (item.TotalPrice > 0)
+                                                        {
+                                                            if (@Model.ClosedDate == "")
+                                                            {@Html.ActionLink("Pre Sales BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })}
+                                                        else
+                                                        {@Html.ActionLink("Post Sales BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = true })}
+
+
+                                                }
+
+                                                    </td>
+
+                                                    @*Download BOM*@
+                                                    <td align="center">
+                                                        @if (item.TotalPrice > 0)
+                                                        {
+                                                            if (@Model.ClosedDate == "")
+                                                            {
+                                                                @Html.ActionLink("Download", "BOMDownloadPDF", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = false })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.ActionLink("Download", "BOMDownloadPDF", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = true })
+                                                            }
+
+                                                        }
+
+                                                    </td>
+
+                                                </tr>
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane fade" id="nav-pickingslip" role="tabpanel" aria-labelledby="nav-pickingslip-tab">
+
+                                <div class="row">
+                                    <div class="col-xl-2">
+                                    </div>
+
+                                    <div class="col-xl-8">
+
+                                        <table id="tblPickingSlip" class="table table-striped table-bordered">
+                                            <thead>
+
+                                                <tr>
+                                                    <th style="display:none">
+                                                        QuoteID
+                                                    </th>
+                                                    <th style="display:none">
+                                                        BOMID
+                                                    </th>
+                                                    <th style="display:none">
+                                                        OpportunityBOMListID
+                                                    </th>
+
+                                                    <th class="text-center">
+                                                        BOM
+                                                    </th>
+                                                    <th class="text-center">
+                                                        Total Value($)
+                                                    </th>
+
+                                                    <th class="text-center">
+                                                     
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.BOMListModel)
+                                                {
+                                                    if (item.TotalPrice > 0)
+                                                    {
+                                                        <tr>
+                                                            <td style="display:none">
+                                                                @Html.DisplayFor(modelItem => item.OpportunityID)
+                                                            </td>
+                                                            <td style="display:none">
+                                                                @Html.DisplayFor(modelItem => item.BOMID)
+                                                            </td>
+
+                                                            <td style="display:none">
+                                                                @Html.DisplayFor(modelItem => item.OpportunityBOMListID)
+                                                            </td>
+                                                            <td align="center">
+                                                                @Html.DisplayFor(modelItem => item.Name)
+                                                            </td>
+
+                                                            <td align="right">
+                                                                @Html.DisplayFor(modelItem => item.TotalPrice)
+                                                            </td>
+
+
+                                                            <td align="center">
+                                                                @if (item.TotalPrice > 0)
+                                                                {
+                                                                    if (@Model.ClosedDate == "")
+                                                                    {
+                                                                        @Html.ActionLink("Download", "PickingListDownload", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name,PMView=false })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.ActionLink("Download", "PickingListDownload", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = true})
+                                                                    }
+                                                                }
+
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="nav-PMComments" role="tabpanel" aria-labelledby="nav-PMComments-tab">
+
+                                <div class="card-body">
+
+                                    @{
+                                        Html.RenderPartial("PMComments");
+                                    }
+
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="nav-documents" role="tabpanel" aria-labelledby="nav-documents-tab">
+
+                                Documents
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <div class="modal fade" id="modelFinancialReview">
+        <div class="modal-dialog" style="background: #fff">
+            <div class=" modal-content" style="width:100%">
+                <div class="modal-header font-weight-bold text-primary text-uppercase mb-1 ">Finance Review </div>
+                <div class="modal-body" id="modelbody">
+                    <form id="form">
+                        <fieldset id="submitforma">
+                            <div>
+
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+   </div>
+
+
+
+
+    @section Scripts{
+
+        <script type="text/javascript" src="~/Scripts/OnlineBOM/Quote/Edit.js">
+
+
+        </script>
+
+    }
+

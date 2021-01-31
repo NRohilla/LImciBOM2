@@ -1,0 +1,104 @@
+﻿@model OnlineBOM.Models.OpportunityCoverModel
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="row col-xl-12">
+            <div class="col-xl-1"></div>
+            <div class="col-xl-9 ">
+
+                <!-- Success Alert -->
+                <div class="alert alert-success" id="SucessfulConsu" style="display:none;">
+                    <strong>Record Saved Sucessfully ! </strong>
+                </div>
+                <!-- Error Alert -->
+                <div class="alert alert-danger" id="ErrorConsu" style="display:none;">
+                    <strong>Error!</strong> Error saving records!
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-1 col-lg-3">
+        </div>
+        <div class="col-xl-10 col-lg-4">
+
+            <fieldset id="Submitform">
+                <div class="row">
+                    <div class="col-xl-6">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+
+
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    @Html.HiddenFor(model => model.QuoteNo, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.InkUsage, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.InkUsage, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.InkUsage, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SolventUsage, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.SolventUsage, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.SolventUsage, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Comments,new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </fieldset>
+
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="row col-xl-12">
+            <div class="col-xl-10 col-md-6 mb-4">
+            </div>
+            <div class="row align-content-lg-end">
+                <div class="align-content-center center col-sm">
+                    <button type="button" id="btnSaveConsumable" class="btn btn-success">Save Consumables</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+}
+

@@ -1,0 +1,70 @@
+﻿@model  OnlineBOM.Models.QuoteViewModel
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p>
+    @Html.ActionLink("New Lead", "Create")
+
+</p>
+
+<table id="example" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Opportunity
+            </th>
+            <th>
+                Company Name
+            </th>
+            <th>
+                Quote No
+            </th>
+            <th>
+                Sales Person
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model.QuoteCustomerListModel)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Opportunity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuoteNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SalesPerson)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { QuoteNo = item.QuoteNo }) 
+
+                </td>
+            </tr>
+        }
+
+    <tbody>
+
+</table>
+
+@section Scripts{
+
+<script src="~/Scripts/OnlineBOM/Quote/Index.js"></script>
+
+
+}
+
+

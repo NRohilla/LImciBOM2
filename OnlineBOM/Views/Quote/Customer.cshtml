@@ -1,0 +1,178 @@
+﻿@model OnlineBOM.Models.OpportunityCoverModel
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+   
+    <div class="row">
+        <div class="row col-xl-12">
+            <div class="col-xl-1"></div>
+            <div class="col-xl-9 ">
+
+                <!-- Success Alert -->
+                <div class="alert alert-success" id="SucessfulCust" style="display:none;">
+                    <strong>Record Saved Sucessfully ! </strong>
+                </div>
+                <!-- Error Alert -->
+                <div class="alert alert-danger" id="ErrorCust" style="display:none;">
+                    <strong>Error!</strong> Error saving records!
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-1 col-lg-3">
+        </div>
+
+
+        <div class="col-xl-10 col-lg-4">
+
+            <fieldset id="Submitform">
+                <div class="row">
+                    <div class="col-xl-6">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+
+                            <div class="form-group">
+
+                                <div class="col-md-10">
+                                    @Html.HiddenFor(model => model.QuoteNo, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DispatchAddress, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DispatchAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.DispatchAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AccountContactName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.AccountContactName, new { htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.AccountContactName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AccountContactTitle, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.AccountContactTitle, new {  htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.AccountContactTitle, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AccountContactPhoneNo, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.AccountContactPhoneNo, new {  htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.AccountContactPhoneNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AccountContactEmail, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.AccountContactEmail, new { htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.AccountContactEmail, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6">
+
+                        <div class="form-group">
+
+
+                            <h6 class="m-0 font-weight-bold text-primary">Finance Details</h6>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FinanceDeal, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FinanceDeal, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FinanceDeal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FinanceType, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FinanceType, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FinanceType, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FinanceApproved, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FinanceApproved, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FinanceApproved, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FinanceTotalAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FinanceTotalAmount, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FinanceTotalAmount, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FinancePeriod, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FinancePeriod, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FinancePeriod, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </fieldset>
+        </div>
+
+        <div class="row">
+            <div class="row col-xl-12">
+                <div class="col-xl-10 col-md-6 mb-4">
+                </div>
+                <div class="row align-content-lg-end">
+                    <div class="align-content-center center col-sm">
+                        <button type="button" id="btnSaveCustomer" class="btn btn-success">Save Customer</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+</div>
+}
+
+
+
+@section Scripts{
+
+    <script type="text/javascript" >
+    
+    
+    </script>
+
+}
