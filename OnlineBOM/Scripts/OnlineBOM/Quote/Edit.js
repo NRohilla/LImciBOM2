@@ -7,37 +7,41 @@ $(document).ready(function () {
         var Item = {};
         Item.QuoteNo = document.getElementById('QuoteNo').value;
         Item.CompanyName = document.getElementById('CompanyName').value;
-        Item.Representative = document.getElementById('Representative').value;
+        //Item.Representative = document.getElementById('Representative').value;
         Item.CustomerType = document.getElementById('CustomerType').value;
         Item.DeliveryDate = document.getElementById('DeliveryDate').value;
         Item.PONumber = document.getElementById('PONumber').value;
         Item.Authorisation = document.getElementById('Authorisation').value;
-        Item.Campaign = document.getElementById('Campaign').value;
-        Item.CampaignCode = document.getElementById('CampaignCode').value;
+        //Item.Campaign = document.getElementById('Campaign').value;
+        //Item.CampaignCode = document.getElementById('CampaignCode').value;
         Item.SalesPerson = document.getElementById('SalesPerson').value;
-      
+        Item.SaleTypeID = document.getElementById('SaleTypeID').value;
         List.push(Item);
+        if (Item.SaleTypeID != 0) {
+            $.ajax({
+                type: "POST",
+                url: "/Quote/SaveAssembly",
+                dataType: "json",
+                data: JSON.stringify(List, getCircularReplacer()),
+                contentType: "application/json; charset=utf-8",
 
-     
-                $.ajax({
-                    type: "POST",
-                    url: "/Quote/SaveAssembly",
-                    dataType: "json",
-                    data: JSON.stringify(List, getCircularReplacer()),
-                    contentType: "application/json; charset=utf-8",
+                success: function (r) {
 
-                    success: function (r) {
-           
-                        if (r == '') {
-                            $('#SucessfulAss').text('Assembly Saved Sucessfully')
-                            SucessAlert('#SucessfulAss');
-                        }
-                        else {
-                            $('#ErrorAss').text(r)
-                            ErrorAlert('#ErrorAss');
-                        }
+                    if (r == '') {
+                        $('#SucessfulAss').text('Assembly Saved Sucessfully')
+                        SucessAlert('#SucessfulAss');
                     }
-                })
+                    else {
+                        $('#ErrorAss').text(r)
+                        ErrorAlert('#ErrorAss');
+                    }
+                }
+            })
+        }
+        else {
+            $('#ErrorAss').text('Trade Out not available')
+            ErrorAlert('#ErrorAss');
+        }
      
     })
 

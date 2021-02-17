@@ -242,6 +242,7 @@
     <Compile Include="Models\Quote\QuoteViewModel.cs" />
     <Compile Include="Models\Quote\OpportunityCoverModel.cs" />
     <Compile Include="Models\EvolabelModel.cs" />
+    <Compile Include="Models\Quote\SaleModel.cs" />
     <Compile Include="Models\Quote\TerritoryModel.cs" />
     <Compile Include="PDFDownload\PDFBOMList.cs" />
     <Compile Include="PDFDownload\PDFPickingSlip.cs" />

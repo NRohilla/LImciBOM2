@@ -48,6 +48,7 @@
     <Compile Include="Model\QuoteBOM\DL_OpportunityBOMItemsViewModel.cs" />
     <Compile Include="Model\QuoteBOM\DL_OpportunityBOMItem.cs" />
     <Compile Include="Model\Quote\DL_BOMFInancialReviewModel.cs" />
+    <Compile Include="Model\Quote\DL_SaleType.cs" />
     <Compile Include="Model\Quote\DL_Territory.cs" />
     <Compile Include="Model\Quote\QuoteDLLineDetails.cs" />
     <Compile Include="PDFDownloadDataAccess.cs" />

@@ -91,6 +91,9 @@ namespace DataLibrary
                         {
                             BOM.AfterDiscount = (BOM.ItemPrice * BOM.Qty);
                         }
+
+                        BOM.InkUsage = dr["InkUsage"].ToString();
+
                         BOMlst.Add(BOM); 
 
                     }
@@ -228,7 +231,7 @@ namespace DataLibrary
                                         dCmd.Parameters.Add(new SqlParameter("@State", item.State));
                                         dCmd.Parameters.Add(new SqlParameter("@IsInTotal", item.IsInTotal));
                                         dCmd.Parameters.Add(new SqlParameter("@IsDecimalAllowed", item.IsDecimalAllowed));
-                                    
+                                        dCmd.Parameters.Add(new SqlParameter("@InkUsage", item.InkUsage));
 
                                     dCmd.ExecuteNonQuery();
                                     }

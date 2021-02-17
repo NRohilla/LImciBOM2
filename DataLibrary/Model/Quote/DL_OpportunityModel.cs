@@ -42,8 +42,7 @@ namespace DataLibrary.Model.Quote
     public string CHOPComments { get; set; }
     public string PMComments { get; set; }
     public string CustomerCode { get; set; }
-
-
+    public int SaleTypeID { get; set; }
 
     }
 }

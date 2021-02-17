@@ -10,6 +10,7 @@ namespace OnlineBOM.Models
         public List<OpportunityCoverModel> QuoteCustomerListModel { get; set; }
         public List<BOMListModel> BOMListModel { get; set; }
         public List<TerritoryModel> TerritoryListModel { get; set; }
+        public List<SaleModel> SaleListModel { get; set; }
 
     }
 }

@@ -42,109 +42,86 @@
                     $rowin.children("td:eq(7)").html(maxQty)
                 }
 
+                //----------------------------------------------------------------------------
                 //Add Child Rows o the parent
-                var strBOMItemID = parseFloat($rowin.children("td:eq(3)").html());
-                var BOMID = parseFloat($rowin.children("td:eq(2)").html());
-                var intOpportunityID = parseFloat($rowin.children("td:eq(0)").html());
-                var intState = parseFloat($rowin.children("td:eq(16)").html());
-                var newRow = $("<tr>");
-
-                $.ajax({
-                    type: "POST",
-                    url: "/Quote/GetChildBOMList",
-                    dataType: "json",
-                    data: JSON.stringify({ 'OpportunityID': intOpportunityID, 'BOMItemID': strBOMItemID, 'BOMID': BOMID, 'State': intState }, getCircularReplacer()),
-                    contentType: "application/json; charset=utf-8",
-
-                    success: function (r) {
-
-
-                        if (r === '') {
-                            alert(r.$rows(0).BOMID);
-                        }
-                        else {
-                            var trHTML = '';
-                            var i;
-                            $.each(r, function (i, item) {
-                                trHTML += '<tr><td>' + item.Code + '</td><td>' + item.Description + '</td></tr>';
-                            });
-
-
-                            for (var i = 0; i < r.length; i++) {
-                                
-                                var cols = "";
-                                                                                               
-
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].OpportunityID +' </td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].OpportunityBOMListID +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].BOMID +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].BOMItemID +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].Category +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false"> ' + r[i].MatthewsCode +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false"> ' + r[i].Description + '</td>';
-                                var isQtyFixed = r[i].IsQtyFixed;
-                                if (isQtyFixed == false) {
-                                    cols += '<td class="allownumeric" contenteditable="true" align="center"> ' + r[i].Qty + '</td>';
-                                }
-                                else {
-                                    cols += '<td class="allownumeric" contenteditable="false" align="center"> ' + r[i].Qty + '</td>';
-                                }
-                               
-                                cols += '<td class="pt-3-half" contenteditable="false" align="right"> ' + r[i].ItemPrice +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].Price +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" align="right">  ' + r[i].Price + '</td>';
-                                var IsDiscountApply = r[i].IsDiscountApply;
-                                if (IsDiscountApply == true) {
-                                    cols += '<td class="pt-3-half" contenteditable="false" > <input checked="checked" class="check-box" disabled="disabled" type="checkbox" /></td>';
-                                }
-                                else {
-                                    cols += '<td class="pt-3-half" contenteditable="false" > <input class="check-box" disabled="disabled" type="checkbox" /></td>';
-                                }
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].Discount +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].AfterDiscount +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].MaximumQty +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" align="center" s> ' + r[i].Stock +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].State +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].IsInTotal +'</td>';
-                                cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].IsDecimalAllowed +'</td>';
-
-
-                                newRow.append(cols);
-                               
-                               
-                            }
-                        }
-
-
-                    }
-                })
-
+                //var strBOMItemID = parseFloat($rowin.children("td:eq(3)").html());
+                //var BOMID = parseFloat($rowin.children("td:eq(2)").html());
+                //var intOpportunityID = parseFloat($rowin.children("td:eq(0)").html());
+                //var intState = parseFloat($rowin.children("td:eq(16)").html());
                 //var newRow = $("<tr>");
-                //var cols = "";
 
-                //cols += '<td class="pt-3-half" contenteditable="false" > 61 </td>';
-                //cols += '< td class="pt-3-half" contenteditable = "false" > 0</td >';
-                //cols += '<td class="pt-3-half" contenteditable="false" > 7</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" > 5637144698</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" > Device</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false"> 02010093</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false"> 8900 IP55 Midi 2m SSc</td>';
-                //cols += '<td class="allownumeric" contenteditable="true" align="center">  0.00</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" align="right"> 1.00</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" >  0.00</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" align="right">  0.00</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" > <input class="check-box" disabled="disabled" type="checkbox" /></td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" > 0.00</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false"> 0.00</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" > 0.00</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" align="center" > 8</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" > 0</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" > 1</td>';
-                //cols += '<td class="pt-3-half" contenteditable="false" > 0</td>';
+                //$.ajax({
+                //    type: "POST",
+                //    url: "/Quote/GetChildBOMList",
+                //    dataType: "json",
+                //    data: JSON.stringify({ 'OpportunityID': intOpportunityID, 'BOMItemID': strBOMItemID, 'BOMID': BOMID, 'State': intState }, getCircularReplacer()),
+                //    contentType: "application/json; charset=utf-8",
 
-                //newRow.append(cols);
-                $(this).closest("tr").after(newRow);
+                //    success: function (r) {
 
+
+                //        if (r === '') {
+                //            alert(r.$rows(0).BOMID);
+                //        }
+                //        else {
+                //            var trHTML = '';
+                //            var i;
+                //            $.each(r, function (i, item) {
+                //                trHTML += '<tr><td>' + item.Code + '</td><td>' + item.Description + '</td></tr>';
+                //            });
+
+
+                //            for (var i = 0; i < r.length; i++) {
+                //                if (r[i].OpportunityID != '0') { 
+                //                        var cols = "";
+                             
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].OpportunityID +' </td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].OpportunityBOMListID +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].BOMID +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].BOMItemID +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].Category +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false"> ' + r[i].MatthewsCode +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false"> ' + r[i].Description + '</td>';
+                //                        var isQtyFixed = r[i].IsQtyFixed;
+                //                        if (isQtyFixed == false) {
+                //                            cols += '<td class="allownumeric" contenteditable="true" align="center"> ' + r[i].Qty + '</td>';
+                //                        }
+                //                        else {
+                //                            cols += '<td class="allownumeric" contenteditable="false" align="center"> ' + r[i].Qty + '</td>';
+                //                        }
+                               
+                //                        cols += '<td class="pt-3-half" contenteditable="false" align="right"> ' + r[i].ItemPrice +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].Price +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" align="right">  ' + r[i].Price + '</td>';
+                //                        var IsDiscountApply = r[i].IsDiscountApply;
+                //                        if (IsDiscountApply == true) {
+                //                            cols += '<td class="pt-3-half" contenteditable="false" > <input checked="checked" class="check-box" disabled="disabled" type="checkbox" /></td>';
+                //                        }
+                //                        else {
+                //                            cols += '<td class="pt-3-half" contenteditable="false" > <input class="check-box" disabled="disabled" type="checkbox" /></td>';
+                //                        }
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].Discount +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].AfterDiscount +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].MaximumQty +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" align="center" s> ' + r[i].Stock +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].State +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].IsInTotal +'</td>';
+                //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].IsDecimalAllowed +'</td>';
+
+
+                //                        newRow.append(cols);
+                //                }
+                               
+                //            }
+                //        }
+
+
+                //    }
+                //})
+                              
+                //$(this).closest("tr").after(newRow);
+
+                //---------------------------------------------------------------
 
                 //Recalculate the Totals
                 $(this).parents('tr').find('input:checkbox').each(function () {
@@ -293,28 +270,30 @@
             BOMItem.State = row.find("TD").eq(16).html();
             BOMItem.IsInTotal = row.find("TD").eq(17).html();
             BOMItem.IsDecimalAllowed = row.find("TD").eq(18).html();
+            BOMItem.InkUsage = document.getElementById('InkUsage').value;
             BOMList.push(BOMItem);
         });
-        
-        $.ajax({
-           type: "POST",
-            url: "/Quote/CreateBOM",
-            dataType: "json",
-            data: JSON.stringify(BOMList, getCircularReplacer()) ,
-            contentType: "application/json; charset=utf-8",
-           
-            success: function (r) {
-                if (r === '') {
-                    SucessAlert();
-                }
-                else {
-                    $('#Error').text(r)
-                    ErrorAlert();
-                }
-            
+       
+            $.ajax({
+                type: "POST",
+                url: "/Quote/CreateBOM",
+                dataType: "json",
+                data: JSON.stringify(BOMList, getCircularReplacer()),
+                contentType: "application/json; charset=utf-8",
 
-            }
-        })
+                success: function (r) {
+                    if (r === '') {
+                        SucessAlert();
+                    }
+                    else {
+                        $('#Error').text(r)
+                        ErrorAlert();
+                    }
+
+
+                }
+            })
+       
 
     });
 

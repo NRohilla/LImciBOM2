@@ -126,6 +126,10 @@ namespace OnlineBOM.Models
         public string  CustomerCode { get; set; }
         public int BOMID { get; set; }
         public int OpportunityID { get; set; }
+
+        [Display(Name = "Trade Out")]
+        public int SaleTypeID { get; set; }
+
     }
 
     public class Title

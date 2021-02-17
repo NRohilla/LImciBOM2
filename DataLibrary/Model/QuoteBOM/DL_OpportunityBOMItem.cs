@@ -48,8 +48,8 @@ namespace DataLibrary.Model.QuoteBOM
            public string AssemblyCode { get; set; }
            public string AssemblyDesc { get; set; }
            public bool IsInTotal { get; set; }
-        public bool IsDecimalAllowed { get; set; }
-        
+           public bool IsDecimalAllowed { get; set; }
+           public String InkUsage { get; set; }
 
     }
   

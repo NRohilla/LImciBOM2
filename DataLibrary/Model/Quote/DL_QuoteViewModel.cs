@@ -12,6 +12,7 @@ namespace DataLibrary.Model.Quote
         public List<DL_BOMListModel> BOMListModel { get; set; } 
         public List<QuoteDLLineDetails> QuoteLineDetails{ get; set; }
         public List<DL_Territory> TerritoryList { get; set; }
+        public List<DL_SaleType> SaleTypeList { get; set; }
     }
    
 }

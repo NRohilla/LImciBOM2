@@ -129,7 +129,8 @@ namespace DataLibrary
                     dCmd.Parameters.Add(new SqlParameter("@Campaign", Assembly.Campaign));
                     dCmd.Parameters.Add(new SqlParameter("@CampaignCode", Assembly.CampaignCode));
                     dCmd.Parameters.Add(new SqlParameter("@SalesPerson", Assembly.SalesPerson));
-           
+                    dCmd.Parameters.Add(new SqlParameter("@SaleTypeID", Assembly.SaleTypeID));
+
                     conn.Open();
                     dCmd.ExecuteNonQuery();
                     conn.Close();
@@ -427,6 +428,10 @@ namespace DataLibrary
                     x.SalesPerson = dr["SalesPerson"].ToString();
                     x.CHOPComments= dr["CHOPComments"].ToString();
                     x.CustomerCode= dr["CustomerCode"].ToString();
+                    if (dr["SaleTypeID"].ToString() != "")
+                    { x.SaleTypeID = Convert.ToInt32(dr["SaleTypeID"].ToString()); }
+                    else
+                    { x.SaleTypeID = 0; }
                 }
            
                 conn.Open();
@@ -498,6 +503,35 @@ namespace DataLibrary
                     x.TerritoryList = TL;
                 }
 
+                //Get Sale Types
+                conn.Open();
+                dCmd = new SqlCommand("Get_SaleTypes", conn);
+                dCmd.CommandType = CommandType.StoredProcedure;
+                da = new SqlDataAdapter(dCmd);
+                dt = new DataTable();
+
+                ds.Clear();
+                da.Fill(dt);
+                conn.Close();
+
+                List<DL_SaleType> SL = new List<DL_SaleType>();
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        DL_SaleType l = new DL_SaleType();
+                        l.ID = dr["ID"].ToString();
+                        l.SaleType = dr["SaleType"].ToString();
+
+                        SL.Add(l);
+                    }
+                    x.SaleTypeList = SL;
+                }
+                else
+                {
+                    x.SaleTypeList = SL;
+                }
 
                 return x;
 

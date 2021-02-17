@@ -33,7 +33,8 @@ namespace OnlineBOM.Models
         public int State { get; set; }
         public int IsInTotal { get; set; }
         public int IsDecimalAllowed { get; set; }
-
+        [Display(Name = "Ink Usage")]
+        public string InkUsage { get; set; }
 
     }
 }

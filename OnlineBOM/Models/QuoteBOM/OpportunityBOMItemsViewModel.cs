@@ -23,6 +23,8 @@ namespace OnlineBOM.Models
         public bool ViewBOM { get; set; }
         public String BOM { get; set; }
         public String ClosedDate { get; set; }
+        [Display(Name = "Ink Usage")]
+        public String InkUsage { get; set; }
 
         public List<OpportunityBOMItem> BOMListViewModel { get; set; }
     }

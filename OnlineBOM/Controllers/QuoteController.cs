@@ -146,7 +146,15 @@ namespace OnlineBOM.Controllers
                     else if (BOMList[0].Discount >100)
                     {
                         return Json("Invalid Discount Percentage", JsonRequestBehavior.AllowGet);
+                    }
 
+                    if (BOMList[0].InkUsage==null)
+                    {
+                        return Json("Consumables, Ink Usage required", JsonRequestBehavior.AllowGet);
+                    }
+                    else if (BOMList[0].InkUsage.Length <10)
+                    {
+                        return Json("Consumables, Ink Usage required minimum of 10 Characters", JsonRequestBehavior.AllowGet);
                     }
 
                     QuoteBOMBusinessLogic bl = new QuoteBOMBusinessLogic();
@@ -435,7 +443,7 @@ namespace OnlineBOM.Controllers
                     { dl.IsDecimalAllowed = true; }
                     else
                     { dl.IsDecimalAllowed = false; }
-
+                    dl.InkUsage = item.InkUsage;
                     lstBOMDL.Add(dl);
 
                 }
@@ -508,7 +516,8 @@ namespace OnlineBOM.Controllers
                     ret.ClosedDate = view.ClosedDate;
                     ret.CalcDeliveryDate = view.CalcDeliveryDate;
                     ret.DeliveryDate = view.DeliveryDate;
-                     ret.CustomerCode = view.CustomerCode;
+                    ret.CustomerCode = view.CustomerCode;
+                    ret.SaleTypeID = view.SaleTypeID;
                     }
             List<BOMListModel> Linelst = new List<BOMListModel>();
                 if (view.BOMListModel.Count > 0)
@@ -549,6 +558,26 @@ namespace OnlineBOM.Controllers
                     Territorylst.Add(l);
                 }
                 ret.TerritoryListModel = Territorylst;
+            }
+            else
+            {
+                ret.TerritoryListModel = Territorylst;
+            }
+
+
+            List<SaleModel> Salelst = new List<SaleModel>();
+            if (view.TerritoryList.Count > 0)
+            {
+
+                foreach (var item in view.SaleTypeList)
+                {
+                    SaleModel l = new SaleModel();
+                    l.ID = item.ID;
+                    l.SaleType = item.SaleType;
+
+                    Salelst.Add(l);
+                }
+                ret.SaleListModel = Salelst;
             }
             else
             {
@@ -628,14 +657,15 @@ namespace OnlineBOM.Controllers
                     ret.BOMID= item.BOMID;
                     ret.BOM = item.BOM;
                     ret.ClosedDate = item.ClosedDate;
-
-                     bomlst.Add(Model);
+                    ret.InkUsage = item.InkUsage;
+                    bomlst.Add(Model);
                 }
 
                 ret.GrandTotalAfterDiscount = GrandTotalAfterDiscount;
                 ret.GrandTotal = GrandTotal;
                 ret.BOMListViewModel = bomlst;
                 ret.QuoteNo = QuoteNo;
+                
             }
             return ret;
         }
@@ -686,6 +716,7 @@ namespace OnlineBOM.Controllers
                 ret.Campaign = item.Campaign;
                 ret.CampaignCode = item.CampaignCode;
                 ret.SalesPerson = item.SalesPerson;
+                ret.SaleTypeID = item.SaleTypeID;
                
             }
 
