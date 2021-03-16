@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace OnlineBOM.Models
 {
@@ -26,6 +27,7 @@ namespace OnlineBOM.Models
         [Display(Name = "Ink Usage")]
         public String InkUsage { get; set; }
 
+        [AllowHtml]
         public List<OpportunityBOMItem> BOMListViewModel { get; set; }
     }
 }

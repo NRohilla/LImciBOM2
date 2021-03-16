@@ -25,17 +25,15 @@
     //--Calculate the price when changing the Qty
     $('body').on('focus', '[contenteditable]', function () { })
         .on('blur keyup paste input', '[contenteditable]', function () {
-        const $this = $(this);
-        
-            if ($this.data('before') !== $this.html())
-            {
+            const $this = $(this);
+
+            if ($this.data('before') !== $this.html()) {
 
                 // Set to Max Qty if exceeding the Max Qty
                 const $rowin = $(this).parents('tr');
                 var maxQty = parseFloat($rowin.children("td:eq(14)").html());
                 var qty = parseFloat($rowin.children("td:eq(7)").html());
-                if (maxQty!=0 && qty > maxQty)
-                {
+                if (maxQty != 0 && qty > maxQty) {
                     var txt = 'Exceeding the defined maximum qty of' + $rowin.children("td:eq(14)").html();
                     $('#Error').text(txt);
                     ErrorAlert();
@@ -74,7 +72,7 @@
                 //            for (var i = 0; i < r.length; i++) {
                 //                if (r[i].OpportunityID != '0') { 
                 //                        var cols = "";
-                             
+
                 //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].OpportunityID +' </td>';
                 //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].OpportunityBOMListID +'</td>';
                 //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].BOMID +'</td>';
@@ -89,7 +87,7 @@
                 //                        else {
                 //                            cols += '<td class="allownumeric" contenteditable="false" align="center"> ' + r[i].Qty + '</td>';
                 //                        }
-                               
+
                 //                        cols += '<td class="pt-3-half" contenteditable="false" align="right"> ' + r[i].ItemPrice +'</td>';
                 //                        cols += '<td class="pt-3-half" contenteditable="false" > ' + r[i].Price +'</td>';
                 //                        cols += '<td class="pt-3-half" contenteditable="false" align="right">  ' + r[i].Price + '</td>';
@@ -111,14 +109,14 @@
 
                 //                        newRow.append(cols);
                 //                }
-                               
+
                 //            }
                 //        }
 
 
                 //    }
                 //})
-                              
+
                 //$(this).closest("tr").after(newRow);
 
                 //---------------------------------------------------------------
@@ -145,22 +143,21 @@
                             $row.children("td:eq(13)").html(price);
                         }
                     }
-                    else
-                    {
+                    else {
                         $row.children("td:eq(9)").html(0);
                         $row.children("td:eq(10)").html(0).formatCurrency();
                         $row.children("td:eq(13)").html(0);
                     }
 
                 })
-                               
+
                 $this.trigger('change');
-           }
+            }
         });
 
 
-//--------------------------------------------
-//
+    //--------------------------------------------
+    //
 
     $('tbody').on('change', 'td', function () {
         var Total = 0;
@@ -181,16 +178,15 @@
     });
 
 
-//Recalculate the Discount
+    //Recalculate the Discount
     $('#Discount').change(function () {
-     
+
         $('.body tr').find('input:checkbox').each(function () {
 
             if (this.checked) {
                 const $row = $(this).parents('tr')
                 var IsInTotal = parseInt($row.find("TD").eq(17).html());
-                if (!isNaN(IsInTotal) && IsInTotal.length != 0)
-                {
+                if (!isNaN(IsInTotal) && IsInTotal.length != 0) {
                     //Calculate the  only if IsInTotal Flag is on
                     if (IsInTotal == 1) {
                         var discount = document.getElementById('Discount').value;
@@ -199,17 +195,15 @@
                         var afterDiscount = (unitPrice - ((unitPrice / 100) * discount)) * qty;
                         $row.children("td:eq(13)").html(afterDiscount);
                     }
-                    else
-                    {
+                    else {
                         $row.children("td:eq(13)").html(0);
                     }
                 }
-                else
-                {
+                else {
                     $row.children("td:eq(13)").html(0);
                 }
-               }
-                
+            }
+
         })
 
         var grandTotal = 0;
@@ -232,76 +226,108 @@
             }
 
         })
-   
+
         $('#GrandTotal').text(grandTotal).formatCurrency();
         $('#GrandTotalAfterDiscount').text(DgrandTotal).formatCurrency();
     });
 
- 
+
 
 
     //---Save the BOM List 
     $('#btnSave').on('click', function (e) {
-        var table = document.getElementById('tblApplicator');
-        var rowLength = table.rows.length;
+        //var table = document.getElementById('tblApplicator');
+        //var rowLength = table.rows.length;
 
         var BOMList = new Array();
 
         $('.body tr').each(function () {
             var row = $(this);
             var BOMItem = {};
+            if (row.find("TD").eq(0).html().indexOf("<div") < 0) {
+                var test = "";
 
-            BOMItem.OpportunityID = row.find("TD").eq(0).html();
-            BOMItem.OpportunityBOMListID = row.find("TD").eq(1).html();
-            BOMItem.BOMID = row.find("TD").eq(2).html();
-            BOMItem.BOMItemID = row.find("TD").eq(3).html();
-            BOMItem.Qty = row.find("TD").eq(7).html();
-            BOMItem.ItemPrice = row.find("TD").eq(8).html();
-            BOMItem.Price = row.find("TD").eq(9).html();
-            BOMItem.Discount = document.getElementById('Discount').value;
-            BOMItem.FinalAgreedPrice = document.getElementById('FinalAgreedPrice').value;
-            BOMItem.IsDiscountApply = row.find('input[type="checkbox"]').is(':checked');
-            BOMItem.AfterDiscount = row.find("TD").eq(13).html();
-            if (BOMItem.BOMItemID == '' && row.find("TD").eq(5).html() !== '') {
-                BOMItem.CustomCode = row.find("TD").eq(5).html();
-                BOMItem.CustomDescription = row.find("TD").eq(6).html();            
-            }
-            BOMItem.MaximumQty = row.find("TD").eq(14).html();
-            BOMItem.State = row.find("TD").eq(16).html();
-            BOMItem.IsInTotal = row.find("TD").eq(17).html();
-            BOMItem.IsDecimalAllowed = row.find("TD").eq(18).html();
-            BOMItem.InkUsage = document.getElementById('InkUsage').value;
-            BOMList.push(BOMItem);
-        });
-       
-            $.ajax({
-                type: "POST",
-                url: "/Quote/CreateBOM",
-                dataType: "json",
-                data: JSON.stringify(BOMList, getCircularReplacer()),
-                contentType: "application/json; charset=utf-8",
-
-                success: function (r) {
-                    if (r === '') {
-                        SucessAlert();
-                    }
-                    else {
-                        $('#Error').text(r)
-                        ErrorAlert();
-                    }
-
-
+                var BOMItem = {};
+                BOMItem.BOMID = row.find("TD").eq(2).html();//1;
+                BOMItem.BOMItemID = row.find("TD").eq(3).html();//1;
+                //BOMItem.Description = "";
+                //BOMItem.QuoteItemMasterID = 1;
+                BOMItem.ItemPrice = row.find("TD").eq(8).html();//2.2;
+                BOMItem.Price = row.find("TD").eq(9).html();// 2.2;
+                BOMItem.Qty = row.find("TD").eq(7).html();//2.2;
+                //BOMItem.Category = "";
+                //BOMItem.CategoryOrder = 1;
+                //BOMItem.SubCategory = "";
+                //BOMItem.SubCategoryOrder = 2;
+                BOMItem.OpportunityID = row.find("TD").eq(0).html();//61
+                //BOMItem.MatthewsCode = "";
+                BOMItem.OpportunityBOMListID = row.find("TD").eq(1).html();//1;
+                if (BOMItem.BOMItemID == '' && row.find("TD").eq(5).html() !== '') {
+                    BOMItem.CustomCode = row.find("TD").eq(5).html();
+                    BOMItem.CustomDescription = row.find("TD").eq(6).html();
                 }
-            })
-       
+                BOMItem.Discount = document.getElementById('Discount').value;//2.2;
+                BOMItem.FinalAgreedPrice = document.getElementById('FinalAgreedPrice').value;// 2.2;
+                BOMItem.IsDiscountApply = row.find('input[type="checkbox"]').is(':checked');//false;
+                BOMItem.AfterDiscount = row.find("TD").eq(13).html();//2.2;
+                //BOMItem.IsQtyFixed = false;
+                //BOMItem.PriceAfterDiscount = 2.2;
+                BOMItem.MaximumQty = row.find("TD").eq(14).html();//2.2;
+                //BOMItem.Stock = 1;
+                BOMItem.State = row.find("TD").eq(16).html();// 1;
+                BOMItem.IsInTotal = row.find("TD").eq(17).html();//1;
+                BOMItem.IsDecimalAllowed = row.find("TD").eq(18).html();//1;
+                if (document.getElementById('InkUsage') != undefined)
+                    BOMItem.InkUsage = document.getElementById('InkUsage').value;
+                
+                BOMList.push(BOMItem);
+            }
+        });
+        
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: '/quote/createbom',
+            data: { "BOMList": BOMList },
+            success: function (json) {
+                if (json) {
+                    alert('ok');
+                } else {
+                    alert('failed');
+                }
+            },
+        });
+
+
+        //$.ajax({
+        //    type: "post",
+        //    url: "/quote/createbom",
+        //    datatype: "json",
+        //    /*data: json.stringify(bomlist, getcircularreplacer()),*/
+        //    data: { postdata: "big data"},
+        //    contenttype: "application/json; charset=utf-8",
+
+        //    success: function (r) {
+        //        if (r === '') {
+        //            sucessalert();
+        //        }
+        //        else {
+        //            $('#error').text(r)
+        //            erroralert();
+        //        }
+
+
+        //    }
+        //})
+
 
     });
 
 
-     //------Show the Messages
+    //------Show the Messages
     function SucessAlert() {
         $('#Sucessful').fadeIn(1000);
-       setTimeout(function () {
+        setTimeout(function () {
             $('.alert').fadeOut(1000);
         }, 5000);
     }
@@ -332,7 +358,7 @@
         $("#tblCustomParts tbody").append(newCustomePartTr);
     });
 
-   
+
 
 
     const newTr = `
