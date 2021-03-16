@@ -18,8 +18,7 @@ namespace DataLibrary
     {
         public static string GetConnectionString(string ConnectionName = "OnlineBOMEntities")
         {
-            return ConfigurationManager.ConnectionStrings[ConnectionName].ConnectionString;
-
+            return Utility.UtilityFunctions.ReturnFormattedConnectionString(ConfigurationManager.ConnectionStrings[ConnectionName].ConnectionString);
         }
         #region 
 

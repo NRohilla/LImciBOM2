@@ -8,24 +8,21 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using DataLibrary.Model.QuoteBOM;
-
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
 namespace DataLibrary
 {
-
-    
     public class QuoteBOMDataAccess
     {
         public static string GetConnectionString(string ConnectionName = "OnlineBOMEntities")
         {
-            return ConfigurationManager.ConnectionStrings[ConnectionName].ConnectionString;
+            return Utility.UtilityFunctions.ReturnFormattedConnectionString(ConfigurationManager.ConnectionStrings[ConnectionName].ConnectionString);
         }
 
-
         #region GetEditBOMByQuoteItemMasterID
-        public DL_OpportunityBOMItemsViewModel Get_OpportunityBOMItemsByOpportunityID(int OpportunityID, int BOMID,bool NewBOM,int State)
+        public DL_OpportunityBOMItemsViewModel Get_OpportunityBOMItemsByOpportunityID(int OpportunityID, int BOMID, bool NewBOM, int State)
         {
-            
-        DL_OpportunityBOMItemsViewModel QuoteBOMView = new DL_OpportunityBOMItemsViewModel();
+            DL_OpportunityBOMItemsViewModel QuoteBOMView = new DL_OpportunityBOMItemsViewModel();
 
             using (SqlConnection conn = new SqlConnection(GetConnectionString()))
             {
@@ -33,14 +30,14 @@ namespace DataLibrary
                 conn.Open();
                 DataSet ds = new DataSet();
                 string SQLSP;
-  
-                { SQLSP= "Get_OpportunityBOMItemsByOpportunityID"; }
+
+                { SQLSP = "Get_OpportunityBOMItemsByOpportunityID"; }
                 SqlCommand dCmd = new SqlCommand(SQLSP, conn);
                 dCmd.CommandType = CommandType.StoredProcedure;
                 dCmd.Parameters.Add(new SqlParameter("@OpportunityID", OpportunityID));
                 dCmd.Parameters.Add(new SqlParameter("@BOMID", BOMID));
                 dCmd.Parameters.Add(new SqlParameter("@NewBOM", NewBOM));
-                dCmd.Parameters.Add(new SqlParameter("@State", State)); 
+                dCmd.Parameters.Add(new SqlParameter("@State", State));
                 SqlDataAdapter da = new SqlDataAdapter(dCmd);
                 DataTable dt = new DataTable();
                 ds.Clear();
@@ -48,44 +45,46 @@ namespace DataLibrary
                 da.Fill(dt);
                 conn.Close();
 
-                List< DL_OpportunityBOMItem> BOMlst= new List<DL_OpportunityBOMItem>();
+                List<DL_OpportunityBOMItem> BOMlst = new List<DL_OpportunityBOMItem>();
                 if (dt != null && dt.Rows.Count > 0)
                 {
-             
+
                     foreach (DataRow dr in dt.Rows)
                     {
                         DL_OpportunityBOMItem BOM = new DL_OpportunityBOMItem();
                         BOM.OpportunityID = Convert.ToInt32(dr["OpportunityID"].ToString());
                         BOM.BOMID = Convert.ToInt32(dr["BOMID"].ToString());
-                        BOM.BOMItemID= Convert.ToInt64(dr["BOMItemsID"].ToString());
+                        BOM.BOMItemID = Convert.ToInt64(dr["BOMItemsID"].ToString());
                         BOM.Description = dr["Description"].ToString();
                         BOM.ItemPrice = Convert.ToDecimal(dr["ItemPrice"].ToString());
                         BOM.Price = Convert.ToDecimal(dr["Price"].ToString());
                         BOM.Qty = Convert.ToDecimal(dr["Qty"].ToString());
-                        BOM.Category= dr["Category"].ToString();
-                        BOM.SubCategory =dr["SubCategory"].ToString();
-                        BOM.MatthewsCode= dr["ITEMID"].ToString();
+                        BOM.Category = dr["Category"].ToString();
+                        BOM.CategoryOrder = Convert.ToString(dr["CategoryOrder"]).Trim().Length > 0 ? Convert.ToInt32(dr["CategoryOrder"]) : 0;
+                        BOM.SubCategory = dr["SubCategory"].ToString();
+                        BOM.SubCategoryOrder = Convert.ToString(dr["SubCategoryOrder"]).Trim().Length > 0 ? Convert.ToInt32(dr["SubCategoryOrder"]) : 0;
+                        BOM.MatthewsCode = dr["ITEMID"].ToString();
                         BOM.OpportunityBOMListID = Convert.ToInt32(dr["OpportunityBOMListID"].ToString());
-                        BOM.IsCustomParts= Convert.ToBoolean(dr["IsCustomParts"].ToString()); 
-                        BOM.Discount= Convert.ToDecimal(dr["Discount"].ToString());
+                        BOM.IsCustomParts = Convert.ToBoolean(dr["IsCustomParts"].ToString());
+                        BOM.Discount = Convert.ToDecimal(dr["Discount"].ToString());
                         BOM.FinalAgreedPrice = Convert.ToDecimal(dr["Finalagreedprice"].ToString());
-                        BOM.IsQtyFixed= Convert.ToBoolean(dr["IsQtyFixed"].ToString());
-                        BOM.PriceAfterDiscount= Convert.ToDecimal(dr["PriceAfterDiscount"].ToString());
-                        BOM.BOM= dr["BOM"].ToString();
+                        BOM.IsQtyFixed = Convert.ToBoolean(dr["IsQtyFixed"].ToString());
+                        BOM.PriceAfterDiscount = Convert.ToDecimal(dr["PriceAfterDiscount"].ToString());
+                        BOM.BOM = dr["BOM"].ToString();
                         BOM.MaximumQty = Convert.ToDecimal(dr["MaximumQty"].ToString());
                         BOM.ClosedDate = dr["ClosedDate"].ToString();
                         BOM.Stock = Convert.ToInt32(dr["Stock"].ToString());
                         BOM.State = State;
-                        BOM.IsInTotal= Convert.ToBoolean(dr["IsInTotal"].ToString());
-                        BOM.IsDecimalAllowed= Convert.ToBoolean(dr["IsDecimalAllowed"].ToString()); 
+                        BOM.IsInTotal = Convert.ToBoolean(dr["IsInTotal"].ToString());
+                        BOM.IsDecimalAllowed = Convert.ToBoolean(dr["IsDecimalAllowed"].ToString());
 
-                        if (dr["IsDiscountApply"].ToString() != null && dr["IsDiscountApply"].ToString() != "" )
-                        { BOM.IsDiscountApply = Convert.ToBoolean(dr["IsDiscountApply"].ToString());  }
+                        if (dr["IsDiscountApply"].ToString() != null && dr["IsDiscountApply"].ToString() != "")
+                        { BOM.IsDiscountApply = Convert.ToBoolean(dr["IsDiscountApply"].ToString()); }
                         else { BOM.IsDiscountApply = false; }
 
                         if (BOM.IsDiscountApply == true)
                         {
-                            BOM.AfterDiscount =( (BOM.ItemPrice) - (BOM.ItemPrice / 100) * BOM.Discount) * BOM.Qty;
+                            BOM.AfterDiscount = ((BOM.ItemPrice) - (BOM.ItemPrice / 100) * BOM.Discount) * BOM.Qty;
                         }
                         else
                         {
@@ -94,7 +93,7 @@ namespace DataLibrary
 
                         BOM.InkUsage = dr["InkUsage"].ToString();
 
-                        BOMlst.Add(BOM); 
+                        BOMlst.Add(BOM);
 
                     }
                     QuoteBOMView.BOMListViewModel = BOMlst;
@@ -199,8 +198,8 @@ namespace DataLibrary
 
                     using (SqlConnection conn = new SqlConnection(GetConnectionString()))
                         if (BOMList.Count > 0)
-                        {  
-                           //Deactivate all the items
+                        {
+                            //Deactivate all the items
                             SqlCommand Cmd = new SqlCommand("Update_OpportunityBOMListIsActiveFlag", conn);
                             Cmd.CommandType = CommandType.StoredProcedure;
                             Cmd.Parameters.Add(new SqlParameter("@OpportunityID", BOMList[0].OpportunityID));
@@ -210,54 +209,54 @@ namespace DataLibrary
                             Cmd.ExecuteNonQuery();
 
                             foreach (var item in BOMList)
+                            {
                                 {
-                                    {
 
-                                        SqlCommand dCmd = new SqlCommand("Insert_OpportunityBOMList", conn);
-                                        dCmd.CommandType = CommandType.StoredProcedure;
-                                        dCmd.Parameters.Add(new SqlParameter("@OpportunityID", item.OpportunityID));
-                                        dCmd.Parameters.Add(new SqlParameter("@BOMID", item.BOMID));
-                                        dCmd.Parameters.Add(new SqlParameter("@BOMItemsID", item.BOMItemID));
-                                        dCmd.Parameters.Add(new SqlParameter("@Qty", item.Qty));
-                                        dCmd.Parameters.Add(new SqlParameter("@ItemPrice", item.ItemPrice));
-                                        dCmd.Parameters.Add(new SqlParameter("@Price", item.Price));
-                                        dCmd.Parameters.Add(new SqlParameter("@CustomDescription", item.CustomDescription));
-                                        dCmd.Parameters.Add(new SqlParameter("@CustomCode", item.MatthewsCode));
-                                        dCmd.Parameters.Add(new SqlParameter("@Discount", item.Discount));
-                                        dCmd.Parameters.Add(new SqlParameter("@FinalAgreedPrice", item.FinalAgreedPrice));
-                                        dCmd.Parameters.Add(new SqlParameter("@IsDiscountApply", item.IsDiscountApply));
-                                        dCmd.Parameters.Add(new SqlParameter("@PriceAfterDiscount", item.AfterDiscount));
-                                        dCmd.Parameters.Add(new SqlParameter("@MaximumQty", item.MaximumQty));
-                                        dCmd.Parameters.Add(new SqlParameter("@State", item.State));
-                                        dCmd.Parameters.Add(new SqlParameter("@IsInTotal", item.IsInTotal));
-                                        dCmd.Parameters.Add(new SqlParameter("@IsDecimalAllowed", item.IsDecimalAllowed));
-                                        dCmd.Parameters.Add(new SqlParameter("@InkUsage", item.InkUsage));
+                                    SqlCommand dCmd = new SqlCommand("Insert_OpportunityBOMList", conn);
+                                    dCmd.CommandType = CommandType.StoredProcedure;
+                                    dCmd.Parameters.Add(new SqlParameter("@OpportunityID", item.OpportunityID));
+                                    dCmd.Parameters.Add(new SqlParameter("@BOMID", item.BOMID));
+                                    dCmd.Parameters.Add(new SqlParameter("@BOMItemsID", item.BOMItemID));
+                                    dCmd.Parameters.Add(new SqlParameter("@Qty", item.Qty));
+                                    dCmd.Parameters.Add(new SqlParameter("@ItemPrice", item.ItemPrice));
+                                    dCmd.Parameters.Add(new SqlParameter("@Price", item.Price));
+                                    dCmd.Parameters.Add(new SqlParameter("@CustomDescription", item.CustomDescription));
+                                    dCmd.Parameters.Add(new SqlParameter("@CustomCode", item.MatthewsCode));
+                                    dCmd.Parameters.Add(new SqlParameter("@Discount", item.Discount));
+                                    dCmd.Parameters.Add(new SqlParameter("@FinalAgreedPrice", item.FinalAgreedPrice));
+                                    dCmd.Parameters.Add(new SqlParameter("@IsDiscountApply", item.IsDiscountApply));
+                                    dCmd.Parameters.Add(new SqlParameter("@PriceAfterDiscount", item.AfterDiscount));
+                                    dCmd.Parameters.Add(new SqlParameter("@MaximumQty", item.MaximumQty));
+                                    dCmd.Parameters.Add(new SqlParameter("@State", item.State));
+                                    dCmd.Parameters.Add(new SqlParameter("@IsInTotal", item.IsInTotal));
+                                    dCmd.Parameters.Add(new SqlParameter("@IsDecimalAllowed", item.IsDecimalAllowed));
+                                    dCmd.Parameters.Add(new SqlParameter("@InkUsage", item.InkUsage));
 
                                     dCmd.ExecuteNonQuery();
-                                    }
-
-                                                                    
-
                                 }
-                            
-                            conn.Close();
-                            }
-                   
-                      
 
-                
+
+
+                            }
+
+                            conn.Close();
+                        }
+
+
+
+
 
                 return "";
             }
             catch (Exception ex)
             {
 
-                return ex.Message ;
+                return ex.Message;
             }
-                }
-           
-   #endregion SaveBOM
-     }
+        }
+
+        #endregion SaveBOM
+    }
 }
 
 

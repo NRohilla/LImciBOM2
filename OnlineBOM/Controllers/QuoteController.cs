@@ -17,6 +17,7 @@ namespace OnlineBOM.Controllers
 {
     public class QuoteController : Controller
     {
+         
 
         public enum BOMState
         {
@@ -25,7 +26,7 @@ namespace OnlineBOM.Controllers
         }
 
 
-        public ActionResult BOMDownloadPDF(int OpportunityID, int BOMID,bool PMView)
+        public ActionResult BOMDownloadPDF(int OpportunityID, int BOMID, bool PMView)
         {
 
             int State;
@@ -36,7 +37,7 @@ namespace OnlineBOM.Controllers
 
             PDFBOMList rep = new PDFBOMList();
 
-            return File(rep.DownloadBOM(OpportunityID,BOMID, State), "application/pdf");
+            return File(rep.DownloadBOM(OpportunityID, BOMID, State), "application/pdf");
 
             //MemoryStream workStream = new MemoryStream();
             //Document document = new Document();
@@ -69,12 +70,12 @@ namespace OnlineBOM.Controllers
 
             PDFPickingSlip rep = new PDFPickingSlip();
 
-            return File(rep.DownloadPickingSlip(OpportunityID, BOMID,State), "application/pdf");
-                      
-                       
+            return File(rep.DownloadPickingSlip(OpportunityID, BOMID, State), "application/pdf");
+
+
         }
 
-        public ActionResult Index(string QuoteNo="")
+        public ActionResult Index(string QuoteNo = "")
         {
             if (QuoteNo == "")
             {
@@ -97,17 +98,15 @@ namespace OnlineBOM.Controllers
                 return View("Edit", ViewModel);
             }
         }
-        
+
 
         // GET The BOM List
-        public ActionResult GetBOMList(int  OpportunityID, int BOMID,string QuoteNo, string Name,bool NewBOM, bool ViewBOM, bool PMView)
+        public ActionResult GetBOMList(int OpportunityID, int BOMID, string QuoteNo, string Name, bool NewBOM, bool ViewBOM, bool PMView)
         {
-            int State;
-            
+            int State = (int)BOMState.PM;
+
             if (PMView == false)
-            { State = (int) BOMState.Sales; }
-            else
-            { State = (int)BOMState.PM; }
+                State = (int)BOMState.Sales;
 
             DL_OpportunityBOMItemsViewModel DLVM = new DL_OpportunityBOMItemsViewModel();
             QuoteBOMBusinessLogic BL = new QuoteBOMBusinessLogic();
@@ -115,13 +114,20 @@ namespace OnlineBOM.Controllers
             OpportunityBOMItemsViewModel view = PopulateBOMList(DLVM, QuoteNo);
             view.ItemMasterName = Name;
             view.ViewBOM = ViewBOM;
+            view.BOMListViewModel = view.BOMListViewModel.OrderBy(p => p.CategoryOrder).ToList();
+
+            List<string> Categories = new List<string>();
+            Categories = view.BOMListViewModel.OrderBy(p => p.CategoryOrder).Select(p => p.Category).ToList();
+            Categories = Categories.GroupBy(p => p).Select(g => g.First()).ToList();
+            TempData["Categories"] = Categories;
+
             return View("BOMList", view);
         }
 
         // GET The BOM List
-        public ActionResult GetChildBOMList(int OpportunityID, string BOMitemID,int BOMID,int State)
+        public ActionResult GetChildBOMList(int OpportunityID, string BOMitemID, int BOMID, int State)
         {
-           
+
             DL_OpportunityBOMItemsViewModel DLVM = new DL_OpportunityBOMItemsViewModel();
             QuoteBOMBusinessLogic BL = new QuoteBOMBusinessLogic();
             DLVM = BL.GetOpportunityBOMChildItemsByBOMItemID(OpportunityID, BOMitemID, BOMID, State);
@@ -143,16 +149,16 @@ namespace OnlineBOM.Controllers
                     {
                         return Json("Final Agreed Price is Not Avialable", JsonRequestBehavior.AllowGet);
                     }
-                    else if (BOMList[0].Discount >100)
+                    else if (BOMList[0].Discount > 100)
                     {
                         return Json("Invalid Discount Percentage", JsonRequestBehavior.AllowGet);
                     }
 
-                    if (BOMList[0].InkUsage==null)
+                    if (BOMList[0].InkUsage == null)
                     {
                         return Json("Consumables, Ink Usage required", JsonRequestBehavior.AllowGet);
                     }
-                    else if (BOMList[0].InkUsage.Length <10)
+                    else if (BOMList[0].InkUsage.Length < 10)
                     {
                         return Json("Consumables, Ink Usage required minimum of 10 Characters", JsonRequestBehavior.AllowGet);
                     }
@@ -161,12 +167,12 @@ namespace OnlineBOM.Controllers
                     List<DL_OpportunityBOMItem> BomDL = new List<DL_OpportunityBOMItem>();
                     BomDL = PopulateBOMDL(BOMList);
                     string Saved = bl.SaveQuoteBOM(BomDL);
-                    return Json(Saved, JsonRequestBehavior.AllowGet); 
-              
-                    
+                    return Json(Saved, JsonRequestBehavior.AllowGet);
+
+
                 }
                 else { return Json("Error Saving the Records", JsonRequestBehavior.AllowGet); }
-              
+
 
             }
             catch (Exception ex)
@@ -174,7 +180,7 @@ namespace OnlineBOM.Controllers
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
 
 
         public JsonResult CreateLead(QuoteViewModel c)
@@ -206,6 +212,19 @@ namespace OnlineBOM.Controllers
 
             QuoteViewModel ViewModel = PopulateBOMViewModel(view);
 
+            var context = new DataLibrary.DBEntity.OnlineBOMEntities();
+            List<DataLibrary.Model.BOM.BOM> _objBOM = new List<DataLibrary.Model.BOM.BOM>();
+            var GetAllBOMs = context.BOMs.ToList();
+            foreach (var item in GetAllBOMs)
+            {
+                _objBOM.Add(new DataLibrary.Model.BOM.BOM { 
+                    _ID=item.ID,
+                    _BOM=item.BOM1,
+                    _IsCustomParts=item.IsCustomParts
+                });
+            }
+            ViewBag._ObjBOM = _objBOM;
+
             ViewBag.Territorylist = ViewModel.TerritoryListModel;
 
             return View("Edit", ViewModel);
@@ -219,7 +238,7 @@ namespace OnlineBOM.Controllers
             DL_BOMFinancialReiewModel DFM = new DL_BOMFinancialReiewModel();
             QuoteBusinessLogic BL = new QuoteBusinessLogic();
             DFM = BL.GetAssemblyForBOMByOpportunityID(OpportunityID, BOMID);
-            FM= PopulateFinanceReviewViewModel(DFM);
+            FM = PopulateFinanceReviewViewModel(DFM);
 
             return PartialView(FM);
         }
@@ -339,13 +358,13 @@ namespace OnlineBOM.Controllers
             return Json(Saved, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpPost]
         public ActionResult SaveProjectFinancials(List<BOMFinancialReviewModel> Financials)
         {
 
-            decimal DepositPerc= Convert.ToDecimal(Financials[0].DepositPerc);
-            decimal PreDPerc= Convert.ToDecimal(Financials[0].PreDeliveryPerc);
+            decimal DepositPerc = Convert.ToDecimal(Financials[0].DepositPerc);
+            decimal PreDPerc = Convert.ToDecimal(Financials[0].PreDeliveryPerc);
             decimal TotalPerc = DepositPerc + PreDPerc;
             string Saved = "";
 
@@ -354,12 +373,12 @@ namespace OnlineBOM.Controllers
                 Saved = "Project Milestones Exceeding 100%";
             }
             else
-            { 
-            DL_BOMFinancialReiewModel cls = new DL_BOMFinancialReiewModel();
-            QuoteBusinessLogic BL = new QuoteBusinessLogic();
-            cls = PopulateFinancialReviewDL(Financials);
-             Saved = BL.BL_SaveProjectFinancials(cls);
-             }
+            {
+                DL_BOMFinancialReiewModel cls = new DL_BOMFinancialReiewModel();
+                QuoteBusinessLogic BL = new QuoteBusinessLogic();
+                cls = PopulateFinancialReviewDL(Financials);
+                Saved = BL.BL_SaveProjectFinancials(cls);
+            }
             return Json(Saved, JsonRequestBehavior.AllowGet);
         }
 
@@ -367,9 +386,9 @@ namespace OnlineBOM.Controllers
 
         private BOMFinancialReviewModel PopulateFinanceReviewViewModel(DL_BOMFinancialReiewModel Assembly)
         {
-            BOMFinancialReviewModel  bl = new BOMFinancialReviewModel();
+            BOMFinancialReviewModel bl = new BOMFinancialReviewModel();
             List<FinancialBOMAssemly> fa = new List<FinancialBOMAssemly>();
-            
+
 
             if (Assembly.BOMAssembly.Count > 0)
             {
@@ -393,11 +412,11 @@ namespace OnlineBOM.Controllers
                     FinancialBOMAssemly b = new FinancialBOMAssemly();
                     b.AssemblyCode = item.AssemblyCode;
                     b.Area = item.Area;
-                    b.Category =item.Category;
-                    b.Device = item.Device ;
+                    b.Category = item.Category;
+                    b.Device = item.Device;
                     b.Revenue = item.Revenue;
                     b.Qty = item.Qty;
-                    
+
                     fa.Add(b);
                 }
                 bl.BOMAssemly = fa;
@@ -414,21 +433,22 @@ namespace OnlineBOM.Controllers
                 foreach (var item in BOMV)
                 {
 
-              
-                        DL_OpportunityBOMItem dl = new DL_OpportunityBOMItem();
-                        dl.OpportunityID = item.OpportunityID;
-                        dl.OpportunityBOMListID = item.OpportunityBOMListID;
-                        dl.BOMID = item.BOMID;
-                        dl.BOMItemID = item.BOMItemID;
-                        dl.Qty = item.Qty;
-                        dl.ItemPrice = item.ItemPrice;
-                        dl.Price = item.Price;
-                        dl.Discount = item.Discount;
-                        dl.FinalAgreedPrice = item.FinalAgreedPrice;
-                        if (item.CustomDescription != null)
-                        {dl.CustomDescription = item.CustomDescription.Trim(charsToTrim);
-                         dl.CustomCode = item.CustomCode;
-                        }
+
+                    DL_OpportunityBOMItem dl = new DL_OpportunityBOMItem();
+                    dl.OpportunityID = item.OpportunityID;
+                    dl.OpportunityBOMListID = item.OpportunityBOMListID;
+                    dl.BOMID = item.BOMID;
+                    dl.BOMItemID = item.BOMItemID;
+                    dl.Qty = item.Qty;
+                    dl.ItemPrice = item.ItemPrice;
+                    dl.Price = item.Price;
+                    dl.Discount = item.Discount;
+                    dl.FinalAgreedPrice = item.FinalAgreedPrice;
+                    if (item.CustomDescription != null)
+                    {
+                        dl.CustomDescription = item.CustomDescription.Trim(charsToTrim);
+                        dl.CustomCode = item.CustomCode;
+                    }
 
                     dl.IsDiscountApply = item.IsDiscountApply;
                     dl.AfterDiscount = item.AfterDiscount;
@@ -436,8 +456,8 @@ namespace OnlineBOM.Controllers
                     dl.State = item.State;
                     if (item.IsInTotal == 1)
                     { dl.IsInTotal = true; }
-                    else 
-                    { dl.IsInTotal = false;}
+                    else
+                    { dl.IsInTotal = false; }
 
                     if (item.IsDecimalAllowed == 1)
                     { dl.IsDecimalAllowed = true; }
@@ -480,70 +500,71 @@ namespace OnlineBOM.Controllers
             QuoteViewModel ret = new QuoteViewModel();
             if (view == null)
             { return ret; }
-            else{
-                    ret.QuoteID = view.ID;
-                    ret.Opportunity = view.Opportunity;
-                    ret.ClosedDate = view.ClosedDate;  
-               
-                    ret.Representative = view.Representative;
-                    ret.CompanyName = view.CompanyName;
-                    ret.CustomerType = view.CustomerType;
-                    ret.DeliveryDate = view.DeliveryDate; 
-                    ret.QuoteNo = view.QuoteNo;
-                    ret.PONumber = view.PONumber;
-                    ret.Authorisation = view.Authorisation;
-                    ret.Campaign = view.Campaign;
-                    ret.CampaignCode = view.CampaignCode;
-                    ret.Territory1ID = view.Territory1ID;
-                    ret.Territory2ID = view.Territory2ID;
-                    ret.Territory1Split = view.Territory1Split; 
-                    ret.Territory2Split = view.Territory2Split; 
-                    ret.DispatchAddress = view.DispatchAddress;
-                    ret.AccountContactName = view.AccountContactName;
-                    ret.AccountContactTitle = view.AccountContactTitle;
-                    ret.AccountContactPhoneNo = view.AccountContactPhoneNo;
-                    ret.AccountContactEmail = view.AccountContactEmail ;
-                    ret.FinanceDeal = view.FinanceDeal;
-                    ret.FinanceType = view.FinanceType;
-                    ret.FinanceApproved = view.FinanceApproved;
-                    ret.FinanceTotalAmount = view.FinanceTotalAmount; 
-                    ret.FinancePeriod = view.FinancePeriod;
-                    ret.InkUsage = view.InkUsage;
-                    ret.SolventUsage = view.SolventUsage;
-                    ret.Comments = view.Comments;
-                    ret.SalesPerson = view.SalesPerson;
-                    ret.CHOPComments = view.CHOPComments;
-                    ret.ClosedDate = view.ClosedDate;
-                    ret.CalcDeliveryDate = view.CalcDeliveryDate;
-                    ret.DeliveryDate = view.DeliveryDate;
-                    ret.CustomerCode = view.CustomerCode;
-                    ret.SaleTypeID = view.SaleTypeID;
-                    }
+            else
+            {
+                ret.QuoteID = view.ID;
+                ret.Opportunity = view.Opportunity;
+                ret.ClosedDate = view.ClosedDate;
+
+                ret.Representative = view.Representative;
+                ret.CompanyName = view.CompanyName;
+                ret.CustomerType = view.CustomerType;
+                ret.DeliveryDate = view.DeliveryDate;
+                ret.QuoteNo = view.QuoteNo;
+                ret.PONumber = view.PONumber;
+                ret.Authorisation = view.Authorisation;
+                ret.Campaign = view.Campaign;
+                ret.CampaignCode = view.CampaignCode;
+                ret.Territory1ID = view.Territory1ID;
+                ret.Territory2ID = view.Territory2ID;
+                ret.Territory1Split = view.Territory1Split;
+                ret.Territory2Split = view.Territory2Split;
+                ret.DispatchAddress = view.DispatchAddress;
+                ret.AccountContactName = view.AccountContactName;
+                ret.AccountContactTitle = view.AccountContactTitle;
+                ret.AccountContactPhoneNo = view.AccountContactPhoneNo;
+                ret.AccountContactEmail = view.AccountContactEmail;
+                ret.FinanceDeal = view.FinanceDeal;
+                ret.FinanceType = view.FinanceType;
+                ret.FinanceApproved = view.FinanceApproved;
+                ret.FinanceTotalAmount = view.FinanceTotalAmount;
+                ret.FinancePeriod = view.FinancePeriod;
+                ret.InkUsage = view.InkUsage;
+                ret.SolventUsage = view.SolventUsage;
+                ret.Comments = view.Comments;
+                ret.SalesPerson = view.SalesPerson;
+                ret.CHOPComments = view.CHOPComments;
+                ret.ClosedDate = view.ClosedDate;
+                ret.CalcDeliveryDate = view.CalcDeliveryDate;
+                ret.DeliveryDate = view.DeliveryDate;
+                ret.CustomerCode = view.CustomerCode;
+                ret.SaleTypeID = view.SaleTypeID;
+            }
             List<BOMListModel> Linelst = new List<BOMListModel>();
-                if (view.BOMListModel.Count > 0)
-                {
+            if (view.BOMListModel.Count > 0)
+            {
 
-                    foreach (var item in view.BOMListModel)
-                    {
-                        BOMListModel l = new BOMListModel();
-                        l.BOMID=item.BOMID;
-                        l.OpportunityBOMListID = item.OpportunityBOMListID;
-                        l.OpportunityID = Convert.ToInt32(item.OpportunityID);
-                        l.Name = item.Name;
-                        l.TotalPrice = Convert.ToDecimal(item.TotalPrice);
-                        l.Discount = item.Discount;
-                        l.PriceAfterDiscount = item.PriceAfterDiscount;
-                        l.FinalAgreedPrice = item.FinalAgreedPrice;
-                        l.ClosedDate = item.ClosedDate;
-
-                        Linelst.Add(l);
-                    }
-                    ret.BOMListModel = Linelst;
-                }
-                else 
+                foreach (var item in view.BOMListModel)
                 {
-                    ret.BOMListModel = Linelst;
+                    BOMListModel l = new BOMListModel();
+                    l.BOMID = item.BOMID;
+                    l.OpportunityBOMListID = item.OpportunityBOMListID;
+                    l.OpportunityID = Convert.ToInt32(item.OpportunityID);
+                    l.Name = item.Name;
+                    l.TotalPrice = Convert.ToDecimal(item.TotalPrice);
+                    l.Discount = item.Discount;
+                    l.PriceAfterDiscount = item.PriceAfterDiscount;
+                    l.FinalAgreedPrice = item.FinalAgreedPrice;
+                    l.ClosedDate = item.ClosedDate;
+
+                    Linelst.Add(l);
                 }
+                ret.BOMListModel = Linelst;
+            }
+            else
+            {
+                ret.BOMListModel = Linelst;
+            }
 
             List<TerritoryModel> Territorylst = new List<TerritoryModel>();
             if (view.TerritoryList.Count > 0)
@@ -587,9 +608,9 @@ namespace OnlineBOM.Controllers
             return ret;
         }
 
-   
+
         //---------------------------------Populate Data to View Modal and from BL
-        private OpportunityBOMItemsViewModel PopulateBOMList(DL_OpportunityBOMItemsViewModel BOMDL,string QuoteNo)
+        private OpportunityBOMItemsViewModel PopulateBOMList(DL_OpportunityBOMItemsViewModel BOMDL, string QuoteNo)
         {
             OpportunityBOMItemsViewModel ret = new OpportunityBOMItemsViewModel();
             List<OpportunityBOMItem> bomlst = new List<OpportunityBOMItem>();
@@ -603,7 +624,8 @@ namespace OnlineBOM.Controllers
                 bomlst.Add(Model);
                 ret.BOMListViewModel = bomlst;
                 ret.QuoteNo = QuoteNo;
-                return ret; }
+                return ret;
+            }
 
             if (BOMDL.BOMListViewModel.Count > 0)
             {
@@ -631,6 +653,8 @@ namespace OnlineBOM.Controllers
                     Model.MaximumQty = item.MaximumQty;
                     Model.Stock = item.Stock;
                     Model.State = item.State;
+                    Model.CategoryOrder = item.CategoryOrder;
+                    Model.SubCategoryOrder = item.SubCategoryOrder;
                     if (item.IsInTotal == true)
                     {
                         Model.IsInTotal = 1;
@@ -642,19 +666,15 @@ namespace OnlineBOM.Controllers
                         Model.IsInTotal = 0;
                     }
 
+                    Model.IsDecimalAllowed = 0;
                     if (item.IsDecimalAllowed == true)
-                    {
                         Model.IsDecimalAllowed = 1;
-                    }
-                    else
-                    {
-                        Model.IsDecimalAllowed = 0;
-                    }
+
                     ret.FinalAgreedPrice = item.FinalAgreedPrice;
                     ret.Discount = item.Discount;
                     ret.IsCustomParts = item.IsCustomParts;
-                    ret.OpportunityID= item.OpportunityID;
-                    ret.BOMID= item.BOMID;
+                    ret.OpportunityID = item.OpportunityID;
+                    ret.BOMID = item.BOMID;
                     ret.BOM = item.BOM;
                     ret.ClosedDate = item.ClosedDate;
                     ret.InkUsage = item.InkUsage;
@@ -665,7 +685,7 @@ namespace OnlineBOM.Controllers
                 ret.GrandTotal = GrandTotal;
                 ret.BOMListViewModel = bomlst;
                 ret.QuoteNo = QuoteNo;
-                
+
             }
             return ret;
         }
@@ -674,7 +694,7 @@ namespace OnlineBOM.Controllers
         private DL_OpportunityModel PopulateCustomerDL(List<OpportunityCoverModel> CUSDL)
         {
             DL_OpportunityModel ret = new DL_OpportunityModel();
-            
+
 
             if (CUSDL == null)
                 return ret;
@@ -717,14 +737,14 @@ namespace OnlineBOM.Controllers
                 ret.CampaignCode = item.CampaignCode;
                 ret.SalesPerson = item.SalesPerson;
                 ret.SaleTypeID = item.SaleTypeID;
-               
+
             }
 
             return ret;
         }
-               
 
-       private DL_OpportunityModel PopulateConsumableDL(List<OpportunityCoverModel> Consumable)
+
+        private DL_OpportunityModel PopulateConsumableDL(List<OpportunityCoverModel> Consumable)
         {
             DL_OpportunityModel ret = new DL_OpportunityModel();
 
@@ -779,7 +799,7 @@ namespace OnlineBOM.Controllers
                 return ret;
             foreach (var item in TS)
             {
-                ret.QuoteNo = item.QuoteNo;    
+                ret.QuoteNo = item.QuoteNo;
                 ret.Territory1Split = item.Territory1Split;
                 ret.Territory2Split = item.Territory2Split;
                 ret.Territory1ID = item.Territory1ID;
@@ -789,7 +809,7 @@ namespace OnlineBOM.Controllers
             return ret;
         }
 
-        
+
         private DL_BOMFinancialReiewModel PopulateFinancialReviewDL(List<BOMFinancialReviewModel> FR)
         {
             DL_BOMFinancialReiewModel ret = new DL_BOMFinancialReiewModel();
@@ -813,4 +833,4 @@ namespace OnlineBOM.Controllers
         #endregion  PopulateViews 
 
     }
-    }
+}

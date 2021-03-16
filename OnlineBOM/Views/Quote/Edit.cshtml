@@ -19,7 +19,7 @@
     <div>
         @Html.ActionLink("Back To Lead List", "Index")
     </div>
-       
+
     <div class="row">
         <!-- Content Column -->
         <div class="col-xl-12 col-lg-7">
@@ -41,7 +41,7 @@
                                 @*<a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="nav-documents-tab" data-toggle="tab" href="#nav-documents" role="tab" aria-controls="nav-documents" aria-selected="false">Documents</a>*@
                             </div>
                         </nav>
-                                               
+
 
                         <div class="tab-content  px-3 px-sm-0" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-cover" role="tabpanel" aria-labelledby="nav-cover-tab">
@@ -162,6 +162,56 @@
 
                             <div class="tab-pane fade" id="nav-BOM" role="tabpanel" aria-labelledby="nav-BOM-tab">
                                 <div class="row">
+                                    <div class="col-xl-10">
+                                    </div>
+                                    <div class="col-xl-2">
+                                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="AnchAddNewBOM" data-toggle="modal" data-target="#exampleModal"
+                                           style="cursor:pointer;">Add New BOM</a>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Add BOM</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-xl-4">
+                                                                Select BOM Type
+                                                            </div>
+                                                            <div class="col-xl-8">
+                                                                @{
+                                                                    if (ViewBag._ObjBOM != null)
+                                                                    {
+                                                                        List<DataLibrary.Model.BOM.BOM> _objBOM = new List<DataLibrary.Model.BOM.BOM>();
+                                                                        _objBOM = ViewBag._ObjBOM;
+                                                                        <select class="form-control" id="SelectBOMs">
+                                                                            @foreach (var item in _objBOM)
+                                                                            {
+                                                                                <option value="@item._ID">@item._BOM</option>
+                                                                            }
+                                                                        </select>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-primary">Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="col-xl-2">
                                     </div>
 
@@ -212,115 +262,128 @@
                                                     <th class="text-center">
                                                         BOM Download
                                                     </th>
+                                                    <th class="text-center">
+                                                    </th>
 
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach (var item in Model.BOMListModel)
                                                 {
-                                                <tr>
-                                                    <td style="display:none">
-                                                        @Html.DisplayFor(modelItem => item.OpportunityID)
-                                                    </td>
-                                                    <td style="display:none">
-                                                        @Html.DisplayFor(modelItem => item.BOMID)
-                                                    </td>
+                                                    <tr>
+                                                        <td style="display:none">
+                                                            @Html.DisplayFor(modelItem => item.OpportunityID)
+                                                        </td>
+                                                        <td style="display:none">
+                                                            @Html.DisplayFor(modelItem => item.BOMID)
+                                                        </td>
 
-                                                    <td style="display:none">
-                                                        @Html.DisplayFor(modelItem => item.OpportunityBOMListID)
-                                                    </td>
-                                                    <td align="center">
-                                                        @Html.DisplayFor(modelItem => item.Name)
-                                                    </td>
+                                                        <td style="display:none">
+                                                            @Html.DisplayFor(modelItem => item.OpportunityBOMListID)
+                                                        </td>
+                                                        <td align="center">
+                                                            @Html.DisplayFor(modelItem => item.Name)
+                                                        </td>
 
-                                                    <td align="right">
-                                                        @Html.DisplayFor(modelItem => item.TotalPrice)
-                                                    </td>
+                                                        <td align="right">
+                                                            @Html.DisplayFor(modelItem => item.TotalPrice)
+                                                        </td>
 
-                                                    <td align="center">
-                                                        @Html.DisplayFor(modelItem => item.Discount)
-                                                    </td>
-                                                    <td align="right">
-                                                        @Html.DisplayFor(modelItem => item.PriceAfterDiscount)
-                                                    </td>
+                                                        <td align="center">
+                                                            @Html.DisplayFor(modelItem => item.Discount)
+                                                        </td>
+                                                        <td align="right">
+                                                            @Html.DisplayFor(modelItem => item.PriceAfterDiscount)
+                                                        </td>
 
-                                                    <td align="right">
-                                                        @Html.DisplayFor(modelItem => item.FinalAgreedPrice)
-                                                    </td>
+                                                        <td align="right">
+                                                            @Html.DisplayFor(modelItem => item.FinalAgreedPrice)
+                                                        </td>
 
                                                         @*Sales BOM*@
-                                                    <td align="center">
-                                                        @if (item.TotalPrice > 0)
-                                                        {
-                                                            if (@Model.ClosedDate == "")
+                                                        <td align="center">
+                                                            @if (item.TotalPrice > 0)
                                                             {
-                                                                @Html.ActionLink("Edit BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = false })
+                                                                if (@Model.ClosedDate == "")
+                                                                {
+                                                                    @Html.ActionLink("Edit BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = false })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.ActionLink("Closed", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })
+                                                                }
+
                                                             }
                                                             else
                                                             {
-                                                                @Html.ActionLink("Closed", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })
+                                                                if (@Model.ClosedDate == "")
+                                                                {
+                                                                    @Html.ActionLink("New BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = true, ViewBOM = false, PMView = false })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.ActionLink("Closed", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })
+                                                                }
                                                             }
+                                                        </td>
 
-                                                        }
-                                                        else
-                                                        {
-                                                            if (@Model.ClosedDate == "")
+                                                        @*Updated BOM*@
+                                                        <td align="center">
+                                                            @if (@Model.ClosedDate != "" && item.TotalPrice > 0)
                                                             {
-                                                                @Html.ActionLink("New BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = true, ViewBOM = false, PMView = false })
+
+                                                                @Html.ActionLink("Edit BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = true })
                                                             }
-                                                            else
+                                                        </td>
+
+                                                        @*View BOM*@
+                                                        <td align="center">
+                                                            @if (item.TotalPrice > 0)
                                                             {
-                                                                @Html.ActionLink("Closed", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })
+                                                                if (@Model.ClosedDate == "")
+                                                                {
+                                                                    @Html.ActionLink("Pre Sales BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.ActionLink("Post Sales BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = true })
+                                                                }
                                                             }
-                                                        }
-                                                    </td>
+                                                        </td>
 
-                                                    @*Updated BOM*@
-                                                    <td align="center">
-                                                        @if (@Model.ClosedDate != "" && item.TotalPrice > 0)
-                                                        {
-
-                                                            @Html.ActionLink("Edit BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = true })
-                                                        }
-
-                                                    </td>
-
-                                                    @*View BOM*@
-                                                    <td align="center">
-                                                        @if (item.TotalPrice > 0)
-                                                        {
-                                                            if (@Model.ClosedDate == "")
-                                                            {@Html.ActionLink("Pre Sales BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })}
-                                                        else
-                                                        {@Html.ActionLink("Post Sales BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = true })}
-
-
-                                                }
-
-                                                    </td>
-
-                                                    @*Download BOM*@
-                                                    <td align="center">
-                                                        @if (item.TotalPrice > 0)
-                                                        {
-                                                            if (@Model.ClosedDate == "")
+                                                        @*Download BOM*@
+                                                        <td align="center">
+                                                            @if (item.TotalPrice > 0)
                                                             {
-                                                                @Html.ActionLink("Download", "BOMDownloadPDF", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = false })
+                                                                if (@Model.ClosedDate == "")
+                                                                {
+                                                                    @Html.ActionLink("Download", "BOMDownloadPDF", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = false })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.ActionLink("Download", "BOMDownloadPDF", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = true })
+                                                                }
+
                                                             }
-                                                            else
-                                                            {
-                                                                @Html.ActionLink("Download", "BOMDownloadPDF", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = true })
+
+                                                        </td>
+                                                        <td>
+                                                            @{
+                                                                if (@Model.ClosedDate != "" || item.TotalPrice > 0)
+                                                                {
+                                                                    <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="AnchDeleteBOM" 
+                                                                       style="cursor:pointer;" data-bomid="@Model.BOMID" opporid="@Model.OpportunityID">Delete</a>
+                                                                }
                                                             }
 
-                                                        }
-
-                                                    </td>
-
-                                                </tr>
+                                                        </td>
+                                                    </tr>
                                                 }
                                             </tbody>
 
                                         </table>
+
+                                      
                                     </div>
                                 </div>
 
@@ -356,7 +419,7 @@
                                                     </th>
 
                                                     <th class="text-center">
-                                                     
+
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -390,11 +453,11 @@
                                                                 {
                                                                     if (@Model.ClosedDate == "")
                                                                     {
-                                                                        @Html.ActionLink("Download", "PickingListDownload", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name,PMView=false })
+                                                                        @Html.ActionLink("Download", "PickingListDownload", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = false })
                                                                     }
                                                                     else
                                                                     {
-                                                                        @Html.ActionLink("Download", "PickingListDownload", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = true})
+                                                                        @Html.ActionLink("Download", "PickingListDownload", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = true })
                                                                     }
                                                                 }
 
@@ -458,17 +521,17 @@
             </div>
         </div>
     </div>
-   </div>
+</div>
 
 
 
 
-    @section Scripts{
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/OnlineBOM/Quote/Edit.js">
+    </script>
+}
 
-        <script type="text/javascript" src="~/Scripts/OnlineBOM/Quote/Edit.js">
-
-
-        </script>
-
-    }
-
+<script>
+    $(document).ready(function () {
+    });
+</script>

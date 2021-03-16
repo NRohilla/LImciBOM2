@@ -1,29 +1,21 @@
 ﻿@model OnlineBOM.Models.OpportunityBOMItemsViewModel
-
 @{
     ViewBag.Title = "BOMList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-@*//test*@
 <div class="row col-xl-12 py-2">
-
     <div class="col-xl-1 col-md-1 mb-4 ">
         <p>
             @Html.ActionLink("Back To Quote", "Edit", new { QuoteNo = Model.QuoteNo })
         </p>
-
         @if (Model.ViewBOM == false && Model.ClosedDate == "")
         {
             <p>
                 @Html.ActionLink("Refresh BOM", "GetBOMList", new { OpportunityID = Model.OpportunityID, BOMID = Model.BOMID, QuoteNo = Model.QuoteNo, Name = Model.BOM, NewBOM = true, ViewBOM = false, PMView = false })
             </p>
         }
-
-      
     </div>
-
     <div class="col-xl-5 col-md-6 mb-4 py-4">
         <!-- Success Alert -->
         <div class="alert alert-success" id="Sucessful" style="display:none;">
@@ -34,932 +26,235 @@
             <strong>Error!</strong> Error saving records!
         </div>
     </div>
+    <div class="col-xl-2 col-md-6 mb-1">
+        <div class="card border-left-success shadow h-100 py-1">
 
-
-
-        <div class="col-xl-2 col-md-6 mb-1">
-            <div class="card border-left-success shadow h-100 py-1">
-
-                <div class="col-sm">
-                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Grand Total ($) </div>
-                    <div id="GrandTotal" class="h5 mb-0 font-weight-bold text-gray-800">
-                        @{var gtformat = String.Format("{0:###,##0.00}", Model.GrandTotal);}
-                        @Html.DisplayFor(modelItem => Model.GrandTotal, gtformat)
-                    </div>
-                </div>
-
-                <div class="col-sm">
-                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total After Discount ($) </div>
-                    <div id="GrandTotalAfterDiscount" class="h5 mb-0 font-weight-bold text-gray-800">
-                        @if (Model.Discount > 0)
-                        {@String.Format("{0:c}", @Html.DisplayFor(modelItem => Model.GrandTotalAfterDiscount))}
-                        else
-                        { @String.Format("{0:c}", @Html.DisplayFor(modelItem => Model.GrandTotal))}
-
-                    </div>
+            <div class="col-sm">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Grand Total ($) </div>
+                <div id="GrandTotal" class="h5 mb-0 font-weight-bold text-gray-800">
+                    @{var gtformat = String.Format("{0:###,##0.00}", Model.GrandTotal);}
+                    @Html.DisplayFor(modelItem => Model.GrandTotal, gtformat)
                 </div>
             </div>
 
-        </div>
-
-        <div class="col-xl-3 col-md-2">
-            <div class="card border-right shadow h-100 ">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col-sm">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1  ">Discount % </div>
-                            @{var disformated = String.Format("{0:0.00}", Model.Discount);}
-                            @Html.TextBoxFor(m => m.Discount, disformated, new { @class = "form-control", @type = "number" })
-                        </div>
-
-                        <div class="col-sm">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1  ">Final Agreed Price $</div>
-                            @{var fpformated = String.Format("{0:0.00}", Model.FinalAgreedPrice);}
-                            @Html.TextBoxFor(m => m.FinalAgreedPrice, fpformated, new { @class = "form-control", @type = "number" })
-                        </div>
-             
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-xl-1 col-md-1 mb-1 ">
-            <div class="row">
-                <div class="row align-content-lg-center px-5">
-                    @if (Model.ViewBOM == false)
-                    {
-                        <div class="align-content-center ">
-                            <button type="button" id="btnSave" class="btn btn-success">Save BOM</button>
-                        </div>
-                    }
+            <div class="col-sm">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total After Discount ($) </div>
+                <div id="GrandTotalAfterDiscount" class="h5 mb-0 font-weight-bold text-gray-800">
+                    @if (Model.Discount > 0)
+                    {@String.Format("{0:c}", @Html.DisplayFor(modelItem => Model.GrandTotalAfterDiscount))}
+                else
+                { @String.Format("{0:c}", @Html.DisplayFor(modelItem => Model.GrandTotal))}
 
                 </div>
             </div>
         </div>
-
     </div>
+    <div class="col-xl-3 col-md-2">
+        <div class="card border-right shadow h-100 ">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-sm">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1  ">Discount % </div>
+                        @{var disformated = String.Format("{0:0.00}", Model.Discount);}
+                        @Html.TextBoxFor(m => m.Discount, disformated, new { @class = "form-control", @type = "number" })
+                    </div>
 
-
-    <div id="BOM">
-
-        <div class="card" id="Applicator">
-            <div class="card shadow mb-4 " id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">@Html.DisplayFor(modelItem => Model.ItemMasterName) </a>
-                    </button>
-                </h5>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#BOM">
-                <div class="card-body">
-
-                    <div id="table" class="table-editable">
-                        <fieldset id="SubmitQuote">
-
-
-
-                            <table id="tblApplicator" class="table table-bordered table-responsive-md table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="display:none">OpportunityID </th>
-                                        <th class="text-center" style="display:none">OpportunityBOMListID</th>
-                                        <th class="text-center" style="display:none">BOMID</th>
-                                        <th class="text-center" style="display:none">BOMItemID</th>
-                                        <th class="text-center" style="display:none">Category</th>
-                                        <th class="text-center">MatthewsCode</th>
-                                        <th class="text-center">Description</th>
-                                        <th class="text-center">Qty</th>
-                                        <th class="text-center">UnitPrice</th>
-                                        <th class="text-center" style="display:none">PriceCalc</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center" style="display:none">IsDiscountApply</th>
-                                        <th class="text-center" style="display:none">Discount</th>
-                                        <th class="text-center" style="display:none">AfterDiscount</th>
-                                        <th class="text-center" style="display:none">MaximumQty</th>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <th class="text-center" style="display:none">Stock Level</th>
-                                        }
-                                        else
-                                        {
-                                            <th class="text-center">Stock Level</th>
-                                        }
-                                        <th class="text-center" style="display:none">State</th>
-                                        <th class="text-center" style="display:none">IsInTotal</th>
-                                        <th class="text-center" style="display:none">IsDecimalAllowed</th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody class="body">
-
-                                    @foreach (var item in Model.BOMListViewModel)
-                                    {
-                                        var ItemName = item.Category;
-
-                                        if (ItemName != "Accessories" && ItemName != "Bracketry" && ItemName != "Options" && ItemName != "Implementation" && ItemName != "Consumables" && ItemName != "")
-                                        {
-
-                                    <tr>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
-                                        @if (@item.IsQtyFixed == true)
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-
-                                        <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
-                                    </tr>
-                                        }
-
-                                    }
-
-                                </tbody>
-                            </table>
-                        </fieldset>
+                    <div class="col-sm">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1  ">Final Agreed Price $</div>
+                        @{var fpformated = String.Format("{0:0.00}", Model.FinalAgreedPrice);}
+                        @Html.TextBoxFor(m => m.FinalAgreedPrice, fpformated, new { @class = "form-control", @type = "number" })
                     </div>
 
                 </div>
             </div>
         </div>
-
-        <div class="card" id="Accessories">
-            <div class="card shadow mb-4" id="headingTwo">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">Accessories </a>
-                    </button>
-                </h5>
+    </div>
+    <div class="col-xl-1 col-md-1 mb-1 ">
+        <div class="row">
+            <div class="row align-content-lg-center px-5">
+                @if (Model.ViewBOM == false)
+                {
+                    <div class="align-content-center ">
+                        <button type="button" id="btnSave" class="btn btn-success">Save BOM</button>
+                    </div>
+                }
             </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#BOM">
-                <div class="card-body">
+        </div>
+    </div>
+</div>
+<div id="BOM">
+    @{
+        if (TempData["Categories"] != null)
+        {
+            List<string> Categories = new List<string>();
+            Categories = (List<string>)TempData["Categories"];
 
-                    <div id="table" class="table-editable">
-                        <fieldset id="SubmitAccessories">
+            foreach (var Category in Categories)
+            {
+                List<string> _Subcategory = new List<string>();
+                string MainDivID = "MainDiv" + Category;
+                string CardShowDivID = "CardShowDiv" + Category;
+                string CollapseDivID = "CollapseDiv" + Category;
+                string CategoryToShow = Category.Trim().ToLower().Equals("Device".Trim().ToLower()) ? Model.ItemMasterName : Category;
+                string _ClassOfDiv = Category.Trim().ToLower().Equals("Device".Trim().ToLower()) ? "collapse show" : "collapse";
+                string TableID = "tbl" + Category;
 
-                            <table id="tblAccessories" class="table table-bordered table-responsive-md table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="display:none">OpportunityID </th>
-                                        <th class="text-center" style="display:none">OpportunityBOMListID</th>
-                                        <th class="text-center" style="display:none">BOMID</th>
-                                        <th class="text-center" style="display:none">BOMItemID</th>
-                                        <th class="text-center" style="display:none">Category</th>
-                                        <th class="text-center">MatthewsCode</th>
-                                        <th class="text-center">Description</th>
-                                        <th class="text-center">Qty</th>
-                                        <th class="text-center">UnitPrice</th>
-                                        <th class="text-center" style="display:none">PriceCalc</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center" style="display:none">IsDiscountApply</th>
-                                        <th class="text-center" style="display:none">Discount</th>
-                                        <th class="text-center" style="display:none">AfterDiscount</th>
-                                        <th class="text-center" style="display:none">MaximumQty</th>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <th class="text-center" style="display:none">Stock Level</th>
-                                        }
-                                        else
-                                        {
-                                            <th class="text-center">Stock Level</th>
-                                        }
-                                        <th class="text-center" style="display:none">State</th>
-                                        <th class="text-center" style="display:none">IsInTotal</th>
-                                        <th class="text-center" style="display:none">IsDecimalAllowed</th>
-                                    </tr>
-                                </thead>
+                <div class="card" id="@MainDivID">
+                    <div class="card shadow mb-4 " id="@CardShowDivID">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#@CollapseDivID" aria-expanded="true" aria-controls="@CollapseDivID">
+                                <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    @CategoryToShow
+                                </a>
+                            </button>
+                        </h5>
+                    </div>
 
-                                <tbody>
-                                <tbody class="body">
-
-
-                                    @foreach (var item in Model.BOMListViewModel)
-                                    {
-                                        var ItemName = item.Category;
-                                        var SubCategory = item.SubCategory;
-
-                                        @*if (ItemName == "Accessories" && SubCategory != "")
-                                        {
-                                      
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                    <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1"> @Html.DisplayFor(modelItem => item.SubCategory)  </a>
-                                                </button>
-                                            </h5>
-                                      
-                                        }*@
-                                        if (ItemName == "Accessories")
-                                        {
+                    <div id="@CollapseDivID" class="@_ClassOfDiv" aria-labelledby="@CardShowDivID" data-parent="#BOM">
+                        <div class="card-body">
+                            <div id="table" class="table-editable">
+                                <fieldset id="SubmitQuote">
+                                    <table id="@TableID" class="table table-bordered table-responsive-md table-striped">
+                                        <thead>
                                             <tr>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
-                                                <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
-                                                @if (@item.IsQtyFixed == true)
-                                                {
-                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                                }
-                                                else
-                                                {
-                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                                }
-                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                <th class="text-center" style="display:none">OpportunityID </th>
+                                                <th class="text-center" style="display:none">OpportunityBOMListID</th>
+                                                <th class="text-center" style="display:none">BOMID</th>
+                                                <th class="text-center" style="display:none">BOMItemID</th>
+                                                <th class="text-center" style="display:none">Category</th>
+                                                <th class="text-center">MatthewsCode</th>
+                                                <th class="text-center">Description</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-center">UnitPrice</th>
+                                                <th class="text-center" style="display:none">PriceCalc</th>
+                                                <th class="text-center">Price</th>
+                                                <th class="text-center" style="display:none">IsDiscountApply</th>
+                                                <th class="text-center" style="display:none">Discount</th>
+                                                <th class="text-center" style="display:none">AfterDiscount</th>
+                                                <th class="text-center" style="display:none">MaximumQty</th>
                                                 @if (Model.ViewBOM == false && Model.ClosedDate == "")
                                                 {
-                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                    <th class="text-center" style="display:none">Stock Level</th>
                                                 }
                                                 else
                                                 {
-                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                    <th class="text-center">Stock Level</th>
                                                 }
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+                                                <th class="text-center" style="display:none">State</th>
+                                                <th class="text-center" style="display:none">IsInTotal</th>
+                                                <th class="text-center" style="display:none">IsDecimalAllowed</th>
+
                                             </tr>
-                                        }
-
-                                    }
-
-                                </tbody>
-
-                            </table>
-                        </fieldset>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="card" id="Bracketry">
-            <div class="card shadow mb-4" id="headingThree">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">Bracketry</a>
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#BOM">
-                <div class="card-body">
-                    <div id="table" class="table-editable">
-                        <fieldset id="SubmitBracketry">
-
-                            <table id="tblBracketry" class="table table-bordered table-responsive-md table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="display:none">OpportunityID </th>
-                                        <th class="text-center" style="display:none">OpportunityBOMListID</th>
-                                        <th class="text-center" style="display:none">BOMID</th>
-                                        <th class="text-center" style="display:none">BOMItemID</th>
-                                        <th class="text-center" style="display:none">Category</th>
-                                        <th class="text-center">MatthewsCode</th>
-                                        <th class="text-center">Description</th>
-                                        <th class="text-center">Qty</th>
-                                        <th class="text-center">UnitPrice</th>
-                                        <th class="text-center" style="display:none">PriceCalc</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center" style="display:none">IsDiscountApply</th>
-                                        <th class="text-center" style="display:none">Discount</th>
-                                        <th class="text-center" style="display:none">AfterDiscount</th>
-                                        <th class="text-center" style="display:none">MaximumQty</th>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <th class="text-center" style="display:none">Stock Level</th>
-                                        }
-                                        else
-                                        {
-                                            <th class="text-center">Stock Level</th>
-                                        }
-                                        <th class="text-center" style="display:none">State</th>
-                                        <th class="text-center" style="display:none">IsInTotal</th>
-                                        <th class="text-center" style="display:none">IsDecimalAllowed</th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                <tbody class="body">
-
-                                    @foreach (var item in Model.BOMListViewModel)
-                                    {
-                                        var ItemName = item.Category;
-
-                                        if (ItemName == "Bracketry")
-                                        {
-                                    <tr>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
-                                        @if (@item.IsQtyFixed == true)
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
-                                    </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </fieldset>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="card" id="Options">
-            <div class="card shadow mb-4" id="headingFour">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">Options</a>
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#BOM">
-                <div class="card-body">
-                    <div id="table" class="table-editable">
-                        <fieldset id="SubmitOptions">
-
-                            <table id="tblOptions" class="table table-bordered table-responsive-md table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="display:none">OpportunityID </th>
-                                        <th class="text-center" style="display:none">OpportunityBOMListID</th>
-                                        <th class="text-center" style="display:none">BOMID</th>
-                                        <th class="text-center" style="display:none">BOMItemID</th>
-                                        <th class="text-center" style="display:none">Category</th>
-                                        <th class="text-center">MatthewsCode</th>
-                                        <th class="text-center">Description</th>
-                                        <th class="text-center">Qty</th>
-                                        <th class="text-center">UnitPrice</th>
-                                        <th class="text-center" style="display:none">PriceCalc</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center" style="display:none">IsDiscountApply</th>
-                                        <th class="text-center" style="display:none">Discount</th>
-                                        <th class="text-center" style="display:none">AfterDiscount</th>
-                                        <th class="text-center" style="display:none">MaximumQty</th>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <th class="text-center" style="display:none">Stock Level</th>
-                                        }
-                                        else
-                                        {
-                                            <th class="text-center">Stock Level</th>
-                                        }
-                                        <th class="text-center" style="display:none">State</th>
-                                        <th class="text-center" style="display:none">IsInTotal</th>
-                                        <th class="text-center" style="display:none">IsDecimalAllowed</th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                <tbody class="body">
-                                    @foreach (var item in Model.BOMListViewModel)
-                                    {
-                                        var ItemName = item.Category;
-
-                                        if (ItemName == "Options")
-                                        {
-                                    <tr>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
-                                        @if (@item.IsQtyFixed == true)
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
-                                    </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </fieldset>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="card" id="Implementation">
-            <div class="card shadow mb-4" id="headingFive">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">Implementation</a>
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#BOM">
-                <div class="card-body">
-                    <div id="table" class="table-editable">
-                        <fieldset id="SubmitImplementation">
-
-                            <table id="tblImplementation" class="table table-bordered table-responsive-md table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="display:none">OpportunityID </th>
-                                        <th class="text-center" style="display:none">OpportunityBOMListID</th>
-                                        <th class="text-center" style="display:none">BOMID</th>
-                                        <th class="text-center" style="display:none">BOMItemID</th>
-                                        <th class="text-center" style="display:none">Category</th>
-                                        <th class="text-center">MatthewsCode</th>
-                                        <th class="text-center">Description</th>
-                                        <th class="text-center">Qty</th>
-                                        <th class="text-center">UnitPrice</th>
-                                        <th class="text-center" style="display:none">PriceCalc</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center" style="display:none">IsDiscountApply</th>
-                                        <th class="text-center" style="display:none">Discount</th>
-                                        <th class="text-center" style="display:none">AfterDiscount</th>
-                                        <th class="text-center" style="display:none">MaximumQty</th>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <th class="text-center" style="display:none">Stock Level</th>
-                                        }
-                                        else
-                                        {
-                                            <th class="text-center">Stock Level</th>
-                                        }
-                                        <th class="text-center" style="display:none">State</th>
-                                        <th class="text-center" style="display:none">IsInTotal</th>
-                                        <th class="text-center" style="display:none">IsDecimalAllowed</th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                <tbody class="body">
-                                    @foreach (var item in Model.BOMListViewModel)
-                                    {
-                                        var ItemName = item.Category;
-
-                                        if (ItemName == "Implementation")
-                                        {
-                                    <tr>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
-                                        @if (@item.IsQtyFixed == true)
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
-                                    </tr>
-                                        }
-                                    }
-
-                                </tbody>
-                            </table>
-                        </fieldset>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="card" id="Consumables">
-            <div class="card shadow mb-4" id="headingSix">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">Consumables</a>
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#BOM">
-                <div class="card-body">
-                    <div id="table" class="table-editable">
-                        <fieldset id="SubmitConsumebles">
-
-                            <table id="tblConsumebles" class="table table-bordered table-responsive-md table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="display:none">OpportunityID </th>
-                                        <th class="text-center" style="display:none">OpportunityBOMListID</th>
-                                        <th class="text-center" style="display:none">BOMID</th>
-                                        <th class="text-center" style="display:none">BOMItemID</th>
-                                        <th class="text-center" style="display:none">Category</th>
-                                        <th class="text-center">MatthewsCode</th>
-                                        <th class="text-center">Description</th>
-                                        <th class="text-center">Qty</th>
-                                        <th class="text-center">UnitPrice</th>
-                                        <th class="text-center" style="display:none">PriceCalc</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center" style="display:none">IsDiscountApply</th>
-                                        <th class="text-center" style="display:none">Discount</th>
-                                        <th class="text-center" style="display:none">AfterDiscount</th>
-                                        <th class="text-center" style="display:none">MaximumQty</th>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <th class="text-center" style="display:none">Stock Level</th>
-                                        }
-                                        else
-                                        {
-                                            <th class="text-center">Stock Level</th>
-                                        }
-                                        <th class="text-center" style="display:none">State</th>
-                                        <th class="text-center" style="display:none">IsInTotal</th>
-                                        <th class="text-center" style="display:none">IsDecimalAllowed</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                <tbody class="body">
-                                    @foreach (var item in Model.BOMListViewModel)
-                                    {
-                                        var ItemName = item.Category;
-
-                                        if (ItemName == "Consumables")
-                                        {
-                                            <tr>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
-                                                <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
-                                                @if (@item.IsQtyFixed == true)
+                                        </thead>
+                                        <tbody class="body">
+                                            @foreach (var item in Model.BOMListViewModel)
+                                            {
+                                                if (item.Category.Trim().ToLower().Equals(Category.Trim().ToLower()))
                                                 {
-                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                                }
-                                                else
-                                                {
-                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                                }
-                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
-                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                                {
-                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                                }
-                                                else
-                                                {
-                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                                }
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
-                                            </tr>
-                                        }
+                                                    int ind = _Subcategory.FindIndex(p => p.ToLower().Equals(item.SubCategory.ToLower()));
+                                                    if (item.SubCategory.Trim().Length > 0 && ind < 0)
+                                                    {
+                                                        _Subcategory.Add(item.SubCategory);
+                                                        <tr>
+                                                            <td colspan="20">
 
-                                    }
+                                                                <div class="card">
+                                                                    <div class="card shadow mb-4" style="margin-bottom: 0px !important;">
+                                                                        <h5 class="mb-0">
+                                                                            <button class="btn btn-link" aria-expanded="false" data-attr="btnSub" data-id="Subtr_@item.SubCategory">
+                                                                                <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                                                    @item.SubCategory
+                                                                                </a>
+                                                                            </button>
+                                                                        </h5>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
 
-                                </tbody>
-                            </table>
+                                                    <tr id="Subtr_@item.SubCategory">
 
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.InkUsage, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.InkUsage, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.InkUsage, "", new { @class = "text-danger" })
-                                </div>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                        <td class="pt-3-half" contenteditable="false"><div id="someotherelement"></div> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
+                                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
+                                                        @if (@item.IsQtyFixed == true)
+                                                        {
+                                                            <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                        }
+
+                                                        <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                        <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                        {
+                                                            <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                        }
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </fieldset>
                             </div>
-
-                        </fieldset>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="card" id="CustomParts">
-            <div class="card shadow mb-4" id="headingSeven">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1">Custom Parts</a>
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseSeven" class="collapse" aria-labelledby="headingSix" data-parent="#BOM">
-                <div class="card-body">
-                    <div id="table" class="table-editable">
-                        <fieldset id="SubmitCustomParts">
-                            @if (Model.IsCustomParts == true)
-                            {
-                                <span class="table-add float-right mb-3 mr-2">
-                                    <input type="button" class="add-row" value="Add Row">
-                                </span>
-                            }
-
-
-                            <table id="tblCustomParts" class="table table-bordered table-responsive-md table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="display:none">OpportunityID </th>
-                                        <th class="text-center" style="display:none">OpportunityBOMListID</th>
-                                        <th class="text-center" style="display:none">BOMID</th>
-                                        <th class="text-center" style="display:none">BOMItemID</th>
-                                        <th class="text-center" style="display:none">Category</th>
-                                        <th class="text-center">MatthewsCode</th>
-                                        <th class="text-center">Description</th>
-                                        <th class="text-center">Qty</th>
-                                        <th class="text-center">UnitPrice</th>
-                                        <th class="text-center" style="display:none">PriceCalc</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center" style="display:none">IsDiscountApply</th>
-                                        <th class="text-center" style="display:none">Discount</th>
-                                        <th class="text-center" style="display:none">AfterDiscount</th>
-                                        <th class="text-center" style="display:none">MaximumQty</th>
-                                        <th class="text-center">Stock Level</th>
-                                        <th class="text-center" style="display:none">State</th>
-                                        <th class="text-center" style="display:none">IsInTotal</th>
-                                        <th class="text-center" style="display:none">IsDecimalAllowed</th>
-                                    </tr>
-                                </thead>
-
-
-                                <tbody class="body">
-                                    @foreach (var item in Model.BOMListViewModel)
-                                    {
-                                        var ItemName = item.Category;
-
-                                        if (ItemName == "")
-                                        {
-                                    <tr>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.CustomCode)</td>
-                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.CustomDescription)</td>
-                                        @if (@item.IsQtyFixed == true)
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
-                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                        }
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
-                                    </tr>
-                                        }
-
-                                    }
-
-                                </tbody>
-                            </table>
-                        </fieldset>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        @*<div class="modal " id="FinancialReviewModal">
-                <div class="modal-dialog">
-                    <div class="model-content">
-
-                        <div class="model-header">
-                            <a href="#" class="close" data-dismiss="modal">&times;</a>
-                            <h3 class="modal-title">Financial Review</h3>
-                        </div>
-                        <div class="modal-body" id="DIVFinancialReview">
-                         <form>
-
-                         </form>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="#" class="btn btn-warning" data-dismiss="modal"> Cancel</a>
                         </div>
                     </div>
                 </div>
-            </div>*@
-
-
-
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-    <!-- Editable table -->
-    @*<div class="card">*@
-    @*<h3 class="card-header text-center font-weight-bold text-uppercase py-4">Editable table</h3>*@
-    @*<div class="card-body">
-            <div id="table" class="table-editable">
-                <span class="table-add float-right mb-3 mr-2">
-                    <a href="#!" class="text-success">
-                        <i class="fas fa-plus fa-2x" aria-hidden="true"></i>
-                    </a>
-                </span>
-                <table class="table table-bordered table-responsive-md table-striped text-center">
-                    <thead>
-                        <tr>
-                            <th class="text-center">QuoteID</th>
-                            <th class="text-center">QuoteItemMasterID</th>
-                            <th class="text-center">LineItemDetailID</th>
-                            <th class="text-center">SupplierCode</th>
-                            <th class="text-center">MatthewsCode</th>
-                            <th class="text-center">Description</th>
-                            <th class="text-center">Qty</th>
-                            <th class="text-center">UnitPrice</th>
-                            <th class="text-center">Price</th>
-
-                            <th class="text-center">Remove</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.BOMListViewModel)
-                        {
-                            <tr>
-                                <td class="pt-3-half" contenteditable="false">   @Html.DisplayFor(modelItem => item.QuoteID) </td>
-                                <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.QuoteItemMasterID)</td>
-                                <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.LineItemDetailID)</td>
-                                <td class="pt-3-half" contenteditable="false">  @Html.DisplayFor(modelItem => item.SupplierCode)</td>
-                                <td class="pt-3-half" contenteditable="false">  @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
-                                <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
-                                <td class="pt-3-half" contenteditable="true">  @Html.DisplayFor(modelItem => item.Qty)</td>
-                                <td class="pt-3-half" contenteditable="false">  @Html.DisplayFor(modelItem => item.ItemPrice)</td>
-                                <td class="pt-3-half" contenteditable="true">  @Html.DisplayFor(modelItem => item.Price)</td>
-
-
-                                <td>
-                                    <span class="table-remove">
-                                        <button type="button"
-                                                class="btn btn-danger btn-rounded btn-sm my-0">
-                                            Remove
-                                        </button>
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
-            </div>
-        </div>*@
-    @*</div>*@
-
-    <div class="modal fade" id="modelFinancialReview">
-        <div class="modal-dialog" style="background: #fff">
-            <div class=" modal-content" style="width:100%">
-                <div class="modal-header font-weight-bold text-primary text-uppercase mb-1 ">Finance Review </div>
-                <div class="modal-body" id="modelbody">
-                    <form id="form">
-                        <fieldset id="submitforma">
-                            <div>
-
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    @section Scripts{
-        @*<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">*@
-        @*<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
-        @*<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
-        <script type="text/javascript" src="~/Scripts/OnlineBOM/QuoteBOM/QuoteBOM.js">
-        </script>
-
+            }
+        }
     }
+</div>
+<div class="modal fade" id="modelFinancialReview">
+    <div class="modal-dialog" style="background: #fff">
+        <div class=" modal-content" style="width:100%">
+            <div class="modal-header font-weight-bold text-primary text-uppercase mb-1 ">Finance Review </div>
+            <div class="modal-body" id="modelbody">
+                <form id="form">
+                    <fieldset id="submitforma">
+                        <div>
+
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/OnlineBOM/QuoteBOM/QuoteBOM.js">
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        $("button[data-attr='btnSub']").click(function () {
+            debugger;
+            var DataAttr = $(this).attr('data-id');
+            $("tr[id='" + DataAttr + "']").each(function () {
+                $(this).toggle();
+            });
+        });
+
+    });
+</script>

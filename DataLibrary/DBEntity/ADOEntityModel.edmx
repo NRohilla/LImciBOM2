@@ -1,0 +1,2133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="OnlineBOMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Assembly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vwProductsID" Type="bigint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="AssemblyCategoryID" Type="int" Nullable="false" />
+          <Property Name="Device" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="AssemblyCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BOM">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BOM" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsCustomParts" Type="bit" />
+        </EntityType>
+        <EntityType Name="BOMItems">
+          <Key>
+            <PropertyRef Name="RECID" />
+          </Key>
+          <Property Name="RECID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+          <Property Name="SALEPRICE" Type="numeric" Precision="32" Scale="16" />
+          <Property Name="SALEUNIT" Type="nvarchar" MaxLength="10" />
+          <Property Name="PRODTYPE" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="BOMTemplate">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BOM_ID" Type="int" Nullable="false" />
+          <Property Name="BOMItem_ID" Type="bigint" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Quantity" Type="decimal" Precision="18" Scale="1" Nullable="false" />
+          <Property Name="IsQtyFixed" Type="bit" Nullable="false" />
+          <Property Name="IsDiscountApply" Type="bit" Nullable="false" />
+          <Property Name="MaximumQty" Type="decimal" Precision="18" Scale="1" Nullable="false" />
+          <Property Name="AssemblyID" Type="int" />
+          <Property Name="IsInTotal" Type="bit" Nullable="false" />
+          <Property Name="IsDecimalAllowed" Type="bit" Nullable="false" />
+          <Property Name="ParentBOMItemID" Type="bigint" />
+        </EntityType>
+        <EntityType Name="BOMtoAssembly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BOMid" Type="int" Nullable="false" />
+          <Property Name="AssemblyID" Type="bigint" Nullable="false" />
+          <Property Name="Device_ID" Type="bigint" Nullable="false" />
+          <Property Name="PMPercentage" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'OnlineBOM.dbo.Configuration_DEL' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Configuration_DEL">
+          <Key>
+            <PropertyRef Name="ProjectMangementFee" />
+          </Key>
+          <Property Name="ProjectMangementFee" Type="float" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'OnlineBOM.dbo.ImplementationAssembly' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ImplementationAssembly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InternalBOMItems">
+          <Key>
+            <PropertyRef Name="RECID" />
+          </Key>
+          <Property Name="RECID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.InventoryOnHand' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="InventoryOnHand">
+          <Property Name="WAREHOUSE" Type="nvarchar" MaxLength="10" />
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+          <Property Name="ITEMGROUPID" Type="nvarchar" MaxLength="10" />
+          <Property Name="AVAILPHYSICAL" Type="numeric" Precision="38" Scale="16" />
+          <Property Name="RESERVPHYSICAL" Type="numeric" Precision="38" Scale="16" />
+          <Property Name="TOTALPHYSICAL" Type="numeric" Precision="38" Scale="16" />
+        </EntityType>-->
+        <EntityType Name="ItemCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ItemOrder" Type="int" />
+        </EntityType>
+        <EntityType Name="ItemSubCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ItemCategory" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ItemOrder" Type="int" />
+        </EntityType>
+        <EntityType Name="LeadTimeForAssembly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssemblyID" Type="bigint" Nullable="false" />
+          <Property Name="LeadTimeDays" Type="int" Nullable="false" />
+          <Property Name="BOMID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Opportunity">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Opportunity" Type="nvarchar" MaxLength="1000" />
+          <Property Name="CustomerCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="ClosedDate" Type="datetime" />
+          <Property Name="Representative" Type="nvarchar" MaxLength="100" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Address" Type="nvarchar" MaxLength="1000" />
+          <Property Name="CustomerType" Type="nvarchar" MaxLength="100" />
+          <Property Name="DeliveryDate" Type="datetime" />
+          <Property Name="QuoteNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="PONumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Authorisation" Type="nvarchar" MaxLength="100" />
+          <Property Name="Campaign" Type="nvarchar" MaxLength="50" />
+          <Property Name="CampaignCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Territory1ID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Territory1Split" Type="int" />
+          <Property Name="Territory2ID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Territory2Split" Type="int" />
+          <Property Name="DispatchAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="AccountContactName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountContactTitle" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountContactPhoneNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountContactEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="FinanceDeal" Type="nvarchar" MaxLength="100" />
+          <Property Name="FinanceType" Type="nvarchar" MaxLength="100" />
+          <Property Name="FinanceApproved" Type="nvarchar" MaxLength="50" />
+          <Property Name="FinanceTotalAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FinancePeriod" Type="int" />
+          <Property Name="InkUsage" Type="nvarchar" MaxLength="50" />
+          <Property Name="SolventUsage" Type="nvarchar" MaxLength="50" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+          <Property Name="SalesPerson" Type="nvarchar" MaxLength="100" />
+          <Property Name="CHOPComments" Type="nvarchar" MaxLength="1000" />
+          <Property Name="LeadTime" Type="int" Nullable="false" />
+          <Property Name="PMComments" Type="nvarchar" MaxLength="1000" />
+          <Property Name="DateTimeStamp" Type="datetime" />
+          <Property Name="SaleTypeID" Type="int" />
+        </EntityType>
+        <EntityType Name="OpportunityBOMList">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OpportunityID" Type="int" Nullable="false" />
+          <Property Name="BOMID" Type="int" Nullable="false" />
+          <Property Name="BOMItemsID" Type="bigint" Nullable="false" />
+          <Property Name="Qty" Type="decimal" Precision="18" Scale="1" Nullable="false" />
+          <Property Name="ItemPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="CustomDescription" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustomCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FinalAgreedPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IsDiscountApply" Type="bit" />
+          <Property Name="PriceAfterDiscount" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="MaximumQty" Type="decimal" Precision="18" Scale="1" />
+          <Property Name="UpdatedDatetime" Type="datetime" />
+          <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="IsInTotal" Type="bit" Nullable="false" />
+          <Property Name="IsDecimalAllowed" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ParentChildPart">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="bigint" Nullable="false" />
+          <Property Name="ChildID" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PartToCapitalAssembly_DEL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartID" Type="bigint" Nullable="false" />
+          <Property Name="AssemblyID" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PartToCategory">
+          <Key>
+            <PropertyRef Name="PartID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartID" Type="bigint" Nullable="false" />
+          <Property Name="CategoryID" Type="bigint" Nullable="false" />
+          <Property Name="SubCategoryID" Type="int" />
+        </EntityType>
+        <EntityType Name="PMFeeNotChargable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssemblyID" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PMFeeNotChargable_DEL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="PartID" Type="bigint" Nullable="false" />
+          <Property Name="Charge" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.Products_vw' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Products_vw">
+          <Property Name="RECID" Type="bigint" />
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+          <Property Name="SALEPRICE" Type="numeric" Precision="32" Scale="16" />
+          <Property Name="SALEUNIT" Type="nvarchar" MaxLength="10" />
+          <Property Name="PRODTYPE" Type="varchar" MaxLength="10" />
+        </EntityType>-->
+        <EntityType Name="ProjectMilestones">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OpportunityID" Type="int" Nullable="false" />
+          <Property Name="BOMID" Type="int" Nullable="false" />
+          <Property Name="DepositPerc" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Deposit" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PreDeliveryPerc" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PreDelivery" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="FinalPerc" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Final" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SaleType">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="SaleType" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaleType" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Teritory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.vw_Assemblies' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="vw_Assemblies">
+          <Property Name="RECID" Type="bigint" />
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+          <Property Name="SALEUNIT" Type="nvarchar" MaxLength="10" />
+          <Property Name="PRODTYPE" Type="nvarchar" MaxLength="10" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.vw_BOMItemsForTemplate' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="vw_BOMItemsForTemplate">
+          <Property Name="RECID" Type="bigint" />
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.vw_BOMitemsInTemplate' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="vw_BOMitemsInTemplate">
+          <Property Name="RECID" Type="bigint" />
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.vw_BOMitemsNotInCategory' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="vw_BOMitemsNotInCategory">
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+          <Property Name="RECID" Type="bigint" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.vw_InventoryOnHand' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="vw_InventoryOnHand">
+          <Property Name="WAREHOUSE" Type="nvarchar" MaxLength="10" />
+          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+          <Property Name="ITEMGROUPID" Type="nvarchar" MaxLength="10" />
+          <Property Name="AVAILPHYSICAL" Type="numeric" Precision="38" Scale="16" />
+          <Property Name="RESERVPHYSICAL" Type="numeric" Precision="38" Scale="16" />
+          <Property Name="TOTALPHYSICAL" Type="numeric" Precision="38" Scale="16" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.vw_Opportunity' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="vw_Opportunity">
+          <Property Name="opportunity" Type="nvarchar" MaxLength="300" />
+          <Property Name="cvn_SalespersonName" Type="nvarchar" MaxLength="200" />
+          <Property Name="cvn_PrimaryContactName" Type="nvarchar" MaxLength="160" />
+          <Property Name="map_QuoteNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="Name" Type="nvarchar" MaxLength="160" />
+          <Property Name="Address" Type="nvarchar" MaxLength="4000" />
+          <Property Name="telephone1" Type="nvarchar" MaxLength="50" />
+          <Property Name="cvn_erpcode" Type="nvarchar" MaxLength="250" />
+          <Property Name="EMailAddress1" Type="nvarchar" MaxLength="110" />
+          <Property Name="JobTitle" Type="nvarchar" MaxLength="100" />
+          <Property Name="OpportunityId" Type="uniqueidentifier" />
+          <Property Name="TerritoryIdName" Type="nvarchar" MaxLength="200" />
+          <Property Name="CLOSEDDATE" Type="datetime" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'OnlineBOM.dbo.vw_Territory' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="vw_Territory">
+          <Property Name="SALESDISTRICTID" Type="nvarchar" MaxLength="20" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
+        </EntityType>-->
+        <Association Name="FK_Assembly_AssemblyCategory">
+          <End Role="AssemblyCategory" Type="Self.AssemblyCategory" Multiplicity="1" />
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssemblyCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Assembly">
+              <PropertyRef Name="AssemblyCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Assembly_BOMItems">
+          <End Role="BOMItems" Type="Self.BOMItems" Multiplicity="1" />
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOMItems">
+              <PropertyRef Name="RECID" />
+            </Principal>
+            <Dependent Role="Assembly">
+              <PropertyRef Name="vwProductsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMtoAssembly_Assembly">
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+          <End Role="BOMtoAssembly" Type="Self.BOMtoAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMtoAssembly">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMtoAssembly_BOM">
+          <End Role="BOM" Type="Self.BOM" Multiplicity="1" />
+          <End Role="BOMtoAssembly" Type="Self.BOMtoAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOM">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMtoAssembly">
+              <PropertyRef Name="BOMid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMtoAssembly_BOMItems">
+          <End Role="BOMItems" Type="Self.BOMItems" Multiplicity="1" />
+          <End Role="BOMtoAssembly" Type="Self.BOMtoAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOMItems">
+              <PropertyRef Name="RECID" />
+            </Principal>
+            <Dependent Role="BOMtoAssembly">
+              <PropertyRef Name="Device_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemCategory_ItemCategory">
+          <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="1" />
+          <End Role="ItemCategory1" Type="Self.ItemCategory" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ItemCategory1">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemSubCategory_ItemCategory1">
+          <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="1" />
+          <End Role="ItemSubCategory" Type="Self.ItemSubCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ItemSubCategory">
+              <PropertyRef Name="ItemCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LeadTimeForAssembly_BOM">
+          <End Role="BOM" Type="Self.BOM" Multiplicity="1" />
+          <End Role="LeadTimeForAssembly" Type="Self.LeadTimeForAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOM">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LeadTimeForAssembly">
+              <PropertyRef Name="BOMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LeadTimeForAssembly_BOMItems">
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+          <End Role="LeadTimeForAssembly" Type="Self.LeadTimeForAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LeadTimeForAssembly">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartToCapitalAssembly_PartToCapitalAssembly">
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+          <End Role="PartToCapitalAssembly_DEL" Type="Self.PartToCapitalAssembly_DEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PartToCapitalAssembly_DEL">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartToCapitalAssembly_Products">
+          <End Role="BOMItems" Type="Self.BOMItems" Multiplicity="1" />
+          <End Role="PartToCapitalAssembly_DEL" Type="Self.PartToCapitalAssembly_DEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOMItems">
+              <PropertyRef Name="RECID" />
+            </Principal>
+            <Dependent Role="PartToCapitalAssembly_DEL">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartToCategory_ItemCategory">
+          <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="1" />
+          <End Role="PartToCategory" Type="Self.PartToCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PartToCategory">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartToCategory_ItemSubCategory">
+          <End Role="ItemSubCategory" Type="Self.ItemSubCategory" Multiplicity="0..1" />
+          <End Role="PartToCategory" Type="Self.PartToCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemSubCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PartToCategory">
+              <PropertyRef Name="SubCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PMFeeChargable_Assembly">
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+          <End Role="PMFeeNotChargable" Type="Self.PMFeeNotChargable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PMFeeNotChargable">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pmFeeChargable_ItemCategory">
+          <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="1" />
+          <End Role="PMFeeNotChargable_DEL" Type="Self.PMFeeNotChargable_DEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PMFeeNotChargable_DEL">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CreateLead" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerName" Type="varchar" Mode="In" />
+          <Parameter Name="LeadDate" Type="datetime" Mode="In" />
+          <Parameter Name="LeadBy" Type="varchar" Mode="In" />
+          <Parameter Name="LeadNumber" Type="varchar" Mode="In" />
+          <Parameter Name="NoOfWeeks" Type="int" Mode="In" />
+          <Parameter Name="DelivaeryDate" Type="datetime" Mode="In" />
+          <Parameter Name="PONumber" Type="varchar" Mode="In" />
+          <Parameter Name="DispatchAddress" Type="varchar" Mode="In" />
+          <Parameter Name="DispatchName" Type="varchar" Mode="In" />
+          <Parameter Name="Title" Type="varchar" Mode="In" />
+          <Parameter Name="PhoneNumber" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="CRMNumber" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Get_AssemblyForBOMByOpportunityID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_BOMPriceTotalsByOpportunityID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_OpportunityBOMChildItemsByBOMItemID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMItemID" Type="nvarchar" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_OpportunityBOMItemsByOpportunityID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+          <Parameter Name="NewBOM" Type="bit" Mode="In" />
+          <Parameter Name="State" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_OpportunityBOMList_BOMDownload" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+          <Parameter Name="State" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_OpportunityBOMListBYOpportunityID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_OpportunityByQuoteNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="QuoteNo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Get_OpportunityList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Get_OpportunityPickingList_BOMDownload" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+          <Parameter Name="State" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_PMFeeChargableAssemlyByBOMID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BOMID" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="Get_PMFeeNotChargableByBOMID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BOMID" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="Get_ProjectMilestones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_SaleTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Get_Territory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetQuoteItemMasterByQuoteID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Insert_OpportunityBOMList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+          <Parameter Name="BOMItemsID" Type="bigint" Mode="In" />
+          <Parameter Name="Qty" Type="decimal" Mode="In" />
+          <Parameter Name="ItemPrice" Type="decimal" Mode="In" />
+          <Parameter Name="Price" Type="decimal" Mode="In" />
+          <Parameter Name="CustomDescription" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="Discount" Type="decimal" Mode="In" />
+          <Parameter Name="FinalAgreedPrice" Type="decimal" Mode="In" />
+          <Parameter Name="PriceAfterDiscount" Type="decimal" Mode="In" />
+          <Parameter Name="IsDiscountApply" Type="bit" Mode="In" />
+          <Parameter Name="MaximumQty" Type="decimal" Mode="In" />
+          <Parameter Name="State" Type="int" Mode="In" />
+          <Parameter Name="IsInTotal" Type="bit" Mode="In" />
+          <Parameter Name="IsDecimalAllowed" Type="bit" Mode="In" />
+          <Parameter Name="InkUsage" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Insert_ProjectMilestones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+          <Parameter Name="DepositPerc" Type="decimal" Mode="In" />
+          <Parameter Name="Deposit" Type="decimal" Mode="In" />
+          <Parameter Name="PreDeliveryPerc" Type="decimal" Mode="In" />
+          <Parameter Name="PreDelivery" Type="decimal" Mode="In" />
+          <Parameter Name="FinalPerc" Type="decimal" Mode="In" />
+          <Parameter Name="Final" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="Update_OpportunityAssemblyDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="QuoteNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="CompanyName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Representative" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerType" Type="nvarchar" Mode="In" />
+          <Parameter Name="DeliveryDate" Type="datetime" Mode="In" />
+          <Parameter Name="PONumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="Authorisation" Type="nvarchar" Mode="In" />
+          <Parameter Name="Campaign" Type="nvarchar" Mode="In" />
+          <Parameter Name="CampaignCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="SalesPerson" Type="nvarchar" Mode="In" />
+          <Parameter Name="SaleTypeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Update_OpportunityBOMListIsActiveFlag" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpportunityID" Type="int" Mode="In" />
+          <Parameter Name="BOMID" Type="int" Mode="In" />
+          <Parameter Name="State" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Update_OpportunityCHOPComments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="QuoteNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="CHOPComments" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Update_OpportunityConsumableDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="QuoteNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="InkUsage" Type="nvarchar" Mode="In" />
+          <Parameter Name="SolventUsage" Type="nvarchar" Mode="In" />
+          <Parameter Name="Comments" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Update_OpportunityCustomerDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="QuoteNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="DispatchAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="AccountContactName" Type="nvarchar" Mode="In" />
+          <Parameter Name="AccountContactTitle" Type="nvarchar" Mode="In" />
+          <Parameter Name="AccountContactPhoneNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="AccountContactEmail" Type="nvarchar" Mode="In" />
+          <Parameter Name="FinanceDeal" Type="nvarchar" Mode="In" />
+          <Parameter Name="FinanceType" Type="nvarchar" Mode="In" />
+          <Parameter Name="FinanceApproved" Type="nvarchar" Mode="In" />
+          <Parameter Name="FinanceTotalAmount" Type="decimal" Mode="In" />
+          <Parameter Name="FinancePeriod" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Update_OpportunityPMComments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="QuoteNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="PMComments" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Update_OpportunityTerritorySplit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="QuoteNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Territory1ID" Type="nvarchar" Mode="In" />
+          <Parameter Name="Territory2ID" Type="nvarchar" Mode="In" />
+          <Parameter Name="Territory1Split" Type="int" Mode="In" />
+          <Parameter Name="Territory2Split" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="OnlineBOMModelStoreContainer">
+          <EntitySet Name="Assembly" EntityType="Self.Assembly" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AssemblyCategory" EntityType="Self.AssemblyCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BOM" EntityType="Self.BOM" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BOMItems" EntityType="Self.BOMItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BOMTemplate" EntityType="Self.BOMTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BOMtoAssembly" EntityType="Self.BOMtoAssembly" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InternalBOMItems" EntityType="Self.InternalBOMItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemCategory" EntityType="Self.ItemCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemSubCategory" EntityType="Self.ItemSubCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LeadTimeForAssembly" EntityType="Self.LeadTimeForAssembly" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Opportunity" EntityType="Self.Opportunity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OpportunityBOMList" EntityType="Self.OpportunityBOMList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParentChildPart" EntityType="Self.ParentChildPart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PartToCapitalAssembly_DEL" EntityType="Self.PartToCapitalAssembly_DEL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PartToCategory" EntityType="Self.PartToCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PMFeeNotChargable" EntityType="Self.PMFeeNotChargable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PMFeeNotChargable_DEL" EntityType="Self.PMFeeNotChargable_DEL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProjectMilestones" EntityType="Self.ProjectMilestones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teritory" EntityType="Self.Teritory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Configuration_DEL" EntityType="Self.Configuration_DEL" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Configuration_DEL].[ProjectMangementFee] AS [ProjectMangementFee]
+    FROM [dbo].[Configuration_DEL] AS [Configuration_DEL]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ImplementationAssembly" EntityType="Self.ImplementationAssembly" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ImplementationAssembly].[ID] AS [ID]
+    FROM [dbo].[ImplementationAssembly] AS [ImplementationAssembly]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SaleType" EntityType="Self.SaleType" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SaleType].[ID] AS [ID], 
+    [SaleType].[SaleType] AS [SaleType]
+    FROM [dbo].[SaleType] AS [SaleType]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Assembly_AssemblyCategory" Association="Self.FK_Assembly_AssemblyCategory">
+            <End Role="AssemblyCategory" EntitySet="AssemblyCategory" />
+            <End Role="Assembly" EntitySet="Assembly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Assembly_BOMItems" Association="Self.FK_Assembly_BOMItems">
+            <End Role="BOMItems" EntitySet="BOMItems" />
+            <End Role="Assembly" EntitySet="Assembly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMtoAssembly_Assembly" Association="Self.FK_BOMtoAssembly_Assembly">
+            <End Role="Assembly" EntitySet="Assembly" />
+            <End Role="BOMtoAssembly" EntitySet="BOMtoAssembly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMtoAssembly_BOM" Association="Self.FK_BOMtoAssembly_BOM">
+            <End Role="BOM" EntitySet="BOM" />
+            <End Role="BOMtoAssembly" EntitySet="BOMtoAssembly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMtoAssembly_BOMItems" Association="Self.FK_BOMtoAssembly_BOMItems">
+            <End Role="BOMItems" EntitySet="BOMItems" />
+            <End Role="BOMtoAssembly" EntitySet="BOMtoAssembly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemCategory_ItemCategory" Association="Self.FK_ItemCategory_ItemCategory">
+            <End Role="ItemCategory" EntitySet="ItemCategory" />
+            <End Role="ItemCategory1" EntitySet="ItemCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemSubCategory_ItemCategory1" Association="Self.FK_ItemSubCategory_ItemCategory1">
+            <End Role="ItemCategory" EntitySet="ItemCategory" />
+            <End Role="ItemSubCategory" EntitySet="ItemSubCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LeadTimeForAssembly_BOM" Association="Self.FK_LeadTimeForAssembly_BOM">
+            <End Role="BOM" EntitySet="BOM" />
+            <End Role="LeadTimeForAssembly" EntitySet="LeadTimeForAssembly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LeadTimeForAssembly_BOMItems" Association="Self.FK_LeadTimeForAssembly_BOMItems">
+            <End Role="Assembly" EntitySet="Assembly" />
+            <End Role="LeadTimeForAssembly" EntitySet="LeadTimeForAssembly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartToCapitalAssembly_PartToCapitalAssembly" Association="Self.FK_PartToCapitalAssembly_PartToCapitalAssembly">
+            <End Role="Assembly" EntitySet="Assembly" />
+            <End Role="PartToCapitalAssembly_DEL" EntitySet="PartToCapitalAssembly_DEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartToCapitalAssembly_Products" Association="Self.FK_PartToCapitalAssembly_Products">
+            <End Role="BOMItems" EntitySet="BOMItems" />
+            <End Role="PartToCapitalAssembly_DEL" EntitySet="PartToCapitalAssembly_DEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartToCategory_ItemCategory" Association="Self.FK_PartToCategory_ItemCategory">
+            <End Role="ItemCategory" EntitySet="ItemCategory" />
+            <End Role="PartToCategory" EntitySet="PartToCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartToCategory_ItemSubCategory" Association="Self.FK_PartToCategory_ItemSubCategory">
+            <End Role="ItemSubCategory" EntitySet="ItemSubCategory" />
+            <End Role="PartToCategory" EntitySet="PartToCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PMFeeChargable_Assembly" Association="Self.FK_PMFeeChargable_Assembly">
+            <End Role="Assembly" EntitySet="Assembly" />
+            <End Role="PMFeeNotChargable" EntitySet="PMFeeNotChargable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pmFeeChargable_ItemCategory" Association="Self.FK_pmFeeChargable_ItemCategory">
+            <End Role="ItemCategory" EntitySet="ItemCategory" />
+            <End Role="PMFeeNotChargable_DEL" EntitySet="PMFeeNotChargable_DEL" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OnlineBOMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Assembly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vwProductsID" Type="Int64" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AssemblyCategoryID" Type="Int32" Nullable="false" />
+          <Property Name="Device" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AssemblyCategory" Relationship="Self.FK_Assembly_AssemblyCategory" FromRole="Assembly" ToRole="AssemblyCategory" />
+          <NavigationProperty Name="BOMItem" Relationship="Self.FK_Assembly_BOMItems" FromRole="Assembly" ToRole="BOMItems" />
+          <NavigationProperty Name="BOMtoAssemblies" Relationship="Self.FK_BOMtoAssembly_Assembly" FromRole="Assembly" ToRole="BOMtoAssembly" />
+          <NavigationProperty Name="LeadTimeForAssemblies" Relationship="Self.FK_LeadTimeForAssembly_BOMItems" FromRole="Assembly" ToRole="LeadTimeForAssembly" />
+          <NavigationProperty Name="PartToCapitalAssembly_DEL" Relationship="Self.FK_PartToCapitalAssembly_PartToCapitalAssembly" FromRole="Assembly" ToRole="PartToCapitalAssembly_DEL" />
+          <NavigationProperty Name="PMFeeNotChargables" Relationship="Self.FK_PMFeeChargable_Assembly" FromRole="Assembly" ToRole="PMFeeNotChargable" />
+        </EntityType>
+        <EntityType Name="AssemblyCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Assemblies" Relationship="Self.FK_Assembly_AssemblyCategory" FromRole="AssemblyCategory" ToRole="Assembly" />
+        </EntityType>
+        <EntityType Name="BOM">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BOM1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsCustomParts" Type="Boolean" />
+          <NavigationProperty Name="BOMtoAssemblies" Relationship="Self.FK_BOMtoAssembly_BOM" FromRole="BOM" ToRole="BOMtoAssembly" />
+          <NavigationProperty Name="LeadTimeForAssemblies" Relationship="Self.FK_LeadTimeForAssembly_BOM" FromRole="BOM" ToRole="LeadTimeForAssembly" />
+        </EntityType>
+        <EntityType Name="BOMItem">
+          <Key>
+            <PropertyRef Name="RECID" />
+          </Key>
+          <Property Name="RECID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ITEMID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="SALEPRICE" Type="Decimal" Precision="32" Scale="16" />
+          <Property Name="SALEUNIT" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PRODTYPE" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Assemblies" Relationship="Self.FK_Assembly_BOMItems" FromRole="BOMItems" ToRole="Assembly" />
+          <NavigationProperty Name="BOMtoAssemblies" Relationship="Self.FK_BOMtoAssembly_BOMItems" FromRole="BOMItems" ToRole="BOMtoAssembly" />
+          <NavigationProperty Name="PartToCapitalAssembly_DEL" Relationship="Self.FK_PartToCapitalAssembly_Products" FromRole="BOMItems" ToRole="PartToCapitalAssembly_DEL" />
+        </EntityType>
+        <EntityType Name="BOMTemplate">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BOM_ID" Type="Int32" Nullable="false" />
+          <Property Name="BOMItem_ID" Type="Int64" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="1" Nullable="false" />
+          <Property Name="IsQtyFixed" Type="Boolean" Nullable="false" />
+          <Property Name="IsDiscountApply" Type="Boolean" Nullable="false" />
+          <Property Name="MaximumQty" Type="Decimal" Precision="18" Scale="1" Nullable="false" />
+          <Property Name="AssemblyID" Type="Int32" />
+          <Property Name="IsInTotal" Type="Boolean" Nullable="false" />
+          <Property Name="IsDecimalAllowed" Type="Boolean" Nullable="false" />
+          <Property Name="ParentBOMItemID" Type="Int64" />
+        </EntityType>
+        <EntityType Name="BOMtoAssembly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BOMid" Type="Int32" Nullable="false" />
+          <Property Name="AssemblyID" Type="Int64" Nullable="false" />
+          <Property Name="Device_ID" Type="Int64" Nullable="false" />
+          <Property Name="PMPercentage" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Assembly" Relationship="Self.FK_BOMtoAssembly_Assembly" FromRole="BOMtoAssembly" ToRole="Assembly" />
+          <NavigationProperty Name="BOM" Relationship="Self.FK_BOMtoAssembly_BOM" FromRole="BOMtoAssembly" ToRole="BOM" />
+          <NavigationProperty Name="BOMItem" Relationship="Self.FK_BOMtoAssembly_BOMItems" FromRole="BOMtoAssembly" ToRole="BOMItems" />
+        </EntityType>
+        <EntityType Name="InternalBOMItem">
+          <Key>
+            <PropertyRef Name="RECID" />
+          </Key>
+          <Property Name="RECID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ITEMID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ItemCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ItemOrder" Type="Int32" />
+          <NavigationProperty Name="ItemCategory1" Relationship="Self.FK_ItemCategory_ItemCategory" FromRole="ItemCategory" ToRole="ItemCategory1" />
+          <NavigationProperty Name="ItemCategory2" Relationship="Self.FK_ItemCategory_ItemCategory" FromRole="ItemCategory1" ToRole="ItemCategory" />
+          <NavigationProperty Name="ItemSubCategories" Relationship="Self.FK_ItemSubCategory_ItemCategory1" FromRole="ItemCategory" ToRole="ItemSubCategory" />
+          <NavigationProperty Name="PartToCategories" Relationship="Self.FK_PartToCategory_ItemCategory" FromRole="ItemCategory" ToRole="PartToCategory" />
+          <NavigationProperty Name="PMFeeNotChargable_DEL" Relationship="Self.FK_pmFeeChargable_ItemCategory" FromRole="ItemCategory" ToRole="PMFeeNotChargable_DEL" />
+        </EntityType>
+        <EntityType Name="ItemSubCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ItemCategory" Type="Int64" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ItemOrder" Type="Int32" />
+          <NavigationProperty Name="ItemCategory1" Relationship="Self.FK_ItemSubCategory_ItemCategory1" FromRole="ItemSubCategory" ToRole="ItemCategory" />
+          <NavigationProperty Name="PartToCategories" Relationship="Self.FK_PartToCategory_ItemSubCategory" FromRole="ItemSubCategory" ToRole="PartToCategory" />
+        </EntityType>
+        <EntityType Name="LeadTimeForAssembly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssemblyID" Type="Int64" Nullable="false" />
+          <Property Name="LeadTimeDays" Type="Int32" Nullable="false" />
+          <Property Name="BOMID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Assembly" Relationship="Self.FK_LeadTimeForAssembly_BOMItems" FromRole="LeadTimeForAssembly" ToRole="Assembly" />
+          <NavigationProperty Name="BOM" Relationship="Self.FK_LeadTimeForAssembly_BOM" FromRole="LeadTimeForAssembly" ToRole="BOM" />
+        </EntityType>
+        <EntityType Name="Opportunity">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Opportunity1" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ClosedDate" Type="DateTime" Precision="3" />
+          <Property Name="Representative" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="3" />
+          <Property Name="QuoteNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PONumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Authorisation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Campaign" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CampaignCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Territory1ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Territory1Split" Type="Int32" />
+          <Property Name="Territory2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Territory2Split" Type="Int32" />
+          <Property Name="DispatchAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AccountContactName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountContactTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountContactPhoneNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountContactEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FinanceDeal" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FinanceType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FinanceApproved" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FinanceTotalAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FinancePeriod" Type="Int32" />
+          <Property Name="InkUsage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SolventUsage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="SalesPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CHOPComments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="LeadTime" Type="Int32" Nullable="false" />
+          <Property Name="PMComments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="DateTimeStamp" Type="DateTime" Precision="3" />
+          <Property Name="SaleTypeID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OpportunityBOMList">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OpportunityID" Type="Int32" Nullable="false" />
+          <Property Name="BOMID" Type="Int32" Nullable="false" />
+          <Property Name="BOMItemsID" Type="Int64" Nullable="false" />
+          <Property Name="Qty" Type="Decimal" Precision="18" Scale="1" Nullable="false" />
+          <Property Name="ItemPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="CustomDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FinalAgreedPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsDiscountApply" Type="Boolean" />
+          <Property Name="PriceAfterDiscount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="MaximumQty" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="UpdatedDatetime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsInTotal" Type="Boolean" Nullable="false" />
+          <Property Name="IsDecimalAllowed" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ParentChildPart">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentID" Type="Int64" Nullable="false" />
+          <Property Name="ChildID" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PartToCapitalAssembly_DEL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartID" Type="Int64" Nullable="false" />
+          <Property Name="AssemblyID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Assembly" Relationship="Self.FK_PartToCapitalAssembly_PartToCapitalAssembly" FromRole="PartToCapitalAssembly_DEL" ToRole="Assembly" />
+          <NavigationProperty Name="BOMItem" Relationship="Self.FK_PartToCapitalAssembly_Products" FromRole="PartToCapitalAssembly_DEL" ToRole="BOMItems" />
+        </EntityType>
+        <EntityType Name="PartToCategory">
+          <Key>
+            <PropertyRef Name="PartID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartID" Type="Int64" Nullable="false" />
+          <Property Name="CategoryID" Type="Int64" Nullable="false" />
+          <Property Name="SubCategoryID" Type="Int32" />
+          <NavigationProperty Name="ItemCategory" Relationship="Self.FK_PartToCategory_ItemCategory" FromRole="PartToCategory" ToRole="ItemCategory" />
+          <NavigationProperty Name="ItemSubCategory" Relationship="Self.FK_PartToCategory_ItemSubCategory" FromRole="PartToCategory" ToRole="ItemSubCategory" />
+        </EntityType>
+        <EntityType Name="PMFeeNotChargable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssemblyID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Assembly" Relationship="Self.FK_PMFeeChargable_Assembly" FromRole="PMFeeNotChargable" ToRole="Assembly" />
+        </EntityType>
+        <EntityType Name="PMFeeNotChargable_DEL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="PartID" Type="Int64" Nullable="false" />
+          <Property Name="Charge" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="ItemCategory" Relationship="Self.FK_pmFeeChargable_ItemCategory" FromRole="PMFeeNotChargable_DEL" ToRole="ItemCategory" />
+        </EntityType>
+        <EntityType Name="ProjectMilestone">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OpportunityID" Type="Int32" Nullable="false" />
+          <Property Name="BOMID" Type="Int32" Nullable="false" />
+          <Property Name="DepositPerc" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Deposit" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PreDeliveryPerc" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PreDelivery" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="FinalPerc" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Final" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Teritory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Configuration_DEL">
+          <Key>
+            <PropertyRef Name="ProjectMangementFee" />
+          </Key>
+          <Property Name="ProjectMangementFee" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ImplementationAssembly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="SaleType">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="SaleType1" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SaleType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Assembly_AssemblyCategory">
+          <End Role="AssemblyCategory" Type="Self.AssemblyCategory" Multiplicity="1" />
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssemblyCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Assembly">
+              <PropertyRef Name="AssemblyCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Assembly_BOMItems">
+          <End Role="BOMItems" Type="Self.BOMItem" Multiplicity="1" />
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOMItems">
+              <PropertyRef Name="RECID" />
+            </Principal>
+            <Dependent Role="Assembly">
+              <PropertyRef Name="vwProductsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMtoAssembly_Assembly">
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+          <End Role="BOMtoAssembly" Type="Self.BOMtoAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMtoAssembly">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LeadTimeForAssembly_BOMItems">
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+          <End Role="LeadTimeForAssembly" Type="Self.LeadTimeForAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LeadTimeForAssembly">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartToCapitalAssembly_PartToCapitalAssembly">
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+          <End Role="PartToCapitalAssembly_DEL" Type="Self.PartToCapitalAssembly_DEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PartToCapitalAssembly_DEL">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PMFeeChargable_Assembly">
+          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+          <End Role="PMFeeNotChargable" Type="Self.PMFeeNotChargable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PMFeeNotChargable">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMtoAssembly_BOM">
+          <End Role="BOM" Type="Self.BOM" Multiplicity="1" />
+          <End Role="BOMtoAssembly" Type="Self.BOMtoAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOM">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMtoAssembly">
+              <PropertyRef Name="BOMid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LeadTimeForAssembly_BOM">
+          <End Role="BOM" Type="Self.BOM" Multiplicity="1" />
+          <End Role="LeadTimeForAssembly" Type="Self.LeadTimeForAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOM">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LeadTimeForAssembly">
+              <PropertyRef Name="BOMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMtoAssembly_BOMItems">
+          <End Role="BOMItems" Type="Self.BOMItem" Multiplicity="1" />
+          <End Role="BOMtoAssembly" Type="Self.BOMtoAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOMItems">
+              <PropertyRef Name="RECID" />
+            </Principal>
+            <Dependent Role="BOMtoAssembly">
+              <PropertyRef Name="Device_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartToCapitalAssembly_Products">
+          <End Role="BOMItems" Type="Self.BOMItem" Multiplicity="1" />
+          <End Role="PartToCapitalAssembly_DEL" Type="Self.PartToCapitalAssembly_DEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOMItems">
+              <PropertyRef Name="RECID" />
+            </Principal>
+            <Dependent Role="PartToCapitalAssembly_DEL">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemCategory_ItemCategory">
+          <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="1" />
+          <End Role="ItemCategory1" Type="Self.ItemCategory" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ItemCategory1">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemSubCategory_ItemCategory1">
+          <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="1" />
+          <End Role="ItemSubCategory" Type="Self.ItemSubCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ItemSubCategory">
+              <PropertyRef Name="ItemCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartToCategory_ItemCategory">
+          <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="1" />
+          <End Role="PartToCategory" Type="Self.PartToCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PartToCategory">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pmFeeChargable_ItemCategory">
+          <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="1" />
+          <End Role="PMFeeNotChargable_DEL" Type="Self.PMFeeNotChargable_DEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PMFeeNotChargable_DEL">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartToCategory_ItemSubCategory">
+          <End Role="ItemSubCategory" Type="Self.ItemSubCategory" Multiplicity="0..1" />
+          <End Role="PartToCategory" Type="Self.PartToCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemSubCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PartToCategory">
+              <PropertyRef Name="SubCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OnlineBOMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Assemblies" EntityType="Self.Assembly" />
+          <EntitySet Name="AssemblyCategories" EntityType="Self.AssemblyCategory" />
+          <EntitySet Name="BOMs" EntityType="Self.BOM" />
+          <EntitySet Name="BOMItems" EntityType="Self.BOMItem" />
+          <EntitySet Name="BOMTemplates" EntityType="Self.BOMTemplate" />
+          <EntitySet Name="BOMtoAssemblies" EntityType="Self.BOMtoAssembly" />
+          <EntitySet Name="InternalBOMItems" EntityType="Self.InternalBOMItem" />
+          <EntitySet Name="ItemCategories" EntityType="Self.ItemCategory" />
+          <EntitySet Name="ItemSubCategories" EntityType="Self.ItemSubCategory" />
+          <EntitySet Name="LeadTimeForAssemblies" EntityType="Self.LeadTimeForAssembly" />
+          <EntitySet Name="Opportunities" EntityType="Self.Opportunity" />
+          <EntitySet Name="OpportunityBOMLists" EntityType="Self.OpportunityBOMList" />
+          <EntitySet Name="ParentChildParts" EntityType="Self.ParentChildPart" />
+          <EntitySet Name="PartToCapitalAssembly_DEL" EntityType="Self.PartToCapitalAssembly_DEL" />
+          <EntitySet Name="PartToCategories" EntityType="Self.PartToCategory" />
+          <EntitySet Name="PMFeeNotChargables" EntityType="Self.PMFeeNotChargable" />
+          <EntitySet Name="PMFeeNotChargable_DEL" EntityType="Self.PMFeeNotChargable_DEL" />
+          <EntitySet Name="ProjectMilestones" EntityType="Self.ProjectMilestone" />
+          <EntitySet Name="Teritories" EntityType="Self.Teritory" />
+          <EntitySet Name="Configuration_DEL" EntityType="Self.Configuration_DEL" />
+          <EntitySet Name="ImplementationAssemblies" EntityType="Self.ImplementationAssembly" />
+          <EntitySet Name="SaleTypes" EntityType="Self.SaleType" />
+          <AssociationSet Name="FK_Assembly_AssemblyCategory" Association="Self.FK_Assembly_AssemblyCategory">
+            <End Role="AssemblyCategory" EntitySet="AssemblyCategories" />
+            <End Role="Assembly" EntitySet="Assemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Assembly_BOMItems" Association="Self.FK_Assembly_BOMItems">
+            <End Role="BOMItems" EntitySet="BOMItems" />
+            <End Role="Assembly" EntitySet="Assemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMtoAssembly_Assembly" Association="Self.FK_BOMtoAssembly_Assembly">
+            <End Role="Assembly" EntitySet="Assemblies" />
+            <End Role="BOMtoAssembly" EntitySet="BOMtoAssemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LeadTimeForAssembly_BOMItems" Association="Self.FK_LeadTimeForAssembly_BOMItems">
+            <End Role="Assembly" EntitySet="Assemblies" />
+            <End Role="LeadTimeForAssembly" EntitySet="LeadTimeForAssemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartToCapitalAssembly_PartToCapitalAssembly" Association="Self.FK_PartToCapitalAssembly_PartToCapitalAssembly">
+            <End Role="Assembly" EntitySet="Assemblies" />
+            <End Role="PartToCapitalAssembly_DEL" EntitySet="PartToCapitalAssembly_DEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PMFeeChargable_Assembly" Association="Self.FK_PMFeeChargable_Assembly">
+            <End Role="Assembly" EntitySet="Assemblies" />
+            <End Role="PMFeeNotChargable" EntitySet="PMFeeNotChargables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMtoAssembly_BOM" Association="Self.FK_BOMtoAssembly_BOM">
+            <End Role="BOM" EntitySet="BOMs" />
+            <End Role="BOMtoAssembly" EntitySet="BOMtoAssemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LeadTimeForAssembly_BOM" Association="Self.FK_LeadTimeForAssembly_BOM">
+            <End Role="BOM" EntitySet="BOMs" />
+            <End Role="LeadTimeForAssembly" EntitySet="LeadTimeForAssemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMtoAssembly_BOMItems" Association="Self.FK_BOMtoAssembly_BOMItems">
+            <End Role="BOMItems" EntitySet="BOMItems" />
+            <End Role="BOMtoAssembly" EntitySet="BOMtoAssemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartToCapitalAssembly_Products" Association="Self.FK_PartToCapitalAssembly_Products">
+            <End Role="BOMItems" EntitySet="BOMItems" />
+            <End Role="PartToCapitalAssembly_DEL" EntitySet="PartToCapitalAssembly_DEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemCategory_ItemCategory" Association="Self.FK_ItemCategory_ItemCategory">
+            <End Role="ItemCategory" EntitySet="ItemCategories" />
+            <End Role="ItemCategory1" EntitySet="ItemCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemSubCategory_ItemCategory1" Association="Self.FK_ItemSubCategory_ItemCategory1">
+            <End Role="ItemCategory" EntitySet="ItemCategories" />
+            <End Role="ItemSubCategory" EntitySet="ItemSubCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartToCategory_ItemCategory" Association="Self.FK_PartToCategory_ItemCategory">
+            <End Role="ItemCategory" EntitySet="ItemCategories" />
+            <End Role="PartToCategory" EntitySet="PartToCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pmFeeChargable_ItemCategory" Association="Self.FK_pmFeeChargable_ItemCategory">
+            <End Role="ItemCategory" EntitySet="ItemCategories" />
+            <End Role="PMFeeNotChargable_DEL" EntitySet="PMFeeNotChargable_DEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartToCategory_ItemSubCategory" Association="Self.FK_PartToCategory_ItemSubCategory">
+            <End Role="ItemSubCategory" EntitySet="ItemSubCategories" />
+            <End Role="PartToCategory" EntitySet="PartToCategories" />
+          </AssociationSet>
+          <FunctionImport Name="CreateLead">
+            <Parameter Name="CustomerName" Mode="In" Type="String" />
+            <Parameter Name="LeadDate" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadBy" Mode="In" Type="String" />
+            <Parameter Name="LeadNumber" Mode="In" Type="String" />
+            <Parameter Name="NoOfWeeks" Mode="In" Type="Int32" />
+            <Parameter Name="DelivaeryDate" Mode="In" Type="DateTime" />
+            <Parameter Name="PONumber" Mode="In" Type="String" />
+            <Parameter Name="DispatchAddress" Mode="In" Type="String" />
+            <Parameter Name="DispatchName" Mode="In" Type="String" />
+            <Parameter Name="Title" Mode="In" Type="String" />
+            <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="CRMNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Get_AssemblyForBOMByOpportunityID">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_BOMPriceTotalsByOpportunityID" ReturnType="Collection(OnlineBOMModel.Get_BOMPriceTotalsByOpportunityID_Result)">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_OpportunityBOMChildItemsByBOMItemID" ReturnType="Collection(OnlineBOMModel.Get_OpportunityBOMChildItemsByBOMItemID_Result)">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMItemID" Mode="In" Type="String" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_OpportunityBOMItemsByOpportunityID" ReturnType="Collection(OnlineBOMModel.Get_OpportunityBOMItemsByOpportunityID_Result)">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+            <Parameter Name="NewBOM" Mode="In" Type="Boolean" />
+            <Parameter Name="State" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_OpportunityBOMList_BOMDownload" ReturnType="Collection(OnlineBOMModel.Get_OpportunityBOMList_BOMDownload_Result)">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+            <Parameter Name="State" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_OpportunityBOMListBYOpportunityID" ReturnType="Collection(OnlineBOMModel.Get_OpportunityBOMListBYOpportunityID_Result)">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_OpportunityByQuoteNo" ReturnType="Collection(OnlineBOMModel.Get_OpportunityByQuoteNo_Result)">
+            <Parameter Name="QuoteNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Get_OpportunityList" ReturnType="Collection(OnlineBOMModel.Get_OpportunityList_Result)" />
+          <FunctionImport Name="Get_OpportunityPickingList_BOMDownload">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+            <Parameter Name="State" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_PMFeeChargableAssemlyByBOMID">
+            <Parameter Name="BOMID" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="Get_PMFeeNotChargableByBOMID">
+            <Parameter Name="BOMID" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="Get_ProjectMilestones" ReturnType="Collection(OnlineBOMModel.Get_ProjectMilestones_Result)">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_SaleTypes" ReturnType="Collection(OnlineBOMModel.Get_SaleTypes_Result)" />
+          <FunctionImport Name="Get_Territory" ReturnType="Collection(OnlineBOMModel.Get_Territory_Result)" />
+          <FunctionImport Name="GetQuoteItemMasterByQuoteID">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_OpportunityBOMList">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMItemsID" Mode="In" Type="Int64" />
+            <Parameter Name="Qty" Mode="In" Type="Decimal" />
+            <Parameter Name="ItemPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="Price" Mode="In" Type="Decimal" />
+            <Parameter Name="CustomDescription" Mode="In" Type="String" />
+            <Parameter Name="CustomCode" Mode="In" Type="String" />
+            <Parameter Name="Discount" Mode="In" Type="Decimal" />
+            <Parameter Name="FinalAgreedPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="PriceAfterDiscount" Mode="In" Type="Decimal" />
+            <Parameter Name="IsDiscountApply" Mode="In" Type="Boolean" />
+            <Parameter Name="MaximumQty" Mode="In" Type="Decimal" />
+            <Parameter Name="State" Mode="In" Type="Int32" />
+            <Parameter Name="IsInTotal" Mode="In" Type="Boolean" />
+            <Parameter Name="IsDecimalAllowed" Mode="In" Type="Boolean" />
+            <Parameter Name="InkUsage" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_ProjectMilestones">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+            <Parameter Name="DepositPerc" Mode="In" Type="Decimal" />
+            <Parameter Name="Deposit" Mode="In" Type="Decimal" />
+            <Parameter Name="PreDeliveryPerc" Mode="In" Type="Decimal" />
+            <Parameter Name="PreDelivery" Mode="In" Type="Decimal" />
+            <Parameter Name="FinalPerc" Mode="In" Type="Decimal" />
+            <Parameter Name="Final" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="Update_OpportunityAssemblyDetails">
+            <Parameter Name="QuoteNo" Mode="In" Type="String" />
+            <Parameter Name="CompanyName" Mode="In" Type="String" />
+            <Parameter Name="Representative" Mode="In" Type="String" />
+            <Parameter Name="CustomerType" Mode="In" Type="String" />
+            <Parameter Name="DeliveryDate" Mode="In" Type="DateTime" />
+            <Parameter Name="PONumber" Mode="In" Type="String" />
+            <Parameter Name="Authorisation" Mode="In" Type="String" />
+            <Parameter Name="Campaign" Mode="In" Type="String" />
+            <Parameter Name="CampaignCode" Mode="In" Type="String" />
+            <Parameter Name="SalesPerson" Mode="In" Type="String" />
+            <Parameter Name="SaleTypeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Update_OpportunityBOMListIsActiveFlag">
+            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+            <Parameter Name="BOMID" Mode="In" Type="Int32" />
+            <Parameter Name="State" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Update_OpportunityCHOPComments">
+            <Parameter Name="QuoteNo" Mode="In" Type="String" />
+            <Parameter Name="CHOPComments" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Update_OpportunityConsumableDetails">
+            <Parameter Name="QuoteNo" Mode="In" Type="String" />
+            <Parameter Name="InkUsage" Mode="In" Type="String" />
+            <Parameter Name="SolventUsage" Mode="In" Type="String" />
+            <Parameter Name="Comments" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Update_OpportunityCustomerDetails">
+            <Parameter Name="QuoteNo" Mode="In" Type="String" />
+            <Parameter Name="DispatchAddress" Mode="In" Type="String" />
+            <Parameter Name="AccountContactName" Mode="In" Type="String" />
+            <Parameter Name="AccountContactTitle" Mode="In" Type="String" />
+            <Parameter Name="AccountContactPhoneNo" Mode="In" Type="String" />
+            <Parameter Name="AccountContactEmail" Mode="In" Type="String" />
+            <Parameter Name="FinanceDeal" Mode="In" Type="String" />
+            <Parameter Name="FinanceType" Mode="In" Type="String" />
+            <Parameter Name="FinanceApproved" Mode="In" Type="String" />
+            <Parameter Name="FinanceTotalAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="FinancePeriod" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Update_OpportunityPMComments">
+            <Parameter Name="QuoteNo" Mode="In" Type="String" />
+            <Parameter Name="PMComments" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Update_OpportunityTerritorySplit">
+            <Parameter Name="QuoteNo" Mode="In" Type="String" />
+            <Parameter Name="Territory1ID" Mode="In" Type="String" />
+            <Parameter Name="Territory2ID" Mode="In" Type="String" />
+            <Parameter Name="Territory1Split" Mode="In" Type="Int32" />
+            <Parameter Name="Territory2Split" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Get_BOMPriceTotalsByOpportunityID_Result">
+          <Property Type="Decimal" Name="TotalPrice" Nullable="true" Precision="38" Scale="3" />
+          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="OpportunityID" Nullable="false" />
+          <Property Type="Int32" Name="BOMID" Nullable="false" />
+          <Property Type="Decimal" Name="FinalAgreedPrice" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CTO" Nullable="false" />
+          <Property Type="String" Name="PONumber" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Get_OpportunityBOMChildItemsByBOMItemID_Result">
+          <Property Type="Int32" Name="OpportunityID" Nullable="true" />
+          <Property Type="Int32" Name="OpportunityBOMListID" Nullable="false" />
+          <Property Type="Int32" Name="BOMID" Nullable="false" />
+          <Property Type="Int64" Name="BOMItemsID" Nullable="false" />
+          <Property Type="Decimal" Name="ItemPrice" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="Qty" Nullable="false" Precision="18" Scale="1" />
+          <Property Type="String" Name="DESCRIPTION" Nullable="true" MaxLength="60" />
+          <Property Type="String" Name="Category" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="SubCategory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ITEMID" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="Price" Nullable="true" Precision="38" Scale="5" />
+          <Property Type="Boolean" Name="IsCustomParts" Nullable="false" />
+          <Property Type="Int32" Name="FinalAgreedPrice" Nullable="false" />
+          <Property Type="Int32" Name="Discount" Nullable="false" />
+          <Property Type="Boolean" Name="IsDiscountApply" Nullable="false" />
+          <Property Type="Boolean" Name="IsQtyFixed" Nullable="false" />
+          <Property Type="Int32" Name="PriceAfterDiscount" Nullable="false" />
+          <Property Type="String" Name="BOM" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="MaximumQty" Nullable="false" Precision="18" Scale="1" />
+          <Property Type="DateTime" Name="ClosedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Stock" Nullable="true" />
+          <Property Type="Boolean" Name="IsInTotal" Nullable="false" />
+          <Property Type="Boolean" Name="IsDecimalAllowed" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Get_OpportunityBOMItemsByOpportunityID_Result">
+          <Property Type="Int32" Name="OpportunityID" Nullable="true" />
+          <Property Type="Int32" Name="OpportunityBOMListID" Nullable="false" />
+          <Property Type="Int32" Name="BOMID" Nullable="false" />
+          <Property Type="Int64" Name="BOMItemsID" Nullable="false" />
+          <Property Type="Decimal" Name="ItemPrice" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="Qty" Nullable="false" Precision="18" Scale="1" />
+          <Property Type="String" Name="DESCRIPTION" Nullable="true" MaxLength="60" />
+          <Property Type="String" Name="Category" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="CategoryOrder" Nullable="true" />
+          <Property Type="String" Name="SubCategory" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="SubCategoryOrder" Nullable="true" />
+          <Property Type="String" Name="ITEMID" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="Price" Nullable="true" Precision="38" Scale="5" />
+          <Property Type="Boolean" Name="IsCustomParts" Nullable="false" />
+          <Property Type="Int32" Name="FinalAgreedPrice" Nullable="false" />
+          <Property Type="Int32" Name="Discount" Nullable="false" />
+          <Property Type="Boolean" Name="IsDiscountApply" Nullable="false" />
+          <Property Type="Boolean" Name="IsQtyFixed" Nullable="false" />
+          <Property Type="Int32" Name="PriceAfterDiscount" Nullable="false" />
+          <Property Type="String" Name="BOM" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="MaximumQty" Nullable="false" Precision="18" Scale="1" />
+          <Property Type="DateTime" Name="ClosedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Stock" Nullable="true" />
+          <Property Type="Boolean" Name="IsInTotal" Nullable="false" />
+          <Property Type="Boolean" Name="IsDecimalAllowed" Nullable="false" />
+          <Property Type="Int32" Name="InkUsage" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Get_OpportunityBOMList_BOMDownload_Result">
+          <Property Type="String" Name="BOM" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DESCRIPTION" Nullable="true" MaxLength="60" />
+          <Property Type="Decimal" Name="ItemPrice" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Price" Nullable="true" Precision="37" Scale="3" />
+          <Property Type="String" Name="MatthewsCode" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="Qty" Nullable="false" Precision="18" Scale="1" />
+          <Property Type="String" Name="Category" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CompanyName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="AccountContactEmail" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DispatchAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="QuoteNo" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PriceAfterDiscount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="FinalAgreedPrice" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="Get_OpportunityBOMListBYOpportunityID_Result">
+          <Property Type="Int32" Name="BOMID" Nullable="false" />
+          <Property Type="String" Name="BOM" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="TotalPrice" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Int32" Name="OpportunityID" Nullable="true" />
+          <Property Type="Decimal" Name="Discount" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PriceAfterDiscount" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="FinalAgreedPrice" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="ClosedDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Get_OpportunityByQuoteNo_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Opportunity" Nullable="true" MaxLength="1000" />
+          <Property Type="String" Name="CustomerCode" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="ClosedDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Representative" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="CompanyName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="1000" />
+          <Property Type="String" Name="CustomerType" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="DeliveryDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="QuoteNo" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="PONumber" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Authorisation" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Campaign" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CampaignCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Territory1ID" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Territory1Split" Nullable="true" />
+          <Property Type="String" Name="Territory2ID" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Territory2Split" Nullable="true" />
+          <Property Type="String" Name="DispatchAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="AccountContactName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AccountContactTitle" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AccountContactPhoneNo" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AccountContactEmail" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FinanceDeal" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="FinanceType" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="FinanceApproved" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="FinanceTotalAmount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="FinancePeriod" Nullable="true" />
+          <Property Type="String" Name="InkUsage" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SolventUsage" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="1000" />
+          <Property Type="String" Name="SalesPerson" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="CHOPComments" Nullable="true" MaxLength="1000" />
+          <Property Type="Int32" Name="LeadTime" Nullable="false" />
+          <Property Type="String" Name="PMComments" Nullable="true" MaxLength="1000" />
+          <Property Type="DateTime" Name="DateTimeStamp" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="SaleTypeID" Nullable="true" />
+          <Property Type="DateTime" Name="CalcDeliveryDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Get_OpportunityList_Result">
+          <Property Type="String" Name="opportunity" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="cvn_SalespersonName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="cvn_PrimaryContactName" Nullable="true" MaxLength="160" />
+          <Property Type="String" Name="map_QuoteNumber" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="160" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="telephone1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="cvn_erpcode" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="EMailAddress1" Nullable="true" MaxLength="110" />
+          <Property Type="String" Name="JobTitle" Nullable="true" MaxLength="100" />
+          <Property Type="Guid" Name="OpportunityId" Nullable="true" />
+          <Property Type="String" Name="TerritoryIdName" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="CLOSEDDATE" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Get_ProjectMilestones_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="OpportunityID" Nullable="false" />
+          <Property Type="Int32" Name="BOMID" Nullable="false" />
+          <Property Type="Decimal" Name="DepositPerc" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Deposit" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PreDeliveryPerc" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PreDelivery" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="FinalPerc" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Final" Nullable="false" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="Get_SaleTypes_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Get_Territory_Result">
+          <Property Type="String" Name="SALESDISTRICTID" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="DESCRIPTION" Nullable="true" MaxLength="60" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OnlineBOMModelStoreContainer" CdmEntityContainer="OnlineBOMEntities">
+          <EntitySetMapping Name="Assemblies">
+            <EntityTypeMapping TypeName="OnlineBOMModel.Assembly">
+              <MappingFragment StoreEntitySet="Assembly">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="vwProductsID" ColumnName="vwProductsID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AssemblyCategoryID" ColumnName="AssemblyCategoryID" />
+                <ScalarProperty Name="Device" ColumnName="Device" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssemblyCategories">
+            <EntityTypeMapping TypeName="OnlineBOMModel.AssemblyCategory">
+              <MappingFragment StoreEntitySet="AssemblyCategory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BOMs">
+            <EntityTypeMapping TypeName="OnlineBOMModel.BOM">
+              <MappingFragment StoreEntitySet="BOM">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BOM1" ColumnName="BOM" />
+                <ScalarProperty Name="IsCustomParts" ColumnName="IsCustomParts" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BOMItems">
+            <EntityTypeMapping TypeName="OnlineBOMModel.BOMItem">
+              <MappingFragment StoreEntitySet="BOMItems">
+                <ScalarProperty Name="RECID" ColumnName="RECID" />
+                <ScalarProperty Name="ITEMID" ColumnName="ITEMID" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="SALEPRICE" ColumnName="SALEPRICE" />
+                <ScalarProperty Name="SALEUNIT" ColumnName="SALEUNIT" />
+                <ScalarProperty Name="PRODTYPE" ColumnName="PRODTYPE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BOMTemplates">
+            <EntityTypeMapping TypeName="OnlineBOMModel.BOMTemplate">
+              <MappingFragment StoreEntitySet="BOMTemplate">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BOM_ID" ColumnName="BOM_ID" />
+                <ScalarProperty Name="BOMItem_ID" ColumnName="BOMItem_ID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="IsQtyFixed" ColumnName="IsQtyFixed" />
+                <ScalarProperty Name="IsDiscountApply" ColumnName="IsDiscountApply" />
+                <ScalarProperty Name="MaximumQty" ColumnName="MaximumQty" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+                <ScalarProperty Name="IsInTotal" ColumnName="IsInTotal" />
+                <ScalarProperty Name="IsDecimalAllowed" ColumnName="IsDecimalAllowed" />
+                <ScalarProperty Name="ParentBOMItemID" ColumnName="ParentBOMItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BOMtoAssemblies">
+            <EntityTypeMapping TypeName="OnlineBOMModel.BOMtoAssembly">
+              <MappingFragment StoreEntitySet="BOMtoAssembly">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BOMid" ColumnName="BOMid" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+                <ScalarProperty Name="Device_ID" ColumnName="Device_ID" />
+                <ScalarProperty Name="PMPercentage" ColumnName="PMPercentage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InternalBOMItems">
+            <EntityTypeMapping TypeName="OnlineBOMModel.InternalBOMItem">
+              <MappingFragment StoreEntitySet="InternalBOMItems">
+                <ScalarProperty Name="RECID" ColumnName="RECID" />
+                <ScalarProperty Name="ITEMID" ColumnName="ITEMID" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemCategories">
+            <EntityTypeMapping TypeName="OnlineBOMModel.ItemCategory">
+              <MappingFragment StoreEntitySet="ItemCategory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="ItemOrder" ColumnName="ItemOrder" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemSubCategories">
+            <EntityTypeMapping TypeName="OnlineBOMModel.ItemSubCategory">
+              <MappingFragment StoreEntitySet="ItemSubCategory">
+                <ScalarProperty Name="ItemCategory" ColumnName="ItemCategory" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ItemOrder" ColumnName="ItemOrder" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LeadTimeForAssemblies">
+            <EntityTypeMapping TypeName="OnlineBOMModel.LeadTimeForAssembly">
+              <MappingFragment StoreEntitySet="LeadTimeForAssembly">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+                <ScalarProperty Name="LeadTimeDays" ColumnName="LeadTimeDays" />
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Opportunities">
+            <EntityTypeMapping TypeName="OnlineBOMModel.Opportunity">
+              <MappingFragment StoreEntitySet="Opportunity">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Opportunity1" ColumnName="Opportunity" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="ClosedDate" ColumnName="ClosedDate" />
+                <ScalarProperty Name="Representative" ColumnName="Representative" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="QuoteNo" ColumnName="QuoteNo" />
+                <ScalarProperty Name="PONumber" ColumnName="PONumber" />
+                <ScalarProperty Name="Authorisation" ColumnName="Authorisation" />
+                <ScalarProperty Name="Campaign" ColumnName="Campaign" />
+                <ScalarProperty Name="CampaignCode" ColumnName="CampaignCode" />
+                <ScalarProperty Name="Territory1ID" ColumnName="Territory1ID" />
+                <ScalarProperty Name="Territory1Split" ColumnName="Territory1Split" />
+                <ScalarProperty Name="Territory2ID" ColumnName="Territory2ID" />
+                <ScalarProperty Name="Territory2Split" ColumnName="Territory2Split" />
+                <ScalarProperty Name="DispatchAddress" ColumnName="DispatchAddress" />
+                <ScalarProperty Name="AccountContactName" ColumnName="AccountContactName" />
+                <ScalarProperty Name="AccountContactTitle" ColumnName="AccountContactTitle" />
+                <ScalarProperty Name="AccountContactPhoneNo" ColumnName="AccountContactPhoneNo" />
+                <ScalarProperty Name="AccountContactEmail" ColumnName="AccountContactEmail" />
+                <ScalarProperty Name="FinanceDeal" ColumnName="FinanceDeal" />
+                <ScalarProperty Name="FinanceType" ColumnName="FinanceType" />
+                <ScalarProperty Name="FinanceApproved" ColumnName="FinanceApproved" />
+                <ScalarProperty Name="FinanceTotalAmount" ColumnName="FinanceTotalAmount" />
+                <ScalarProperty Name="FinancePeriod" ColumnName="FinancePeriod" />
+                <ScalarProperty Name="InkUsage" ColumnName="InkUsage" />
+                <ScalarProperty Name="SolventUsage" ColumnName="SolventUsage" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="SalesPerson" ColumnName="SalesPerson" />
+                <ScalarProperty Name="CHOPComments" ColumnName="CHOPComments" />
+                <ScalarProperty Name="LeadTime" ColumnName="LeadTime" />
+                <ScalarProperty Name="PMComments" ColumnName="PMComments" />
+                <ScalarProperty Name="DateTimeStamp" ColumnName="DateTimeStamp" />
+                <ScalarProperty Name="SaleTypeID" ColumnName="SaleTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OpportunityBOMLists">
+            <EntityTypeMapping TypeName="OnlineBOMModel.OpportunityBOMList">
+              <MappingFragment StoreEntitySet="OpportunityBOMList">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OpportunityID" ColumnName="OpportunityID" />
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+                <ScalarProperty Name="BOMItemsID" ColumnName="BOMItemsID" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="CustomDescription" ColumnName="CustomDescription" />
+                <ScalarProperty Name="CustomCode" ColumnName="CustomCode" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="FinalAgreedPrice" ColumnName="FinalAgreedPrice" />
+                <ScalarProperty Name="IsDiscountApply" ColumnName="IsDiscountApply" />
+                <ScalarProperty Name="PriceAfterDiscount" ColumnName="PriceAfterDiscount" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="MaximumQty" ColumnName="MaximumQty" />
+                <ScalarProperty Name="UpdatedDatetime" ColumnName="UpdatedDatetime" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsInTotal" ColumnName="IsInTotal" />
+                <ScalarProperty Name="IsDecimalAllowed" ColumnName="IsDecimalAllowed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParentChildParts">
+            <EntityTypeMapping TypeName="OnlineBOMModel.ParentChildPart">
+              <MappingFragment StoreEntitySet="ParentChildPart">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ChildID" ColumnName="ChildID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartToCapitalAssembly_DEL">
+            <EntityTypeMapping TypeName="OnlineBOMModel.PartToCapitalAssembly_DEL">
+              <MappingFragment StoreEntitySet="PartToCapitalAssembly_DEL">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartToCategories">
+            <EntityTypeMapping TypeName="OnlineBOMModel.PartToCategory">
+              <MappingFragment StoreEntitySet="PartToCategory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PMFeeNotChargables">
+            <EntityTypeMapping TypeName="OnlineBOMModel.PMFeeNotChargable">
+              <MappingFragment StoreEntitySet="PMFeeNotChargable">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PMFeeNotChargable_DEL">
+            <EntityTypeMapping TypeName="OnlineBOMModel.PMFeeNotChargable_DEL">
+              <MappingFragment StoreEntitySet="PMFeeNotChargable_DEL">
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Charge" ColumnName="Charge" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProjectMilestones">
+            <EntityTypeMapping TypeName="OnlineBOMModel.ProjectMilestone">
+              <MappingFragment StoreEntitySet="ProjectMilestones">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OpportunityID" ColumnName="OpportunityID" />
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+                <ScalarProperty Name="DepositPerc" ColumnName="DepositPerc" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="PreDeliveryPerc" ColumnName="PreDeliveryPerc" />
+                <ScalarProperty Name="PreDelivery" ColumnName="PreDelivery" />
+                <ScalarProperty Name="FinalPerc" ColumnName="FinalPerc" />
+                <ScalarProperty Name="Final" ColumnName="Final" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teritories">
+            <EntityTypeMapping TypeName="OnlineBOMModel.Teritory">
+              <MappingFragment StoreEntitySet="Teritory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Configuration_DEL">
+            <EntityTypeMapping TypeName="OnlineBOMModel.Configuration_DEL">
+              <MappingFragment StoreEntitySet="Configuration_DEL">
+                <ScalarProperty Name="ProjectMangementFee" ColumnName="ProjectMangementFee" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImplementationAssemblies">
+            <EntityTypeMapping TypeName="OnlineBOMModel.ImplementationAssembly">
+              <MappingFragment StoreEntitySet="ImplementationAssembly">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SaleTypes">
+            <EntityTypeMapping TypeName="OnlineBOMModel.SaleType">
+              <MappingFragment StoreEntitySet="SaleType">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SaleType1" ColumnName="SaleType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CreateLead" FunctionName="OnlineBOMModel.Store.CreateLead" />
+          <FunctionImportMapping FunctionImportName="Get_AssemblyForBOMByOpportunityID" FunctionName="OnlineBOMModel.Store.Get_AssemblyForBOMByOpportunityID" />
+          <FunctionImportMapping FunctionImportName="Get_BOMPriceTotalsByOpportunityID" FunctionName="OnlineBOMModel.Store.Get_BOMPriceTotalsByOpportunityID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_BOMPriceTotalsByOpportunityID_Result">
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="OpportunityID" ColumnName="OpportunityID" />
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+                <ScalarProperty Name="FinalAgreedPrice" ColumnName="FinalAgreedPrice" />
+                <ScalarProperty Name="CTO" ColumnName="CTO" />
+                <ScalarProperty Name="PONumber" ColumnName="PONumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_OpportunityBOMChildItemsByBOMItemID" FunctionName="OnlineBOMModel.Store.Get_OpportunityBOMChildItemsByBOMItemID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_OpportunityBOMChildItemsByBOMItemID_Result">
+                <ScalarProperty Name="OpportunityID" ColumnName="OpportunityID" />
+                <ScalarProperty Name="OpportunityBOMListID" ColumnName="OpportunityBOMListID" />
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+                <ScalarProperty Name="BOMItemsID" ColumnName="BOMItemsID" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="SubCategory" ColumnName="SubCategory" />
+                <ScalarProperty Name="ITEMID" ColumnName="ITEMID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="IsCustomParts" ColumnName="IsCustomParts" />
+                <ScalarProperty Name="FinalAgreedPrice" ColumnName="FinalAgreedPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="IsDiscountApply" ColumnName="IsDiscountApply" />
+                <ScalarProperty Name="IsQtyFixed" ColumnName="IsQtyFixed" />
+                <ScalarProperty Name="PriceAfterDiscount" ColumnName="PriceAfterDiscount" />
+                <ScalarProperty Name="BOM" ColumnName="BOM" />
+                <ScalarProperty Name="MaximumQty" ColumnName="MaximumQty" />
+                <ScalarProperty Name="ClosedDate" ColumnName="ClosedDate" />
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+                <ScalarProperty Name="IsInTotal" ColumnName="IsInTotal" />
+                <ScalarProperty Name="IsDecimalAllowed" ColumnName="IsDecimalAllowed" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_OpportunityBOMItemsByOpportunityID" FunctionName="OnlineBOMModel.Store.Get_OpportunityBOMItemsByOpportunityID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_OpportunityBOMItemsByOpportunityID_Result">
+                <ScalarProperty Name="OpportunityID" ColumnName="OpportunityID" />
+                <ScalarProperty Name="OpportunityBOMListID" ColumnName="OpportunityBOMListID" />
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+                <ScalarProperty Name="BOMItemsID" ColumnName="BOMItemsID" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="CategoryOrder" ColumnName="CategoryOrder" />
+                <ScalarProperty Name="SubCategory" ColumnName="SubCategory" />
+                <ScalarProperty Name="SubCategoryOrder" ColumnName="SubCategoryOrder" />
+                <ScalarProperty Name="ITEMID" ColumnName="ITEMID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="IsCustomParts" ColumnName="IsCustomParts" />
+                <ScalarProperty Name="FinalAgreedPrice" ColumnName="FinalAgreedPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="IsDiscountApply" ColumnName="IsDiscountApply" />
+                <ScalarProperty Name="IsQtyFixed" ColumnName="IsQtyFixed" />
+                <ScalarProperty Name="PriceAfterDiscount" ColumnName="PriceAfterDiscount" />
+                <ScalarProperty Name="BOM" ColumnName="BOM" />
+                <ScalarProperty Name="MaximumQty" ColumnName="MaximumQty" />
+                <ScalarProperty Name="ClosedDate" ColumnName="ClosedDate" />
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+                <ScalarProperty Name="IsInTotal" ColumnName="IsInTotal" />
+                <ScalarProperty Name="IsDecimalAllowed" ColumnName="IsDecimalAllowed" />
+                <ScalarProperty Name="InkUsage" ColumnName="InkUsage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_OpportunityBOMList_BOMDownload" FunctionName="OnlineBOMModel.Store.Get_OpportunityBOMList_BOMDownload">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_OpportunityBOMList_BOMDownload_Result">
+                <ScalarProperty Name="BOM" ColumnName="BOM" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="MatthewsCode" ColumnName="MatthewsCode" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="AccountContactEmail" ColumnName="AccountContactEmail" />
+                <ScalarProperty Name="DispatchAddress" ColumnName="DispatchAddress" />
+                <ScalarProperty Name="QuoteNo" ColumnName="QuoteNo" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="PriceAfterDiscount" ColumnName="PriceAfterDiscount" />
+                <ScalarProperty Name="FinalAgreedPrice" ColumnName="FinalAgreedPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_OpportunityBOMListBYOpportunityID" FunctionName="OnlineBOMModel.Store.Get_OpportunityBOMListBYOpportunityID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_OpportunityBOMListBYOpportunityID_Result">
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+                <ScalarProperty Name="BOM" ColumnName="BOM" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="OpportunityID" ColumnName="OpportunityID" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="PriceAfterDiscount" ColumnName="PriceAfterDiscount" />
+                <ScalarProperty Name="FinalAgreedPrice" ColumnName="FinalAgreedPrice" />
+                <ScalarProperty Name="ClosedDate" ColumnName="ClosedDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_OpportunityByQuoteNo" FunctionName="OnlineBOMModel.Store.Get_OpportunityByQuoteNo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_OpportunityByQuoteNo_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Opportunity" ColumnName="Opportunity" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="ClosedDate" ColumnName="ClosedDate" />
+                <ScalarProperty Name="Representative" ColumnName="Representative" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="QuoteNo" ColumnName="QuoteNo" />
+                <ScalarProperty Name="PONumber" ColumnName="PONumber" />
+                <ScalarProperty Name="Authorisation" ColumnName="Authorisation" />
+                <ScalarProperty Name="Campaign" ColumnName="Campaign" />
+                <ScalarProperty Name="CampaignCode" ColumnName="CampaignCode" />
+                <ScalarProperty Name="Territory1ID" ColumnName="Territory1ID" />
+                <ScalarProperty Name="Territory1Split" ColumnName="Territory1Split" />
+                <ScalarProperty Name="Territory2ID" ColumnName="Territory2ID" />
+                <ScalarProperty Name="Territory2Split" ColumnName="Territory2Split" />
+                <ScalarProperty Name="DispatchAddress" ColumnName="DispatchAddress" />
+                <ScalarProperty Name="AccountContactName" ColumnName="AccountContactName" />
+                <ScalarProperty Name="AccountContactTitle" ColumnName="AccountContactTitle" />
+                <ScalarProperty Name="AccountContactPhoneNo" ColumnName="AccountContactPhoneNo" />
+                <ScalarProperty Name="AccountContactEmail" ColumnName="AccountContactEmail" />
+                <ScalarProperty Name="FinanceDeal" ColumnName="FinanceDeal" />
+                <ScalarProperty Name="FinanceType" ColumnName="FinanceType" />
+                <ScalarProperty Name="FinanceApproved" ColumnName="FinanceApproved" />
+                <ScalarProperty Name="FinanceTotalAmount" ColumnName="FinanceTotalAmount" />
+                <ScalarProperty Name="FinancePeriod" ColumnName="FinancePeriod" />
+                <ScalarProperty Name="InkUsage" ColumnName="InkUsage" />
+                <ScalarProperty Name="SolventUsage" ColumnName="SolventUsage" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="SalesPerson" ColumnName="SalesPerson" />
+                <ScalarProperty Name="CHOPComments" ColumnName="CHOPComments" />
+                <ScalarProperty Name="LeadTime" ColumnName="LeadTime" />
+                <ScalarProperty Name="PMComments" ColumnName="PMComments" />
+                <ScalarProperty Name="DateTimeStamp" ColumnName="DateTimeStamp" />
+                <ScalarProperty Name="SaleTypeID" ColumnName="SaleTypeID" />
+                <ScalarProperty Name="CalcDeliveryDate" ColumnName="CalcDeliveryDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_OpportunityList" FunctionName="OnlineBOMModel.Store.Get_OpportunityList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_OpportunityList_Result">
+                <ScalarProperty Name="opportunity" ColumnName="opportunity" />
+                <ScalarProperty Name="cvn_SalespersonName" ColumnName="cvn_SalespersonName" />
+                <ScalarProperty Name="cvn_PrimaryContactName" ColumnName="cvn_PrimaryContactName" />
+                <ScalarProperty Name="map_QuoteNumber" ColumnName="map_QuoteNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="telephone1" ColumnName="telephone1" />
+                <ScalarProperty Name="cvn_erpcode" ColumnName="cvn_erpcode" />
+                <ScalarProperty Name="EMailAddress1" ColumnName="EMailAddress1" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="OpportunityId" ColumnName="OpportunityId" />
+                <ScalarProperty Name="TerritoryIdName" ColumnName="TerritoryIdName" />
+                <ScalarProperty Name="CLOSEDDATE" ColumnName="CLOSEDDATE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_OpportunityPickingList_BOMDownload" FunctionName="OnlineBOMModel.Store.Get_OpportunityPickingList_BOMDownload" />
+          <FunctionImportMapping FunctionImportName="Get_PMFeeChargableAssemlyByBOMID" FunctionName="OnlineBOMModel.Store.Get_PMFeeChargableAssemlyByBOMID" />
+          <FunctionImportMapping FunctionImportName="Get_PMFeeNotChargableByBOMID" FunctionName="OnlineBOMModel.Store.Get_PMFeeNotChargableByBOMID" />
+          <FunctionImportMapping FunctionImportName="Get_ProjectMilestones" FunctionName="OnlineBOMModel.Store.Get_ProjectMilestones">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_ProjectMilestones_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OpportunityID" ColumnName="OpportunityID" />
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+                <ScalarProperty Name="DepositPerc" ColumnName="DepositPerc" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="PreDeliveryPerc" ColumnName="PreDeliveryPerc" />
+                <ScalarProperty Name="PreDelivery" ColumnName="PreDelivery" />
+                <ScalarProperty Name="FinalPerc" ColumnName="FinalPerc" />
+                <ScalarProperty Name="Final" ColumnName="Final" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_SaleTypes" FunctionName="OnlineBOMModel.Store.Get_SaleTypes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_SaleTypes_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_Territory" FunctionName="OnlineBOMModel.Store.Get_Territory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineBOMModel.Get_Territory_Result">
+                <ScalarProperty Name="SALESDISTRICTID" ColumnName="SALESDISTRICTID" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetQuoteItemMasterByQuoteID" FunctionName="OnlineBOMModel.Store.GetQuoteItemMasterByQuoteID" />
+          <FunctionImportMapping FunctionImportName="Insert_OpportunityBOMList" FunctionName="OnlineBOMModel.Store.Insert_OpportunityBOMList" />
+          <FunctionImportMapping FunctionImportName="Insert_ProjectMilestones" FunctionName="OnlineBOMModel.Store.Insert_ProjectMilestones" />
+          <FunctionImportMapping FunctionImportName="Update_OpportunityAssemblyDetails" FunctionName="OnlineBOMModel.Store.Update_OpportunityAssemblyDetails" />
+          <FunctionImportMapping FunctionImportName="Update_OpportunityBOMListIsActiveFlag" FunctionName="OnlineBOMModel.Store.Update_OpportunityBOMListIsActiveFlag" />
+          <FunctionImportMapping FunctionImportName="Update_OpportunityCHOPComments" FunctionName="OnlineBOMModel.Store.Update_OpportunityCHOPComments" />
+          <FunctionImportMapping FunctionImportName="Update_OpportunityConsumableDetails" FunctionName="OnlineBOMModel.Store.Update_OpportunityConsumableDetails" />
+          <FunctionImportMapping FunctionImportName="Update_OpportunityCustomerDetails" FunctionName="OnlineBOMModel.Store.Update_OpportunityCustomerDetails" />
+          <FunctionImportMapping FunctionImportName="Update_OpportunityPMComments" FunctionName="OnlineBOMModel.Store.Update_OpportunityPMComments" />
+          <FunctionImportMapping FunctionImportName="Update_OpportunityTerritorySplit" FunctionName="OnlineBOMModel.Store.Update_OpportunityTerritorySplit" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -16,7 +16,9 @@ namespace OnlineBOM.Models
         public decimal Price { get; set; }
         public decimal Qty { get; set; }
         public string Category { get; set; }
+        public int CategoryOrder { get; set; }
         public string SubCategory { get; set; }
+        public int SubCategoryOrder { get; set; }
         public int OpportunityID { get; set; }
         public string MatthewsCode { get; set; }
         public int OpportunityBOMListID { get; set; }
