@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="OnlineBOMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="OnlineBOMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Assembly">
           <Key>
             <PropertyRef Name="ID" />
@@ -92,17 +92,6 @@ warning 6002: The table/view 'OnlineBOM.dbo.ImplementationAssembly' does not hav
           <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
           <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.InventoryOnHand' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="InventoryOnHand">
-          <Property Name="WAREHOUSE" Type="nvarchar" MaxLength="10" />
-          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
-          <Property Name="ITEMGROUPID" Type="nvarchar" MaxLength="10" />
-          <Property Name="AVAILPHYSICAL" Type="numeric" Precision="38" Scale="16" />
-          <Property Name="RESERVPHYSICAL" Type="numeric" Precision="38" Scale="16" />
-          <Property Name="TOTALPHYSICAL" Type="numeric" Precision="38" Scale="16" />
-        </EntityType>-->
         <EntityType Name="ItemCategory">
           <Key>
             <PropertyRef Name="ID" />
@@ -195,6 +184,8 @@ warning 6013: The table/view 'OnlineBOM.dbo.InventoryOnHand' does not have a pri
           <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
           <Property Name="IsInTotal" Type="bit" Nullable="false" />
           <Property Name="IsDecimalAllowed" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="VersionNum" Type="int" />
         </EntityType>
         <EntityType Name="ParentChildPart">
           <Key>
@@ -236,16 +227,6 @@ warning 6013: The table/view 'OnlineBOM.dbo.InventoryOnHand' does not have a pri
           <Property Name="Charge" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.Products_vw' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Products_vw">
-          <Property Name="RECID" Type="bigint" />
-          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
-          <Property Name="SALEPRICE" Type="numeric" Precision="32" Scale="16" />
-          <Property Name="SALEUNIT" Type="nvarchar" MaxLength="10" />
-          <Property Name="PRODTYPE" Type="varchar" MaxLength="10" />
-        </EntityType>-->
         <EntityType Name="ProjectMilestones">
           <Key>
             <PropertyRef Name="ID" />
@@ -277,70 +258,6 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.vw_Assemblies' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="vw_Assemblies">
-          <Property Name="RECID" Type="bigint" />
-          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
-          <Property Name="SALEUNIT" Type="nvarchar" MaxLength="10" />
-          <Property Name="PRODTYPE" Type="nvarchar" MaxLength="10" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.vw_BOMItemsForTemplate' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="vw_BOMItemsForTemplate">
-          <Property Name="RECID" Type="bigint" />
-          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.vw_BOMitemsInTemplate' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="vw_BOMitemsInTemplate">
-          <Property Name="RECID" Type="bigint" />
-          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.vw_BOMitemsNotInCategory' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="vw_BOMitemsNotInCategory">
-          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
-          <Property Name="RECID" Type="bigint" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.vw_InventoryOnHand' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="vw_InventoryOnHand">
-          <Property Name="WAREHOUSE" Type="nvarchar" MaxLength="10" />
-          <Property Name="ITEMID" Type="nvarchar" MaxLength="20" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
-          <Property Name="ITEMGROUPID" Type="nvarchar" MaxLength="10" />
-          <Property Name="AVAILPHYSICAL" Type="numeric" Precision="38" Scale="16" />
-          <Property Name="RESERVPHYSICAL" Type="numeric" Precision="38" Scale="16" />
-          <Property Name="TOTALPHYSICAL" Type="numeric" Precision="38" Scale="16" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.vw_Opportunity' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="vw_Opportunity">
-          <Property Name="opportunity" Type="nvarchar" MaxLength="300" />
-          <Property Name="cvn_SalespersonName" Type="nvarchar" MaxLength="200" />
-          <Property Name="cvn_PrimaryContactName" Type="nvarchar" MaxLength="160" />
-          <Property Name="map_QuoteNumber" Type="nvarchar" MaxLength="100" />
-          <Property Name="Name" Type="nvarchar" MaxLength="160" />
-          <Property Name="Address" Type="nvarchar" MaxLength="4000" />
-          <Property Name="telephone1" Type="nvarchar" MaxLength="50" />
-          <Property Name="cvn_erpcode" Type="nvarchar" MaxLength="250" />
-          <Property Name="EMailAddress1" Type="nvarchar" MaxLength="110" />
-          <Property Name="JobTitle" Type="nvarchar" MaxLength="100" />
-          <Property Name="OpportunityId" Type="uniqueidentifier" />
-          <Property Name="TerritoryIdName" Type="nvarchar" MaxLength="200" />
-          <Property Name="CLOSEDDATE" Type="datetime" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'OnlineBOM.dbo.vw_Territory' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="vw_Territory">
-          <Property Name="SALESDISTRICTID" Type="nvarchar" MaxLength="20" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="60" />
-        </EntityType>-->
         <Association Name="FK_Assembly_AssemblyCategory">
           <End Role="AssemblyCategory" Type="Self.AssemblyCategory" Multiplicity="1" />
           <End Role="Assembly" Type="Self.Assembly" Multiplicity="*" />
@@ -765,8 +682,7 @@ warning 6013: The table/view 'OnlineBOM.dbo.vw_Territory' does not have a primar
             <End Role="PMFeeNotChargable_DEL" EntitySet="PMFeeNotChargable_DEL" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OnlineBOMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -957,6 +873,8 @@ warning 6013: The table/view 'OnlineBOM.dbo.vw_Territory' does not have a primar
           <Property Name="CreatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsInTotal" Type="Boolean" Nullable="false" />
           <Property Name="IsDecimalAllowed" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="VersionNum" Type="Int32" />
         </EntityType>
         <EntityType Name="ParentChildPart">
           <Key>
@@ -1348,10 +1266,10 @@ warning 6013: The table/view 'OnlineBOM.dbo.vw_Territory' does not have a primar
             <Parameter Name="State" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Get_OpportunityBOMListBYOpportunityID" ReturnType="Collection(OnlineBOMModel.Get_OpportunityBOMListBYOpportunityID_Result)">
-            <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
+          <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Get_OpportunityByQuoteNo" ReturnType="Collection(OnlineBOMModel.Get_OpportunityByQuoteNo_Result)">
-            <Parameter Name="QuoteNo" Mode="In" Type="String" />
+          <Parameter Name="QuoteNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Get_OpportunityList" ReturnType="Collection(OnlineBOMModel.Get_OpportunityList_Result)" />
           <FunctionImport Name="Get_OpportunityPickingList_BOMDownload">
@@ -1360,10 +1278,10 @@ warning 6013: The table/view 'OnlineBOM.dbo.vw_Territory' does not have a primar
             <Parameter Name="State" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Get_PMFeeChargableAssemlyByBOMID">
-            <Parameter Name="BOMID" Mode="In" Type="Boolean" />
+          <Parameter Name="BOMID" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="Get_PMFeeNotChargableByBOMID">
-            <Parameter Name="BOMID" Mode="In" Type="Boolean" />
+          <Parameter Name="BOMID" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="Get_ProjectMilestones" ReturnType="Collection(OnlineBOMModel.Get_ProjectMilestones_Result)">
             <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
@@ -1372,7 +1290,7 @@ warning 6013: The table/view 'OnlineBOM.dbo.vw_Territory' does not have a primar
           <FunctionImport Name="Get_SaleTypes" ReturnType="Collection(OnlineBOMModel.Get_SaleTypes_Result)" />
           <FunctionImport Name="Get_Territory" ReturnType="Collection(OnlineBOMModel.Get_Territory_Result)" />
           <FunctionImport Name="GetQuoteItemMasterByQuoteID">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Insert_OpportunityBOMList">
             <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
@@ -1777,6 +1695,8 @@ warning 6013: The table/view 'OnlineBOM.dbo.vw_Territory' does not have a primar
           <EntitySetMapping Name="OpportunityBOMLists">
             <EntityTypeMapping TypeName="OnlineBOMModel.OpportunityBOMList">
               <MappingFragment StoreEntitySet="OpportunityBOMList">
+                <ScalarProperty Name="VersionNum" ColumnName="VersionNum" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="OpportunityID" ColumnName="OpportunityID" />
                 <ScalarProperty Name="BOMID" ColumnName="BOMID" />

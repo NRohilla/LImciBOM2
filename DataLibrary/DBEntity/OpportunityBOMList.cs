@@ -34,5 +34,7 @@ namespace DataLibrary.DBEntity
         public System.DateTime CreatedDateTime { get; set; }
         public bool IsInTotal { get; set; }
         public bool IsDecimalAllowed { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
+        public Nullable<int> VersionNum { get; set; }
     }
 }

@@ -13,10 +13,11 @@ namespace DataLibrary.Model.Quote
         public int OpportunityBOMListID { get; set; }
         public string Name { get; set; }
         public Decimal TotalPrice { get; set; }
-        public Decimal Discount{ get; set; }
+        public Decimal Discount { get; set; }
         public Decimal PriceAfterDiscount { get; set; }
         public Decimal FinalAgreedPrice { get; set; }
         public string ClosedDate { get; set; }
-
+        public bool IsDeleted { get; set; }
+        public int VersionNum { get; set; }
     }
 }

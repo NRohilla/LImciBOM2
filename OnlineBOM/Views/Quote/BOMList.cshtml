@@ -91,6 +91,8 @@
 
             foreach (var Category in Categories)
             {
+                int currentConsummableCount = 0;
+                int LengthConsummable = (int)TempData["CountOfConsumable"];
                 List<string> _Subcategory = new List<string>();
                 string MainDivID = "MainDiv" + Category;
                 string CardShowDivID = "CardShowDiv" + Category;
@@ -211,6 +213,29 @@
                                                         <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
 
                                                     </tr>
+                                                    <!--Inserted after the last tr-->
+
+                                                    if (item.Category.Trim().ToLower().Equals("Consumables".ToLower()))
+                                                    {
+                                                        ++currentConsummableCount;
+
+                                                        if (currentConsummableCount == LengthConsummable)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="5">
+
+
+                                                                    <div class="form-group">
+                                                                        @Html.LabelFor(model => model.InkUsage, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                                        <div class="col-md-10">
+                                                                            @Html.EditorFor(model => model.InkUsage, new { htmlAttributes = new { @class = "form-control" } })
+                                                                            @Html.ValidationMessageFor(model => model.InkUsage, "", new { @class = "text-danger" })
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
                                                 }
                                             }
                                         </tbody>

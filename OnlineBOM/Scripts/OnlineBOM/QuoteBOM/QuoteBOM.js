@@ -277,25 +277,30 @@
                 BOMItem.State = row.find("TD").eq(16).html();// 1;
                 BOMItem.IsInTotal = row.find("TD").eq(17).html();//1;
                 BOMItem.IsDecimalAllowed = row.find("TD").eq(18).html();//1;
+                
                 if (document.getElementById('InkUsage') != undefined)
                     BOMItem.InkUsage = document.getElementById('InkUsage').value;
                 
                 BOMList.push(BOMItem);
             }
         });
-        
+        debugger;
         $.ajax({
             type: 'post',
             dataType: 'json',
             url: '/quote/createbom',
             data: { "BOMList": BOMList },
-            success: function (json) {
-                if (json) {
-                    alert('ok');
-                } else {
-                    alert('failed');
+            success: function (r) {
+                if (r === '') {
+                    SucessAlert();
                 }
-            },
+                else {
+                    $('#error').text(r)
+                    ErrorAlert();
+                }
+
+
+            }
         });
 
 

@@ -17,7 +17,7 @@ namespace OnlineBOM.Controllers
 {
     public class QuoteController : Controller
     {
-         
+
 
         public enum BOMState
         {
@@ -120,6 +120,7 @@ namespace OnlineBOM.Controllers
             Categories = view.BOMListViewModel.OrderBy(p => p.CategoryOrder).Select(p => p.Category).ToList();
             Categories = Categories.GroupBy(p => p).Select(g => g.First()).ToList();
             TempData["Categories"] = Categories;
+            TempData["CountOfConsumable"] = view.BOMListViewModel.Where(p => p.Category.Equals("Consumables")).Count();
 
             return View("BOMList", view);
         }
@@ -217,20 +218,91 @@ namespace OnlineBOM.Controllers
             var GetAllBOMs = context.BOMs.ToList();
             foreach (var item in GetAllBOMs)
             {
-                _objBOM.Add(new DataLibrary.Model.BOM.BOM { 
-                    _ID=item.ID,
-                    _BOM=item.BOM1,
-                    _IsCustomParts=item.IsCustomParts
+                _objBOM.Add(new DataLibrary.Model.BOM.BOM
+                {
+                    _ID = item.ID,
+                    _BOM = item.BOM1,
+                    _IsCustomParts = item.IsCustomParts
                 });
             }
             ViewBag._ObjBOM = _objBOM;
-
             ViewBag.Territorylist = ViewModel.TerritoryListModel;
-
             return View("Edit", ViewModel);
-
         }
 
+        [HttpPost]
+        public ActionResult DeleteBOM(int BOMID, int oppurtunityID)
+        {
+            int ResultCount = 0;
+            using (var context = new DataLibrary.DBEntity.OnlineBOMEntities())
+            {
+                var GetAllOppBomList = context.OpportunityBOMLists.Where(p => p.BOMID == BOMID && p.OpportunityID == oppurtunityID).ToList();
+                GetAllOppBomList.ForEach(p => p.IsActive = false);
+                GetAllOppBomList.ForEach(p => p.IsDeleted = true);
+                ResultCount = context.SaveChanges();
+            }
+
+            if (ResultCount > 0)
+                return Json("BOM deleted Successfully", JsonRequestBehavior.AllowGet);
+
+            return Json("Operation failed!", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddNewBOM(int BOMID, int oppurtunityID, string ActivateNew)
+        {
+            int ResultCount = 0;
+            using (var context = new DataLibrary.DBEntity.OnlineBOMEntities())
+            {
+                var GetAllOppBomList = context.OpportunityBOMLists.Where(p => p.BOMID == BOMID && p.OpportunityID == oppurtunityID).ToList();
+                var GetMaxVersion = GetAllOppBomList.Max(p => p.VersionNum);
+                GetAllOppBomList = GetAllOppBomList.Where(p => p.VersionNum == GetMaxVersion).ToList();
+
+                //return Json("Operation failed!", JsonRequestBehavior.AllowGet);
+
+                foreach (var item in GetAllOppBomList)
+                {
+                    //code to add New BOM
+                    context.OpportunityBOMLists.Add(
+                        new DataLibrary.DBEntity.OpportunityBOMList
+                        {
+                            BOMID = item.BOMID,
+                            BOMItemsID = item.BOMItemsID,
+                            CreatedDateTime = item.CreatedDateTime,
+                            CustomCode = item.CustomCode,
+                            CustomDescription = item.CustomDescription,
+                            Discount = item.Discount,
+                            FinalAgreedPrice = item.FinalAgreedPrice,
+
+                            IsDecimalAllowed = item.IsDecimalAllowed,
+                            IsDiscountApply = item.IsDiscountApply,
+                            IsInTotal = Convert.ToBoolean(item.IsInTotal),
+                            ItemPrice = item.ItemPrice,
+                            MaximumQty = item.MaximumQty,
+                            OpportunityID = item.OpportunityID,
+                            Price = item.Price,
+                            PriceAfterDiscount = item.BOMID,
+                            Qty = item.Qty,
+                            State = item.State,
+                            UpdatedDatetime = item.UpdatedDatetime,
+                            IsActive = (ActivateNew.Trim().ToLower().Equals("No".ToLower()) ? false : true),
+                            IsDeleted = false,
+                            VersionNum = GetMaxVersion + 1,
+                        });
+
+                    //Update Current Saved BOM
+                    if (ActivateNew.Trim().ToLower().Equals("Yes".ToLower()))
+                        item.IsActive = false;// Make Current Inactive
+                }
+
+                ResultCount = context.SaveChanges();
+            }
+
+            if (ResultCount > 0)
+                return Json("BOM deleted Successfully", JsonRequestBehavior.AllowGet);
+
+            return Json("Operation failed!", JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult FinancialReviewModal(int OpportunityID, int BOMID)
         {
