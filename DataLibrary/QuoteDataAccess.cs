@@ -22,44 +22,44 @@ namespace DataLibrary
         }
         #region 
 
-        public bool CreateLead(string CustomerName,DateTime QuoteDate,string QuoteBy,string QuoteNumber,int NoOfWeeks,DateTime DeliveryDate,string PONumber,string DispatchAddress,string DispatchName,string Title,string PhoneNumber,string Email,string ReferenceNo)
+        public bool CreateLead(string CustomerName, DateTime QuoteDate, string QuoteBy, string QuoteNumber, int NoOfWeeks, DateTime DeliveryDate, string PONumber, string DispatchAddress, string DispatchName, string Title, string PhoneNumber, string Email, string ReferenceNo)
         {
             try
-            { 
-             using (SqlConnection conn = new SqlConnection(GetConnectionString()))
-                        {
+            {
+                using (SqlConnection conn = new SqlConnection(GetConnectionString()))
+                {
 
-                     
-                            DataSet ds = new DataSet();
 
-                            SqlCommand dCmd = new SqlCommand("CreateLead", conn);
-                            dCmd.CommandType = CommandType.StoredProcedure;
-                            dCmd.Parameters.Add(new SqlParameter("@CustomerName", CustomerName));
-                            dCmd.Parameters.Add(new SqlParameter("@LeadDate", QuoteDate));
-                            dCmd.Parameters.Add(new SqlParameter("@LeadBy", QuoteBy));
-                            dCmd.Parameters.Add(new SqlParameter("@LeadNumber", QuoteNumber));
-                            dCmd.Parameters.Add(new SqlParameter("@NoOfWeeks", NoOfWeeks));
-                            dCmd.Parameters.Add(new SqlParameter("@DeliveryDate", DeliveryDate));
-                            dCmd.Parameters.Add(new SqlParameter("@PONumber", PONumber));
-                            dCmd.Parameters.Add(new SqlParameter("@DispatchAddress", DispatchAddress));
-                            dCmd.Parameters.Add(new SqlParameter("@DispatchName", DispatchName));
-                            dCmd.Parameters.Add(new SqlParameter("@Title", Title));
-                            dCmd.Parameters.Add(new SqlParameter("@PhoneNumber", PhoneNumber));
-                            dCmd.Parameters.Add(new SqlParameter("@Email", Email));
-                             dCmd.Parameters.Add(new SqlParameter("@CRMNumber", ReferenceNo));
-                            conn.Open();
-                            dCmd.ExecuteNonQuery();
-                            conn.Close();
+                    DataSet ds = new DataSet();
+
+                    SqlCommand dCmd = new SqlCommand("CreateLead", conn);
+                    dCmd.CommandType = CommandType.StoredProcedure;
+                    dCmd.Parameters.Add(new SqlParameter("@CustomerName", CustomerName));
+                    dCmd.Parameters.Add(new SqlParameter("@LeadDate", QuoteDate));
+                    dCmd.Parameters.Add(new SqlParameter("@LeadBy", QuoteBy));
+                    dCmd.Parameters.Add(new SqlParameter("@LeadNumber", QuoteNumber));
+                    dCmd.Parameters.Add(new SqlParameter("@NoOfWeeks", NoOfWeeks));
+                    dCmd.Parameters.Add(new SqlParameter("@DeliveryDate", DeliveryDate));
+                    dCmd.Parameters.Add(new SqlParameter("@PONumber", PONumber));
+                    dCmd.Parameters.Add(new SqlParameter("@DispatchAddress", DispatchAddress));
+                    dCmd.Parameters.Add(new SqlParameter("@DispatchName", DispatchName));
+                    dCmd.Parameters.Add(new SqlParameter("@Title", Title));
+                    dCmd.Parameters.Add(new SqlParameter("@PhoneNumber", PhoneNumber));
+                    dCmd.Parameters.Add(new SqlParameter("@Email", Email));
+                    dCmd.Parameters.Add(new SqlParameter("@CRMNumber", ReferenceNo));
+                    conn.Open();
+                    dCmd.ExecuteNonQuery();
+                    conn.Close();
                     return true;
-                        }
-               }
+                }
+            }
             catch (Exception ex)
-            { 
+            {
 
-            return false; 
+                return false;
             }
-         
-            }
+
+        }
 
         public string Update_OpportunityCustomerDetails(DL_OpportunityModel customer)
         {
@@ -98,7 +98,7 @@ namespace DataLibrary
 
                 return ex.Message;
             }
-       
+
         }
 
         public string Update_OpportunityAssemblyDetails(DL_OpportunityModel Assembly)
@@ -122,7 +122,7 @@ namespace DataLibrary
                     if (Assembly.DeliveryDate.Year != 1)
                     { dCmd.Parameters.Add(new SqlParameter("@DeliveryDate", Assembly.DeliveryDate)); }
                     else { dCmd.Parameters.Add(new SqlParameter("@DeliveryDate", null)); }
-                    
+
                     dCmd.Parameters.Add(new SqlParameter("@PONumber", Assembly.PONumber));
                     dCmd.Parameters.Add(new SqlParameter("@Authorisation", Assembly.Authorisation));
                     dCmd.Parameters.Add(new SqlParameter("@Campaign", Assembly.Campaign));
@@ -162,7 +162,7 @@ namespace DataLibrary
                     dCmd.Parameters.Add(new SqlParameter("@InkUsage", consu.InkUsage));
                     dCmd.Parameters.Add(new SqlParameter("@SolventUsage", consu.SolventUsage));
                     dCmd.Parameters.Add(new SqlParameter("@Comments", consu.Comments));
-                   
+
                     conn.Open();
                     dCmd.ExecuteNonQuery();
                     conn.Close();
@@ -193,7 +193,7 @@ namespace DataLibrary
 
                     dCmd.Parameters.Add(new SqlParameter("@QuoteNo", chop.QuoteNo));
                     dCmd.Parameters.Add(new SqlParameter("@CHOPComments", chop.CHOPComments));
-                
+
 
                     conn.Open();
                     dCmd.ExecuteNonQuery();
@@ -289,7 +289,7 @@ namespace DataLibrary
                     dCmd.Parameters.Add(new SqlParameter("@BOMID", FS.BOMID));
                     dCmd.Parameters.Add(new SqlParameter("@DepositPerc", FS.DepositPerc));
                     dCmd.Parameters.Add(new SqlParameter("@Deposit", FS.Deposit));
-                    dCmd.Parameters.Add(new SqlParameter("@PreDeliveryPerc",FS.PreDeliveryPerc));
+                    dCmd.Parameters.Add(new SqlParameter("@PreDeliveryPerc", FS.PreDeliveryPerc));
                     dCmd.Parameters.Add(new SqlParameter("@PreDelivery", FS.PreDelivery));
                     dCmd.Parameters.Add(new SqlParameter("@FinalPerc", FS.FinalPerc));
                     dCmd.Parameters.Add(new SqlParameter("@Final", FS.Final));
@@ -346,6 +346,8 @@ namespace DataLibrary
             }
         }
 
+
+        //filling tabs on Quote Details page
         public DL_QuoteViewModel GetOpportunityByQuoteNo(string QuoteNo)
         {
             DL_QuoteViewModel QuoteList = new DL_QuoteViewModel();
@@ -369,11 +371,11 @@ namespace DataLibrary
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
-                   
+
                     DataRow dr = dt.Rows[0];
                     x.ID = Convert.ToInt32(dr["ID"].ToString());
                     x.Opportunity = dr["Opportunity"].ToString();
-                     x.ClosedDate = dr["ClosedDate"].ToString();
+                    x.ClosedDate = dr["ClosedDate"].ToString();
                     x.Representative = dr["Representative"].ToString();
                     x.CompanyName = dr["CompanyName"].ToString();
                     x.CustomerType = dr["CustomerType"].ToString();
@@ -387,7 +389,7 @@ namespace DataLibrary
                     {
                         x.DeliveryDate = DateTime.Now;
                     }
-                    else 
+                    else
                     {
                         x.DeliveryDate = Convert.ToDateTime(dr["DeliveryDate"].ToString());
                     }
@@ -397,7 +399,7 @@ namespace DataLibrary
                     x.Authorisation = dr["Authorisation"].ToString();
                     x.Campaign = dr["Campaign"].ToString();
                     x.CampaignCode = dr["CampaignCode"].ToString();
-                    x.Territory1ID= dr["Territory1ID"].ToString();
+                    x.Territory1ID = dr["Territory1ID"].ToString();
                     x.Territory2ID = dr["Territory2ID"].ToString();
                     if (dr["Territory1Split"].ToString() != "")
                     { x.Territory1Split = Convert.ToInt32(dr["Territory1Split"].ToString()); }
@@ -418,21 +420,21 @@ namespace DataLibrary
                     if (dr["FinanceTotalAmount"].ToString() != "")
                     { x.FinanceTotalAmount = Convert.ToDecimal(dr["FinanceTotalAmount"].ToString()); }
                     else { x.FinanceTotalAmount = 0; }
-                    if (dr["FinancePeriod"].ToString() =="" || dr["FinancePeriod"].ToString()==null)
+                    if (dr["FinancePeriod"].ToString() == "" || dr["FinancePeriod"].ToString() == null)
                     { x.FinancePeriod = 0; }
-                    else { x.FinancePeriod = Convert.ToInt32(dr["FinancePeriod"].ToString()); }                  
+                    else { x.FinancePeriod = Convert.ToInt32(dr["FinancePeriod"].ToString()); }
                     x.InkUsage = dr["InkUsage"].ToString();
                     x.SolventUsage = dr["SolventUsage"].ToString();
                     x.Comments = dr["Comments"].ToString();
                     x.SalesPerson = dr["SalesPerson"].ToString();
-                    x.CHOPComments= dr["CHOPComments"].ToString();
-                    x.CustomerCode= dr["CustomerCode"].ToString();
+                    x.CHOPComments = dr["CHOPComments"].ToString();
+                    x.CustomerCode = dr["CustomerCode"].ToString();
                     if (dr["SaleTypeID"].ToString() != "")
                     { x.SaleTypeID = Convert.ToInt32(dr["SaleTypeID"].ToString()); }
                     else
                     { x.SaleTypeID = 0; }
                 }
-           
+
                 conn.Open();
                 dCmd = new SqlCommand("Get_OpportunityBOMListBYOpportunityID", conn);
                 dCmd.CommandType = CommandType.StoredProcedure;
@@ -440,7 +442,7 @@ namespace DataLibrary
                 //dCmd.Parameters.Add(new SqlParameter("@parameter1", parameter1));
                 da = new SqlDataAdapter(dCmd);
                 dt = new DataTable();
-                
+
                 ds.Clear();
                 da.Fill(dt);
                 conn.Close();
@@ -448,7 +450,7 @@ namespace DataLibrary
                 List<DL_BOMListModel> QL = new List<DL_BOMListModel>();
                 if (dt != null && dt.Rows.Count > 0)
                 {
- 
+
                     foreach (DataRow dr in dt.Rows)
                     {
                         DL_BOMListModel l = new DL_BOMListModel();
@@ -456,18 +458,18 @@ namespace DataLibrary
                         l.Name = dr["BOM"].ToString();
 
                         //if (dr["OpportunityBOMListID"].ToString() != "") { l.OpportunityBOMListID = Convert.ToInt32(dr["OpportunityBOMListID"].ToString()); }
-                        if (dr["OpportunityID"].ToString() != "") {l.OpportunityID = Convert.ToInt32(dr["OpportunityID"].ToString()); }
-                        if (dr["TotalPrice"] != DBNull.Value){ l.TotalPrice= Convert.ToDecimal(dr["TotalPrice"].ToString());} else { l.TotalPrice = 0; }
+                        if (dr["OpportunityID"].ToString() != "") { l.OpportunityID = Convert.ToInt32(dr["OpportunityID"].ToString()); }
+                        if (dr["TotalPrice"] != DBNull.Value) { l.TotalPrice = Convert.ToDecimal(dr["TotalPrice"].ToString()); } else { l.TotalPrice = 0; }
 
                         l.Discount = Convert.ToDecimal(dr["Discount"].ToString());
-                        l.PriceAfterDiscount =Convert.ToDecimal(dr["PriceAfterDiscount"].ToString());
+                        l.PriceAfterDiscount = Convert.ToDecimal(dr["PriceAfterDiscount"].ToString());
                         l.FinalAgreedPrice = Convert.ToDecimal(dr["FinalAgreedPrice"].ToString());
                         l.ClosedDate = dr["ClosedDate"].ToString();
                         QL.Add(l);
                     }
                     x.BOMListModel = QL;
                 }
-                else 
+                else
                 {
                     x.BOMListModel = QL;
                 }
@@ -489,7 +491,7 @@ namespace DataLibrary
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
-                       DL_Territory l = new DL_Territory();
+                        DL_Territory l = new DL_Territory();
                         l.ID = dr["SALESDISTRICTID"].ToString();
                         l.Description = dr["DESCRIPTION"].ToString();
 
@@ -552,7 +554,7 @@ namespace DataLibrary
                 dCmd.Parameters.Add(new SqlParameter("@BOMID", BOMID));
                 SqlDataAdapter da = new SqlDataAdapter(dCmd);
                 DataTable dt = new DataTable();
-              
+
                 da.Fill(dt);
                 List<DL_BOMAssembly> lst = new List<DL_BOMAssembly>();
 
@@ -572,7 +574,7 @@ namespace DataLibrary
                         if ((dr["Qty"].ToString() != null) && (dr["Qty"].ToString() != ""))
                         { a.Qty = Convert.ToDecimal(dr["Qty"].ToString()); }
                         else { a.Qty = 1; }
-                        a.PMPercentage= Convert.ToDecimal(dr["PMPercentage"].ToString());
+                        a.PMPercentage = Convert.ToDecimal(dr["PMPercentage"].ToString());
                         bfw.QuoteNo = dr["QuoteNo"].ToString();
                         lst.Add(a);
                     }
@@ -611,18 +613,18 @@ namespace DataLibrary
                 adp.Fill(tbl);
 
                 conn.Close();
-               List<DL_PMChargableAssemly> pm = new List<DL_PMChargableAssemly>();
+                List<DL_PMChargableAssemly> pm = new List<DL_PMChargableAssemly>();
                 if (tbl != null && tbl.Rows.Count > 0)
                 {
-                    
+
                     foreach (DataRow dr in tbl.Rows)
                     {
                         DL_PMChargableAssemly p = new DL_PMChargableAssemly();
                         p.AssemblyCode = dr["ITEMID"].ToString();
                         pm.Add(p);
-                                    
+
                     }
-                 }
+                }
                 bfw.PMChargableAssemly = pm;
 
                 //------------Get Project Milestones 
@@ -637,7 +639,7 @@ namespace DataLibrary
                 adM.Fill(tblM);
 
                 conn.Close();
-                
+
                 if (tblM != null && tblM.Rows.Count > 0)
                 {
                     foreach (DataRow dr in tblM.Rows)
@@ -659,7 +661,61 @@ namespace DataLibrary
             }
         }
 
+        //to add a new BOM
+        public Boolean AddNewBOM(int BOMID, int oppurtunityID, string ActivateNew)
+        {
+            int ResultCount = 0;
+            using (var context = new DataLibrary.DBEntity.OnlineBOMEntities())
+            {
+                //Get all the records of this BOM+OppID Family
+                var GetAllOppBomList = context.OpportunityBOMLists.Where(p => p.BOMID == BOMID && p.OpportunityID == oppurtunityID).ToList();
+                var GetMaxVersion = GetAllOppBomList.Max(p => p.VersionNum);// Find Maximum Current Version of this combi
+                GetAllOppBomList = GetAllOppBomList.Where(p => p.VersionNum == GetMaxVersion).ToList();// Filter the original family to contain on latest family filtered with version
 
+                foreach (var item in GetAllOppBomList)
+                {
+                    //code to add New BOM
+                    context.OpportunityBOMLists.Add(
+                        new DataLibrary.DBEntity.OpportunityBOMList
+                        {
+                            BOMID = item.BOMID,
+                            BOMItemsID = item.BOMItemsID,
+                            CreatedDateTime = item.CreatedDateTime,
+                            CustomCode = item.CustomCode,
+                            CustomDescription = item.CustomDescription,
+                            Discount = item.Discount,
+                            FinalAgreedPrice = item.FinalAgreedPrice,
+
+                            IsDecimalAllowed = item.IsDecimalAllowed,
+                            IsDiscountApply = item.IsDiscountApply,
+                            IsInTotal = Convert.ToBoolean(item.IsInTotal),
+                            ItemPrice = item.ItemPrice,
+                            MaximumQty = item.MaximumQty,
+                            OpportunityID = item.OpportunityID,
+                            Price = item.Price,
+                            PriceAfterDiscount = item.PriceAfterDiscount,
+                            Qty = item.Qty,
+                            State = item.State,
+                            UpdatedDatetime = item.UpdatedDatetime,
+                            IsActive = (ActivateNew.Trim().ToLower().Equals("No".ToLower()) ? false : true),
+                            IsDeleted = false,
+                            VersionNum = GetMaxVersion + 1,
+                        });
+
+                    //Update Current Saved BOM
+                    if (ActivateNew.Trim().ToLower().Equals("Yes".ToLower()))
+                        item.IsActive = false;// Make Current Inactive
+                }
+
+                ResultCount = context.SaveChanges();
+            }
+
+            if (ResultCount > 0)
+                return true;
+
+            return false;
+                
+        }
 
 
 

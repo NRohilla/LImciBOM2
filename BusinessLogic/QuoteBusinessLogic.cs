@@ -176,5 +176,8 @@ namespace BusinessLogic
             return fr;
         }
 
+        public Boolean BL_AddNewBOM(int BOMID, int oppurtunityID, string ActivateNew) {
+            return this.CustomerDL.AddNewBOM(BOMID, oppurtunityID, ActivateNew);
+        }
     }
 }
