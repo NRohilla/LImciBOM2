@@ -435,7 +435,7 @@ namespace DataLibrary
                     { x.SaleTypeID = 0; }
                 }
 
-                conn.Open();
+                /*conn.Open();
                 dCmd = new SqlCommand("Get_OpportunityBOMListBYOpportunityID", conn);
                 dCmd.CommandType = CommandType.StoredProcedure;
                 dCmd.Parameters.Add(new SqlParameter("@OpportunityID", x.ID));
@@ -473,7 +473,7 @@ namespace DataLibrary
                 {
                     x.BOMListModel = QL;
                 }
-
+                 */
 
                 conn.Open();
                 dCmd = new SqlCommand("Get_Territory", conn);
@@ -669,10 +669,15 @@ namespace DataLibrary
             {
                 //Get all the records of this BOM+OppID Family
                 var GetAllOppBomList = context.OpportunityBOMLists.Where(p => p.BOMID == BOMID && p.OpportunityID == oppurtunityID).ToList();
-                var GetMaxVersion = GetAllOppBomList.Max(p => p.VersionNum);// Find Maximum Current Version of this combi
-                GetAllOppBomList = GetAllOppBomList.Where(p => p.VersionNum == GetMaxVersion).ToList();// Filter the original family to contain on latest family filtered with version
 
-                foreach (var item in GetAllOppBomList)
+                //Deactivate Old records
+                if (ActivateNew.Trim().ToLower().Equals("yes"))
+                    GetAllOppBomList.ForEach(a => a.IsActive = false);
+
+                var GetMaxVersion = GetAllOppBomList.Max(p => p.VersionNum);// Find Maximum Current Version of this combi
+                var GetOnlyMaxVersionRows = GetAllOppBomList.Where(p => p.VersionNum == GetMaxVersion).ToList();// Filter the original family to contain on latest family filtered with version
+
+                foreach (var item in GetOnlyMaxVersionRows)
                 {
                     //code to add New BOM
                     context.OpportunityBOMLists.Add(
@@ -701,10 +706,6 @@ namespace DataLibrary
                             IsDeleted = false,
                             VersionNum = GetMaxVersion + 1,
                         });
-
-                    //Update Current Saved BOM
-                    if (ActivateNew.Trim().ToLower().Equals("Yes".ToLower()))
-                        item.IsActive = false;// Make Current Inactive
                 }
 
                 ResultCount = context.SaveChanges();
@@ -714,7 +715,7 @@ namespace DataLibrary
                 return true;
 
             return false;
-                
+
         }
 
 

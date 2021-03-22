@@ -215,29 +215,91 @@ namespace OnlineBOM.Controllers
 
             var context = new DataLibrary.DBEntity.OnlineBOMEntities();
             List<DataLibrary.Model.BOM.BOM> _objBOM = new List<DataLibrary.Model.BOM.BOM>();
-            var GetAllBOMs = context.BOMs.ToList();
-            foreach (var item in GetAllBOMs)
+
+            var GetAllBOMs = context.BOMs.ToList();//Get BOMs
+            var ObjOp = context.Opportunities.Where(p => p.QuoteNo == QuoteNo).FirstOrDefault(); //Get Oppurtunity
+            List<OnlineBOM.Models.BOMListModel> _objOppBom = new List<OnlineBOM.Models.BOMListModel>();
+
+            if (ObjOp != null)
             {
-                _objBOM.Add(new DataLibrary.Model.BOM.BOM
+                foreach (var item in GetAllBOMs)
                 {
-                    _ID = item.ID,
-                    _BOM = item.BOM1,
-                    _IsCustomParts = item.IsCustomParts
-                });
+                    _objBOM.Add(new DataLibrary.Model.BOM.BOM
+                    {
+                        _ID = item.ID,
+                        _BOM = item.BOM1,
+                        _IsCustomParts = item.IsCustomParts
+                    });
+
+                    //Get All OPP+BOM records based on OppID
+                    var GetOppBOMList = context.OpportunityBOMLists.Where(p => p.OpportunityID == ObjOp.ID && p.BOMID == item.ID && p.IsDeleted == false && p.IsInTotal == true).ToList();
+                    if (GetOppBOMList.Count() <= 0)
+                    {
+                        _objOppBom.Add(new OnlineBOM.Models.BOMListModel
+                        {
+                            BOMID = item.ID,
+                            Name = item.BOM1,
+                            TotalPrice = 0,
+                            OpportunityID = ObjOp.ID,
+                            PriceAfterDiscount = 0,
+                            FinalAgreedPrice = 0,
+                            ClosedDate = Convert.ToString(ObjOp.ClosedDate),
+                        });
+                    }
+                    else
+                    {
+                        var GetMaxState = GetOppBOMList.Max(p => p.State);//Get Max of State for the BOM Opp List
+                        var GetTotalVersion = GetOppBOMList.Select(p => p.VersionNum).Distinct();
+
+                        foreach (var itemBOMVersion in GetTotalVersion)
+                        {
+                            var GetBOMForVersion = GetOppBOMList.Where(p => p.VersionNum == itemBOMVersion && p.State == GetMaxState).ToList();//Filter BOM + Opp for the vserion Number
+
+                            decimal GetPriceSum = GetBOMForVersion.Sum(p => p.Price);//total Price for this BOM
+                            decimal GetDiscountSum = Convert.ToDecimal(GetBOMForVersion.Sum(p => p.Discount));//total Price for this BOM
+                            decimal GetAfterDiscountSum = Convert.ToDecimal(GetBOMForVersion.Sum(p => p.PriceAfterDiscount));
+                            decimal GetFinalAgreedSum = Convert.ToDecimal(GetBOMForVersion.Max(p => p.FinalAgreedPrice));
+
+                            _objOppBom.Add(new OnlineBOM.Models.BOMListModel
+                            {
+                                BOMID = item.ID,
+                                Name = item.BOM1,
+                                TotalPrice = GetPriceSum,
+                                Discount = GetDiscountSum,
+                                OpportunityID = ObjOp.ID,
+                                PriceAfterDiscount = GetAfterDiscountSum,
+                                FinalAgreedPrice = GetFinalAgreedSum,
+                                ClosedDate = Convert.ToString(ObjOp.ClosedDate),
+                                VersionNum = Convert.ToInt32(itemBOMVersion)
+                            });
+                        }
+                    }
+                }
             }
+
+            ViewModel.BOMListModel = _objOppBom;
             ViewBag._ObjBOM = _objBOM;
             ViewBag.Territorylist = ViewModel.TerritoryListModel;
             return View("Edit", ViewModel);
         }
 
+        /*
+         * select sum(price) as price, sum(discount) as discount,sum(PriceAfterDiscount) as PriceAfterDiscount,max(FinalAgreedPrice) as FinalAgreedPrice from OpportunityBOMList  
+    where OpportunityID in (61)
+    and versionnum=2
+    and [State]= (select max([state]) from OpportunityBOMList where  OpportunityID in (61)  and versionnum=2)
+    and IsInTotal=1
+         */
+
         //Used for AJAX
         [HttpPost]
-        public ActionResult DeleteBOM(int BOMID, int oppurtunityID)
+        public ActionResult DeleteBOM(int BOMID, int oppurtunityID, int VersionNum)
         {
             int ResultCount = 0;
+            //Update the BOM for deletion
             using (var context = new DataLibrary.DBEntity.OnlineBOMEntities())
             {
-                var GetAllOppBomList = context.OpportunityBOMLists.Where(p => p.BOMID == BOMID && p.OpportunityID == oppurtunityID).ToList();
+                var GetAllOppBomList = context.OpportunityBOMLists.Where(p => p.BOMID == BOMID && p.OpportunityID == oppurtunityID && p.VersionNum == VersionNum).ToList();
                 GetAllOppBomList.ForEach(p => p.IsActive = false);
                 GetAllOppBomList.ForEach(p => p.IsDeleted = true);
                 ResultCount = context.SaveChanges();
@@ -570,7 +632,8 @@ namespace OnlineBOM.Controllers
                 ret.SaleTypeID = view.SaleTypeID;
             }
             List<BOMListModel> Linelst = new List<BOMListModel>();
-            if (view.BOMListModel.Count > 0)
+            if (view.BOMListModel != null &&
+                view.BOMListModel.Count > 0)
             {
 
                 foreach (var item in view.BOMListModel)
