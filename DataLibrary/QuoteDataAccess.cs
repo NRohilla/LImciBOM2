@@ -675,33 +675,36 @@ namespace DataLibrary
                     GetAllOppBomList.ForEach(a => a.IsActive = false);
 
                 var GetMaxVersion = GetAllOppBomList.Max(p => p.VersionNum);// Find Maximum Current Version of this combi
-                var GetOnlyMaxVersionRows = GetAllOppBomList.Where(p => p.VersionNum == GetMaxVersion).ToList();// Filter the original family to contain on latest family filtered with version
 
-                foreach (var item in GetOnlyMaxVersionRows)
+                //Get BOM Template Items for insertion
+                var GetBomItems = context.BOMTemplates.Where(p => p.BOM_ID == BOMID);
+
+                foreach (var item in GetBomItems)
                 {
                     //code to add New BOM
                     context.OpportunityBOMLists.Add(
                         new DataLibrary.DBEntity.OpportunityBOMList
                         {
-                            BOMID = item.BOMID,
-                            BOMItemsID = item.BOMItemsID,
-                            CreatedDateTime = item.CreatedDateTime,
-                            CustomCode = item.CustomCode,
-                            CustomDescription = item.CustomDescription,
-                            Discount = item.Discount,
-                            FinalAgreedPrice = item.FinalAgreedPrice,
+                            BOMID = item.BOM_ID,
+                            BOMItemsID = item.BOMItem_ID,
+                            CreatedDateTime = System.DateTime.Now,
+                            CustomCode = string.Empty,
+                            CustomDescription = string.Empty,
+                            Discount = 0,
+                            FinalAgreedPrice = 0,
 
                             IsDecimalAllowed = item.IsDecimalAllowed,
                             IsDiscountApply = item.IsDiscountApply,
-                            IsInTotal = Convert.ToBoolean(item.IsInTotal),
-                            ItemPrice = item.ItemPrice,
+                            IsInTotal = item.IsInTotal,
+                            ItemPrice = (item.IsInTotal == true ? item.Quantity * item.Price : 0),
                             MaximumQty = item.MaximumQty,
-                            OpportunityID = item.OpportunityID,
-                            Price = item.Price,
-                            PriceAfterDiscount = item.PriceAfterDiscount,
-                            Qty = item.Qty,
-                            State = item.State,
-                            UpdatedDatetime = item.UpdatedDatetime,
+                            Price = (item.IsInTotal == true ? item.Quantity * item.Price : 0),
+                            Qty = item.Quantity,
+
+                            PriceAfterDiscount = 0,
+                            OpportunityID = oppurtunityID,
+                            State = 1,
+                            UpdatedDatetime = System.DateTime.Now,
                             IsActive = (ActivateNew.Trim().ToLower().Equals("No".ToLower()) ? false : true),
                             IsDeleted = false,
                             VersionNum = GetMaxVersion + 1,
