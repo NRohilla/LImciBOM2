@@ -232,7 +232,7 @@ namespace DataLibrary
                                     dCmd.Parameters.Add(new SqlParameter("@IsDecimalAllowed", item.IsDecimalAllowed));
                                     dCmd.Parameters.Add(new SqlParameter("@InkUsage", item.InkUsage));
 
-                                    dCmd.ExecuteNonQuery();
+                                    int Res= dCmd.ExecuteNonQuery();
                                 }
 
 
