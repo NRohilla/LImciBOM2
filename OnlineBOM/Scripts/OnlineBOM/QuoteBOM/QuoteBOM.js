@@ -236,31 +236,42 @@
 
     //---Save the BOM List 
     $('#btnSave').on('click', function (e) {
-        //var table = document.getElementById('tblApplicator');
-        //var rowLength = table.rows.length;
-
         var BOMList = new Array();
+        debugger;
+        var GetVersionNum = location.href.substring(location.href.toLocaleLowerCase().indexOf("version"));
+        GetVersionNum = GetVersionNum.split('=')
+        if (GetVersionNum != null)
+            GetVersionNum = GetVersionNum[1];
+
+        var GetOppID = location.href.substring(location.href.toLocaleLowerCase().indexOf("opportunityid")).split('&');
+        if (GetOppID.length > 0) {
+            GetOppID = GetOppID[0].split('=');
+            if (GetOppID.length > 0) {
+                GetOppID = GetOppID[1];
+            }
+        }
+
+        var GetBOMID = location.href.substring(location.href.toLocaleLowerCase().indexOf("bomid")).split('&');
+        if (GetBOMID.length > 0) {
+            GetBOMID = GetBOMID[0].split('=');
+            if (GetBOMID.length > 0) {
+                GetBOMID = GetBOMID[1];
+            }
+        }
+
 
         $('.body tr').each(function () {
             var row = $(this);
             var BOMItem = {};
             if (row.find("TD").eq(0).html().indexOf("<div") < 0) {
-                var test = "";
 
                 var BOMItem = {};
-                BOMItem.BOMID = row.find("TD").eq(2).html();//1;
+                BOMItem.BOMID = GetBOMID;//1;
                 BOMItem.BOMItemID = row.find("TD").eq(3).html();//1;
-                //BOMItem.Description = "";
-                //BOMItem.QuoteItemMasterID = 1;
                 BOMItem.ItemPrice = row.find("TD").eq(8).html();//2.2;
                 BOMItem.Price = row.find("TD").eq(9).html();// 2.2;
                 BOMItem.Qty = row.find("TD").eq(7).html();//2.2;
-                //BOMItem.Category = "";
-                //BOMItem.CategoryOrder = 1;
-                //BOMItem.SubCategory = "";
-                //BOMItem.SubCategoryOrder = 2;
-                BOMItem.OpportunityID = row.find("TD").eq(0).html();//61
-                //BOMItem.MatthewsCode = "";
+                BOMItem.OpportunityID = GetOppID;//61
                 BOMItem.OpportunityBOMListID = row.find("TD").eq(1).html();//1;
                 if (BOMItem.BOMItemID == '' && row.find("TD").eq(5).html() !== '') {
                     BOMItem.CustomCode = row.find("TD").eq(5).html();
@@ -270,26 +281,28 @@
                 BOMItem.FinalAgreedPrice = document.getElementById('FinalAgreedPrice').value;// 2.2;
                 BOMItem.IsDiscountApply = row.find('input[type="checkbox"]').is(':checked');//false;
                 BOMItem.AfterDiscount = row.find("TD").eq(13).html();//2.2;
-                //BOMItem.IsQtyFixed = false;
-                //BOMItem.PriceAfterDiscount = 2.2;
                 BOMItem.MaximumQty = row.find("TD").eq(14).html();//2.2;
-                //BOMItem.Stock = 1;
                 BOMItem.State = row.find("TD").eq(16).html();// 1;
                 BOMItem.IsInTotal = row.find("TD").eq(17).html();//1;
                 BOMItem.IsDecimalAllowed = row.find("TD").eq(18).html();//1;
-                
+
                 if (document.getElementById('InkUsage') != undefined)
                     BOMItem.InkUsage = document.getElementById('InkUsage').value;
-                
+
                 BOMList.push(BOMItem);
             }
         });
         debugger;
+
+
         $.ajax({
             type: 'post',
             dataType: 'json',
             url: '/quote/createbom',
-            data: { "BOMList": BOMList },
+            data: {
+                "BOMList": BOMList,
+                "VersionNum": GetVersionNum
+            },
             success: function (r) {
                 if (r === '') {
                     SucessAlert();
@@ -302,30 +315,6 @@
 
             }
         });
-
-
-        //$.ajax({
-        //    type: "post",
-        //    url: "/quote/createbom",
-        //    datatype: "json",
-        //    /*data: json.stringify(bomlist, getcircularreplacer()),*/
-        //    data: { postdata: "big data"},
-        //    contenttype: "application/json; charset=utf-8",
-
-        //    success: function (r) {
-        //        if (r === '') {
-        //            sucessalert();
-        //        }
-        //        else {
-        //            $('#error').text(r)
-        //            erroralert();
-        //        }
-
-
-        //    }
-        //})
-
-
     });
 
 

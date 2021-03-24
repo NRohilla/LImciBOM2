@@ -101,7 +101,7 @@ namespace OnlineBOM.Controllers
 
 
         // GET The BOM List
-        public ActionResult GetBOMList(int OpportunityID, int BOMID, string QuoteNo, string Name, bool NewBOM, bool ViewBOM, bool PMView,int VersionNum)
+        public ActionResult GetBOMList(int OpportunityID, int BOMID, string QuoteNo, string Name, bool NewBOM, bool ViewBOM, bool PMView, int VersionNum)
         {
             int State = (int)BOMState.PM;
 
@@ -110,7 +110,7 @@ namespace OnlineBOM.Controllers
 
             DL_OpportunityBOMItemsViewModel DLVM = new DL_OpportunityBOMItemsViewModel();
             QuoteBOMBusinessLogic BL = new QuoteBOMBusinessLogic();
-            DLVM = BL.GetOpportunityBOMItemsByOpportunityID(OpportunityID, BOMID, NewBOM, State,VersionNum);
+            DLVM = BL.GetOpportunityBOMItemsByOpportunityID(OpportunityID, BOMID, NewBOM, State, VersionNum);
             OpportunityBOMItemsViewModel view = PopulateBOMList(DLVM, QuoteNo);
             view.ItemMasterName = Name;
             view.ViewBOM = ViewBOM;
@@ -149,35 +149,28 @@ namespace OnlineBOM.Controllers
 
         // POST: QuoteBOM/Create
         [HttpPost]
-        public ActionResult CreateBOM(List<OpportunityBOMItem> BOMList)
-
+        public ActionResult CreateBOM(List<OpportunityBOMItem> BOMList, int VersionNum)
         {
             try
             {
                 if (BOMList.Count > 0)
                 {
                     if (BOMList[0].FinalAgreedPrice == 0)
-                    {
                         return Json("Final Agreed Price is Not Avialable", JsonRequestBehavior.AllowGet);
-                    }
-                    else if (BOMList[0].Discount > 100)
-                    {
+
+                    if (BOMList[0].Discount > 100)
                         return Json("Invalid Discount Percentage", JsonRequestBehavior.AllowGet);
-                    }
 
                     if (BOMList[0].InkUsage == null)
-                    {
                         return Json("Consumables, Ink Usage required", JsonRequestBehavior.AllowGet);
-                    }
-                    else if (BOMList[0].InkUsage.Length < 10)
-                    {
+
+                    if (BOMList[0].InkUsage.Length < 10)
                         return Json("Consumables, Ink Usage required minimum of 10 Characters", JsonRequestBehavior.AllowGet);
-                    }
 
                     QuoteBOMBusinessLogic bl = new QuoteBOMBusinessLogic();
                     List<DL_OpportunityBOMItem> BomDL = new List<DL_OpportunityBOMItem>();
                     BomDL = PopulateBOMDL(BOMList);
-                    string Saved = bl.SaveQuoteBOM(BomDL);
+                    string Saved = bl.SaveQuoteBOM(BomDL,VersionNum);
                     return Json(Saved, JsonRequestBehavior.AllowGet);
 
 
@@ -263,7 +256,7 @@ namespace OnlineBOM.Controllers
 
                         foreach (var itemBOMVersion in GetTotalVersion)
                         {
-                            var GetBOMForVersion = GetOppBOMList.Where(p => p.VersionNum == itemBOMVersion ).ToList();//Filter BOM + Opp for the vserion Number////&& p.State == GetMaxState
+                            var GetBOMForVersion = GetOppBOMList.Where(p => p.VersionNum == itemBOMVersion).ToList();//Filter BOM + Opp for the vserion Number////&& p.State == GetMaxState
 
                             decimal GetPriceSum = GetBOMForVersion.Sum(p => p.Price);//total Price for this BOM
                             decimal GetDiscountSum = Convert.ToDecimal(GetBOMForVersion.Sum(p => p.Discount));//total Price for this BOM

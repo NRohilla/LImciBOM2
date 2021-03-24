@@ -32,11 +32,11 @@ namespace BusinessLogic
             return ret;
         }
 
-        public string SaveQuoteBOM(List<DL_OpportunityBOMItem> Bom)
+        public string SaveQuoteBOM(List<DL_OpportunityBOMItem> Bom, int VersionNum)
         {
             try
             {
-                string SaveBom = this.CustomerDL.SaveBom(Bom);
+                string SaveBom = this.CustomerDL.SaveBom(Bom,VersionNum);
                return SaveBom;
             }
             catch (Exception ex)

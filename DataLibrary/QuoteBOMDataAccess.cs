@@ -298,62 +298,64 @@ namespace DataLibrary
 
 
         #region SaveBOM
-        public string SaveBom(List<DL_OpportunityBOMItem> BOMList)
+        public string SaveBom(List<DL_OpportunityBOMItem> BOMList, int VersionNum)
         {
             try
             {
-                if (BOMList.Count > 0)
+                var context = new DataLibrary.DBEntity.OnlineBOMEntities();
+                int result = 0;
 
-                    using (SqlConnection conn = new SqlConnection(GetConnectionString()))
-                        if (BOMList.Count > 0)
+                //Update the records; EDIT BOM CASE
+                foreach (var item in BOMList)
+                {
+                    if (VersionNum > 0)
+                    {
+                        var GetOppBomList = context.OpportunityBOMLists.Where(p => p.ID == item.OpportunityBOMListID).FirstOrDefault();
+                        if (GetOppBomList != null)
                         {
-                            ////Deactivate all the items
-                            //SqlCommand Cmd = new SqlCommand("Update_OpportunityBOMListIsActiveFlag", conn);
-                            //Cmd.CommandType = CommandType.StoredProcedure;
-                            //Cmd.Parameters.Add(new SqlParameter("@OpportunityID", BOMList[0].OpportunityID));
-                            //Cmd.Parameters.Add(new SqlParameter("@BOMID", BOMList[0].BOMID));
-                            //Cmd.Parameters.Add(new SqlParameter("@State", BOMList[0].State));
-                            conn.Open();
-                            //Cmd.ExecuteNonQuery();
+                            GetOppBomList.Discount = item.Discount;
+                            GetOppBomList.FinalAgreedPrice = item.FinalAgreedPrice;
+                            GetOppBomList.ItemPrice = item.ItemPrice;
+                            GetOppBomList.Price = item.Price;
+                            GetOppBomList.PriceAfterDiscount = item.PriceAfterDiscount;
+                            GetOppBomList.MaximumQty = item.MaximumQty;
 
-                            foreach (var item in BOMList)
-                            {
-                                {
-
-                                    SqlCommand dCmd = new SqlCommand("Insert_OpportunityBOMList", conn);
-                                    dCmd.CommandType = CommandType.StoredProcedure;
-                                    dCmd.Parameters.Add(new SqlParameter("@OpportunityID", item.OpportunityID));
-                                    dCmd.Parameters.Add(new SqlParameter("@BOMID", item.BOMID));
-                                    dCmd.Parameters.Add(new SqlParameter("@BOMItemsID", item.BOMItemID));
-                                    dCmd.Parameters.Add(new SqlParameter("@Qty", item.Qty));
-                                    dCmd.Parameters.Add(new SqlParameter("@ItemPrice", item.ItemPrice));
-                                    dCmd.Parameters.Add(new SqlParameter("@Price", item.Price));
-                                    dCmd.Parameters.Add(new SqlParameter("@CustomDescription", item.CustomDescription));
-                                    dCmd.Parameters.Add(new SqlParameter("@CustomCode", item.MatthewsCode));
-                                    dCmd.Parameters.Add(new SqlParameter("@Discount", item.Discount));
-                                    dCmd.Parameters.Add(new SqlParameter("@FinalAgreedPrice", item.FinalAgreedPrice));
-                                    dCmd.Parameters.Add(new SqlParameter("@IsDiscountApply", item.IsDiscountApply));
-                                    dCmd.Parameters.Add(new SqlParameter("@PriceAfterDiscount", item.AfterDiscount));
-                                    dCmd.Parameters.Add(new SqlParameter("@MaximumQty", item.MaximumQty));
-                                    dCmd.Parameters.Add(new SqlParameter("@State", item.State));
-                                    dCmd.Parameters.Add(new SqlParameter("@IsInTotal", item.IsInTotal));
-                                    dCmd.Parameters.Add(new SqlParameter("@IsDecimalAllowed", item.IsDecimalAllowed));
-                                    dCmd.Parameters.Add(new SqlParameter("@InkUsage", item.InkUsage));
-
-                                    int Res = dCmd.ExecuteNonQuery();
-                                }
-
-
-
-                            }
-
-                            conn.Close();
+                            var GetOppRecord = context.Opportunities.Where(p => p.ID == item.OpportunityID).FirstOrDefault();
+                            if (GetOppRecord != null)
+                                GetOppRecord.InkUsage = item.InkUsage;
                         }
+                    }
+                    else
+                    {
+                        //insert the records;; NEW BOM CASE
+                        context.OpportunityBOMLists.Add(new DBEntity.OpportunityBOMList
+                        {
+                            OpportunityID = item.OpportunityID,
+                            BOMID = item.BOMID,
+                            Price = item.Price,
+                            BOMItemsID = item.BOMItemID,
+                            CreatedDateTime = DateTime.Now,
+                            CustomCode = item.CustomCode,
+                            CustomDescription = item.CustomDescription,
+                            Discount = item.Discount,
+                            FinalAgreedPrice = item.FinalAgreedPrice,
+                            IsActive = true,
+                            IsDecimalAllowed = item.IsDecimalAllowed,
+                            IsDeleted = false,
+                            IsDiscountApply = item.IsDiscountApply,
+                            IsInTotal = item.IsInTotal,
+                            ItemPrice = item.ItemPrice,
+                            MaximumQty = item.MaximumQty,
+                            PriceAfterDiscount = 0,
+                            Qty = item.Qty,
+                            State = item.State,
+                            UpdatedDatetime = DateTime.Now,
+                            VersionNum = 1
+                        });
 
-
-
-
-
+                    }
+                    result += context.SaveChanges();
+                }
                 return "";
             }
             catch (Exception ex)
