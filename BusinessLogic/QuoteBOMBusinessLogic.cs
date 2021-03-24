@@ -17,10 +17,10 @@ namespace BusinessLogic
             this.CustomerDL = new QuoteBOMDataAccess();
         }
 
-        public DL_OpportunityBOMItemsViewModel GetOpportunityBOMItemsByOpportunityID(int OpportunityID,int BOMID,bool NewBOM,int State)
+        public DL_OpportunityBOMItemsViewModel GetOpportunityBOMItemsByOpportunityID(int OpportunityID,int BOMID,bool NewBOM,int State,  int versionnum)
         {
             DL_OpportunityBOMItemsViewModel ret = new DL_OpportunityBOMItemsViewModel();
-            ret = this.CustomerDL.Get_OpportunityBOMItemsByOpportunityID(OpportunityID, BOMID, NewBOM,State);
+            ret = this.CustomerDL.Get_OpportunityBOMItemsByOpportunityID(OpportunityID, BOMID, NewBOM,State,versionnum);
             return ret;
         }
 

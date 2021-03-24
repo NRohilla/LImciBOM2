@@ -52,6 +52,7 @@ namespace DataLibrary.Model.QuoteBOM
         public bool IsInTotal { get; set; }
         public bool IsDecimalAllowed { get; set; }
         public String InkUsage { get; set; }
+        public int VersionNum { get; set; }
 
     }
 

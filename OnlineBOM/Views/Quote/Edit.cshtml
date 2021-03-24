@@ -336,36 +336,27 @@
 
                                                         @*Sales BOM*@
                                                         <td align="center">
-                                                            @if (item.TotalPrice > 0)
-                                                            {
-                                                                if (@Model.ClosedDate == "")
-                                                                {
-                                                                    @Html.ActionLink("Edit BOM", "GetBOMList"
-                                                                   , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = false }
-                                                                   , new { data_SalesStatus = "Edit", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })
-                                                                }
-                                                                else
-                                                                {
-                                                                    @Html.ActionLink("Closed", "GetBOMList"
-                                                                   , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false }
-                                                                   , new { data_SalesStatus = "Closed", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })
-                                                                }
 
-                                                            }
-                                                            else
+                                                            @if (Model.ClosedDate != "")
                                                             {
-                                                                if (@Model.ClosedDate == "")
-                                                                {
-                                                                    @Html.ActionLink("New BOM", "GetBOMList"
-                                                                   , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = true, ViewBOM = false, PMView = false }
-                                                                   , new { data_SalesStatus = "New", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })
-                                                                }
-                                                                else
-                                                                {
-                                                                    @Html.ActionLink("Closed", "GetBOMList"
-                                                                   , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false }
-                                                                   , new { data_SalesStatus = "Closed", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })
-                                                                }
+                                                                @*@Html.ActionLink("Closed", "GetBOMList"
+                                                                    , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false, VersionNum = item.VersionNum }
+                                                                    , new { data_SalesStatus = "Closed", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })*@
+                                                                <a href="#">Closed</a>
+                                                            }
+
+                                                            @if ((item.TotalPrice > 0 && Model.ClosedDate == "") || item.VersionNum > 0)
+                                                            {
+                                                                @Html.ActionLink("Edit BOM", "GetBOMList"
+                                                               , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = false, VersionNum = item.VersionNum }
+                                                               , new { data_SalesStatus = "Edit", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })
+                                                            }
+
+                                                            @if ((item.TotalPrice <= 0 && Model.ClosedDate == ""))
+                                                            {
+                                                                @Html.ActionLink("New BOM", "GetBOMList"
+                                                               , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = true, ViewBOM = false, PMView = false, VersionNum = item.VersionNum }
+                                                               , new { data_SalesStatus = "New", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })
                                                             }
                                                         </td>
 
@@ -374,7 +365,8 @@
                                                             @if (@Model.ClosedDate != "" && item.TotalPrice > 0)
                                                             {
 
-                                                                @Html.ActionLink("Edit BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = true })
+                                                                @Html.ActionLink("Edit BOM", "GetBOMList"
+                                                               , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = true, VersionNum = item.VersionNum })
                                                             }
                                                         </td>
 
@@ -384,11 +376,13 @@
                                                             {
                                                                 if (@Model.ClosedDate == "")
                                                                 {
-                                                                    @Html.ActionLink("Pre Sales BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false })
+                                                                    @Html.ActionLink("Pre Sales BOM", "GetBOMList"
+                                                                   , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false, VersionNum = item.VersionNum })
                                                                 }
                                                                 else
                                                                 {
-                                                                    @Html.ActionLink("Post Sales BOM", "GetBOMList", new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = true })
+                                                                    @Html.ActionLink("Post Sales BOM", "GetBOMList"
+                                                                   , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = true, VersionNum = item.VersionNum })
                                                                 }
                                                             }
                                                         </td>
@@ -399,11 +393,13 @@
                                                             {
                                                                 if (@Model.ClosedDate == "")
                                                                 {
-                                                                    @Html.ActionLink("Download", "BOMDownloadPDF", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = false })
+                                                                    @Html.ActionLink("Download", "BOMDownloadPDF"
+                                                                   , new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = false, VersionNum = item.VersionNum })
                                                                 }
                                                                 else
                                                                 {
-                                                                    @Html.ActionLink("Download", "BOMDownloadPDF", new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = true })
+                                                                    @Html.ActionLink("Download", "BOMDownloadPDF"
+                                                                   , new { OpportunityID = item.OpportunityID, BOMID = item.BOMID, Name = item.Name, PMView = true, VersionNum = item.VersionNum })
                                                                 }
 
                                                             }
@@ -631,8 +627,8 @@
                 success: function (r) {
                     if (r === "BOM deleted Successfully") {
                         $("#DeleteBOMModal").modal('hide');
-                        
-                        $('#'+ID).css('display', 'none');
+
+                        $('#' + ID).css('display', 'none');
                     }
                     else {
                         $('#error').text(r)

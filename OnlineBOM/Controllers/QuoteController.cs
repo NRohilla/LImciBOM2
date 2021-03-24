@@ -101,7 +101,7 @@ namespace OnlineBOM.Controllers
 
 
         // GET The BOM List
-        public ActionResult GetBOMList(int OpportunityID, int BOMID, string QuoteNo, string Name, bool NewBOM, bool ViewBOM, bool PMView)
+        public ActionResult GetBOMList(int OpportunityID, int BOMID, string QuoteNo, string Name, bool NewBOM, bool ViewBOM, bool PMView,int VersionNum)
         {
             int State = (int)BOMState.PM;
 
@@ -110,11 +110,21 @@ namespace OnlineBOM.Controllers
 
             DL_OpportunityBOMItemsViewModel DLVM = new DL_OpportunityBOMItemsViewModel();
             QuoteBOMBusinessLogic BL = new QuoteBOMBusinessLogic();
-            DLVM = BL.GetOpportunityBOMItemsByOpportunityID(OpportunityID, BOMID, NewBOM, State);
+            DLVM = BL.GetOpportunityBOMItemsByOpportunityID(OpportunityID, BOMID, NewBOM, State,VersionNum);
             OpportunityBOMItemsViewModel view = PopulateBOMList(DLVM, QuoteNo);
             view.ItemMasterName = Name;
             view.ViewBOM = ViewBOM;
-            view.BOMListViewModel = view.BOMListViewModel.OrderBy(p => p.CategoryOrder).ToList();
+
+            List<OpportunityBOMItem> _ObjTempList = new List<OpportunityBOMItem>();
+            //Only enter records for this BOM
+            foreach (var item in view.BOMListViewModel)
+            {
+                if (_ObjTempList.Where(p => p.BOMItemID == item.BOMItemID).FirstOrDefault() == null)
+                {
+                    _ObjTempList.Add(item);
+                }
+            }
+            view.BOMListViewModel = _ObjTempList;
 
             List<string> Categories = new List<string>();
             Categories = view.BOMListViewModel.OrderBy(p => p.CategoryOrder).Select(p => p.Category).ToList();
@@ -253,7 +263,7 @@ namespace OnlineBOM.Controllers
 
                         foreach (var itemBOMVersion in GetTotalVersion)
                         {
-                            var GetBOMForVersion = GetOppBOMList.Where(p => p.VersionNum == itemBOMVersion && p.State == GetMaxState).ToList();//Filter BOM + Opp for the vserion Number
+                            var GetBOMForVersion = GetOppBOMList.Where(p => p.VersionNum == itemBOMVersion ).ToList();//Filter BOM + Opp for the vserion Number////&& p.State == GetMaxState
 
                             decimal GetPriceSum = GetBOMForVersion.Sum(p => p.Price);//total Price for this BOM
                             decimal GetDiscountSum = Convert.ToDecimal(GetBOMForVersion.Sum(p => p.Discount));//total Price for this BOM
