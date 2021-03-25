@@ -16,7 +16,7 @@ namespace OnlineBOM.Models
         public Decimal PriceAfterDiscount { get; set; }
         public Decimal FinalAgreedPrice { get; set; }
         public string ClosedDate { get; set; }
-
+        public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public int VersionNum { get; set; }
     }

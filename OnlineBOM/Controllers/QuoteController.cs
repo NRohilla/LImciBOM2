@@ -170,7 +170,7 @@ namespace OnlineBOM.Controllers
                     QuoteBOMBusinessLogic bl = new QuoteBOMBusinessLogic();
                     List<DL_OpportunityBOMItem> BomDL = new List<DL_OpportunityBOMItem>();
                     BomDL = PopulateBOMDL(BOMList);
-                    string Saved = bl.SaveQuoteBOM(BomDL,VersionNum);
+                    string Saved = bl.SaveQuoteBOM(BomDL, VersionNum);
                     return Json(Saved, JsonRequestBehavior.AllowGet);
 
 
@@ -262,7 +262,8 @@ namespace OnlineBOM.Controllers
                             decimal GetDiscountSum = Convert.ToDecimal(GetBOMForVersion.Sum(p => p.Discount));//total Price for this BOM
                             decimal GetAfterDiscountSum = Convert.ToDecimal(GetBOMForVersion.Sum(p => p.PriceAfterDiscount));
                             decimal GetFinalAgreedSum = Convert.ToDecimal(GetBOMForVersion.Max(p => p.FinalAgreedPrice));
-
+                            bool IsActive = GetBOMForVersion != null ? (GetBOMForVersion.Count() > 0 ? GetBOMForVersion[0].IsActive : false) : false;
+                            bool IsDeleted = GetBOMForVersion != null ? (GetBOMForVersion.Count() > 0 ? Convert.ToBoolean(GetBOMForVersion[0].IsDeleted) : false) : false;
                             _objOppBom.Add(new OnlineBOM.Models.BOMListModel
                             {
                                 BOMID = item.ID,
@@ -273,7 +274,10 @@ namespace OnlineBOM.Controllers
                                 PriceAfterDiscount = GetAfterDiscountSum,
                                 FinalAgreedPrice = GetFinalAgreedSum,
                                 ClosedDate = Convert.ToString(ObjOp.ClosedDate),
-                                VersionNum = Convert.ToInt32(itemBOMVersion)
+                                VersionNum = Convert.ToInt32(itemBOMVersion),
+                                IsActive = IsActive,
+                                IsDeleted = IsDeleted,
+
                             });
                         }
                     }
@@ -286,13 +290,6 @@ namespace OnlineBOM.Controllers
             return View("Edit", ViewModel);
         }
 
-        /*
-         * select sum(price) as price, sum(discount) as discount,sum(PriceAfterDiscount) as PriceAfterDiscount,max(FinalAgreedPrice) as FinalAgreedPrice from OpportunityBOMList  
-    where OpportunityID in (61)
-    and versionnum=2
-    and [State]= (select max([state]) from OpportunityBOMList where  OpportunityID in (61)  and versionnum=2)
-    and IsInTotal=1
-         */
 
         //Used for AJAX
         [HttpPost]
@@ -313,6 +310,39 @@ namespace OnlineBOM.Controllers
 
             return Json("Operation failed!", JsonRequestBehavior.AllowGet);
         }
+
+        //Used for AJAX
+        [HttpPost]
+        public ActionResult ChangeActiveStatusBOM(int BOMID, int oppurtunityID, int VersionNum)
+        {
+            int ResultCount = 0;
+            bool StatusToChangeTo = false;
+
+            //De-Activate all BOM entities for this Opp
+            using (var context = new DataLibrary.DBEntity.OnlineBOMEntities())
+            {
+                //Get the OppBomList for the current version number
+                var GetAllOppBomListForCurrentVersion = context.OpportunityBOMLists.Where(p => p.BOMID == BOMID && p.OpportunityID == oppurtunityID && p.VersionNum == VersionNum).ToList();
+
+                //Get the current state of activeness of this OPPBOM
+                if (GetAllOppBomListForCurrentVersion != null && GetAllOppBomListForCurrentVersion.Count() > 0)
+                    StatusToChangeTo = !(GetAllOppBomListForCurrentVersion[0].IsActive);
+
+                //Get the OppBomList for all the version number
+                var GetAllOppBomList = context.OpportunityBOMLists.Where(p => p.BOMID == BOMID && p.OpportunityID == oppurtunityID).ToList();
+                GetAllOppBomList.ForEach(p => p.IsActive = (!StatusToChangeTo));
+
+                //Toggle status of activeness for the current OppBOM
+                GetAllOppBomListForCurrentVersion.ForEach(p => p.IsActive = StatusToChangeTo);
+                ResultCount = context.SaveChanges();
+            }
+
+            if (ResultCount > 0)
+                return Json("BOM updated Successfully", JsonRequestBehavior.AllowGet);
+
+            return Json("Operation failed!", JsonRequestBehavior.AllowGet);
+        }
+
 
 
         //Used for AJAX
