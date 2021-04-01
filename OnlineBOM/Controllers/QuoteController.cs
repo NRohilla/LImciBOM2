@@ -259,7 +259,7 @@ namespace OnlineBOM.Controllers
                             var GetBOMForVersion = GetOppBOMList.Where(p => p.VersionNum == itemBOMVersion).ToList();//Filter BOM + Opp for the vserion Number////&& p.State == GetMaxState
 
                             decimal GetPriceSum = GetBOMForVersion.Sum(p => p.Price);//total Price for this BOM
-                            decimal GetDiscountSum = Convert.ToDecimal(GetBOMForVersion.Sum(p => p.Discount));//total Price for this BOM
+                            decimal GetDiscountSum = Convert.ToDecimal(GetBOMForVersion[0].Discount);// (Convert.ToDecimal(GetBOMForVersion[0].Discount) / 100) * GetPriceSum;//;/Convert.ToDecimal(GetBOMForVersion.Sum(p => p.Discount));//total Price for this BOM
                             decimal GetAfterDiscountSum = Convert.ToDecimal(GetBOMForVersion.Sum(p => p.PriceAfterDiscount));
                             decimal GetFinalAgreedSum = Convert.ToDecimal(GetBOMForVersion.Max(p => p.FinalAgreedPrice));
                             bool IsActive = GetBOMForVersion != null ? (GetBOMForVersion.Count() > 0 ? GetBOMForVersion[0].IsActive : false) : false;

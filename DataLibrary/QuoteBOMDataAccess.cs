@@ -27,6 +27,12 @@ namespace DataLibrary
             List<DL_OpportunityBOMItem> BOMlst = new List<DL_OpportunityBOMItem>();
 
             var context = new DataLibrary.DBEntity.OnlineBOMEntities();
+
+            //1... Fetch all the updated list of items from the BOM template Table
+            var GetAllItemsForBomFromTemp = context.BOMTemplates.Where(p => p.BOM_ID == BOMID).ToList();
+            bool isActive = false;
+
+            //2. Fetch all the saved BOM values from the oppBOMList Table
             //EDIT scope for the saved BOMs
             //Get the OppBomList based on major params
             var _objGetOppBomList = context.OpportunityBOMLists.Where(p => p.OpportunityID == OpportunityID && p.BOMID == BOMID).ToList();
@@ -36,6 +42,15 @@ namespace DataLibrary
 
             foreach (var item in _objGetOppBomList)
             {
+                if (NewBOM)
+                {
+                    //check and take the missing/latest BOM Item
+                    int check = GetAllItemsForBomFromTemp.FindIndex(a => a.BOMItem_ID == item.BOMItemsID);//remove the saved item from the list of template items... At the end, we will only have the remaining items 
+                    if (check > -1)
+                        GetAllItemsForBomFromTemp.RemoveAt(check);
+                }
+
+                isActive = item.IsActive;
                 var _ObjBOM = context.BOMs.Where(p => p.ID == item.BOMID).FirstOrDefault();
                 var _ObjBOMItem = context.BOMItems.Where(p => p.RECID == item.BOMItemsID).FirstOrDefault();
                 var _ObjPartInfo = context.PartToCategories.Where(p => p.PartID == item.BOMItemsID).FirstOrDefault();
@@ -79,139 +94,92 @@ namespace DataLibrary
                 });
             }
 
-            /*
-            if (!NewBOM)
-            {
-                
-            }
-            else
-            {
-                //Get items from the BOM Template
-                var _ObjGetBOMTemplateItems = context.BOMTemplates.Where(p => p.BOM_ID == BOMID).ToList();
-                foreach (var item in _ObjGetBOMTemplateItems)
+            if (NewBOM)
+                if (GetAllItemsForBomFromTemp != null
+                    && GetAllItemsForBomFromTemp.Count() > 0)
                 {
-                    var _ObjBOM = context.BOMs.Where(p => p.ID == item.BOM_ID).FirstOrDefault();
-                    var _ObjBOMItem = context.BOMItems.Where(p => p.RECID == item.BOMItem_ID).FirstOrDefault();
-                    var _ObjPartInfo = context.PartToCategories.Where(p => p.PartID == item.BOMItem_ID).FirstOrDefault();
-                    Decimal _StockInHand = 0;
-
-                    if (_ObjBOMItem != null)
-                        context.Database.SqlQuery<Decimal>("Select AVAILPHYSICAL from InventoryOnHand where ITEMID='" + _ObjBOMItem.ITEMID + "'")
-                                    .FirstOrDefault();
-
-                    BOMlst.Add(new DL_OpportunityBOMItem
+                    foreach (var item in GetAllItemsForBomFromTemp)
                     {
-                        OpportunityID = 0,
-                        BOMID = item.BOM_ID,
-                        VersionNum = 0,
-                        BOMItemID = item.BOMItem_ID,
-                        ItemPrice = item.Price,
-                        Price = item.IsInTotal ? (item.Price * item.Quantity) : 0,
-                        Qty = item.Quantity,
-                        Description = (_ObjBOMItem != null ? _ObjBOMItem.DESCRIPTION : string.Empty),
-                        Category = _ObjPartInfo != null ? (_ObjPartInfo.ItemCategory != null ? _ObjPartInfo.ItemCategory.Category : string.Empty) : string.Empty,
-                        CategoryOrder = _ObjPartInfo != null ? (_ObjPartInfo.ItemCategory != null ? Convert.ToInt32(_ObjPartInfo.ItemCategory.ItemOrder) : 0) : 0,
-                        SubCategory = _ObjPartInfo != null ? (_ObjPartInfo.ItemSubCategory != null ? _ObjPartInfo.ItemSubCategory.Name : string.Empty) : string.Empty,
-                        SubCategoryOrder = _ObjPartInfo != null ? (_ObjPartInfo.ItemSubCategory != null ? Convert.ToInt32(_ObjPartInfo.ItemSubCategory.ItemOrder) : 0) : 0,
-                        MatthewsCode = _ObjBOMItem != null ? _ObjBOMItem.ITEMID : string.Empty,
-                        IsCustomParts = _ObjBOM != null ? Convert.ToBoolean(_ObjBOM.IsCustomParts) : false,
-                        FinalAgreedPrice = 0,
-                        Discount = 0,
-                        IsDiscountApply = Convert.ToBoolean(item.IsDiscountApply),
-                        IsQtyFixed = item.IsQtyFixed,
-                        PriceAfterDiscount = 0,
-                        AfterDiscount = 0,
-                        BOM = _ObjBOM != null ? _ObjBOM.BOM1 : string.Empty,
-                        MaximumQty = Convert.ToDecimal(item.MaximumQty),
-                        ClosedDate = string.Empty,
-                        IsInTotal = item.IsInTotal,
-                        IsDecimalAllowed = item.IsDecimalAllowed,
-                        InkUsage = string.Empty,
-                        Stock = Convert.ToInt32(_StockInHand)
-                    });
+                        var _ObjBOM = context.BOMs.Where(p => p.ID == item.BOMItem_ID).FirstOrDefault();
+                        var _ObjBOMItem = context.BOMItems.Where(p => p.RECID == item.BOMItem_ID).FirstOrDefault();
+                        var _ObjPartInfo = context.PartToCategories.Where(p => p.PartID == item.BOMItem_ID).FirstOrDefault();
+                        long RecID = (_ObjBOMItem != null ? _ObjBOMItem.RECID : 0);
+                        string ItemID = (_ObjBOMItem != null ? _ObjBOMItem.ITEMID : string.Empty);
+                        var _ObjBOMTemplate = context.BOMTemplates.Where(p => p.BOMItem_ID == RecID).FirstOrDefault();
+                        Decimal _StockInHand = context.Database.SqlQuery<Decimal>("Select AVAILPHYSICAL from InventoryOnHand where ITEMID='"
+                            + ItemID + "'").FirstOrDefault();
+
+
+                        //code to add BOM items to the OPP BOM table
+                        context.OpportunityBOMLists.Add(
+                            new DataLibrary.DBEntity.OpportunityBOMList
+                            {
+                                BOMID = item.BOM_ID,
+                                BOMItemsID = item.BOMItem_ID,
+                                CreatedDateTime = System.DateTime.Now,
+                                CustomCode = string.Empty,
+                                CustomDescription = string.Empty,
+                                Discount = 0,
+                                FinalAgreedPrice = 0,
+
+                                IsDecimalAllowed = item.IsDecimalAllowed,
+                                IsDiscountApply = item.IsDiscountApply,
+                                IsInTotal = item.IsInTotal,
+                                ItemPrice = (item.IsInTotal == true ? item.Quantity * item.Price : 0),
+                                MaximumQty = item.MaximumQty,
+                                Price = (item.IsInTotal == true ? item.Quantity * item.Price : 0),
+                                Qty = item.Quantity,
+
+                                PriceAfterDiscount = 0,
+                                OpportunityID = OpportunityID,
+                                State = 1,
+                                UpdatedDatetime = System.DateTime.Now,
+                                IsActive = isActive,
+                                IsDeleted = false,
+                                VersionNum = versionnum,
+                            });
+
+                        //Add these items to the list passed to the front end also
+                        BOMlst.Add(new DL_OpportunityBOMItem
+                        {
+                            OpportunityBOMListID = item.ID,
+                            OpportunityID = OpportunityID,
+                            BOMID = BOMID,
+                            VersionNum = Convert.ToInt32(versionnum),
+                            BOMItemID = item.BOMItem_ID,
+                            ItemPrice = item.Price,
+                            Price = item.IsInTotal ? (item.Price * item.Quantity) : 0,
+                            Qty = item.Quantity,
+                            Description = _ObjBOMItem.DESCRIPTION,
+                            Category = _ObjPartInfo != null ? (_ObjPartInfo.ItemCategory != null ? _ObjPartInfo.ItemCategory.Category : string.Empty) : string.Empty,
+                            CategoryOrder = _ObjPartInfo != null ? (_ObjPartInfo.ItemCategory != null ? Convert.ToInt32(_ObjPartInfo.ItemCategory.ItemOrder) : 0) : 0,
+                            SubCategory = _ObjPartInfo != null ? (_ObjPartInfo.ItemSubCategory != null ? _ObjPartInfo.ItemSubCategory.Name : string.Empty) : string.Empty,
+                            SubCategoryOrder = _ObjPartInfo != null ? (_ObjPartInfo.ItemSubCategory != null ? Convert.ToInt32(_ObjPartInfo.ItemSubCategory.ItemOrder) : 0) : 0,
+                            MatthewsCode = _ObjBOMItem != null ? _ObjBOMItem.ITEMID : string.Empty,
+                            IsCustomParts = _ObjBOM != null ? Convert.ToBoolean(_ObjBOM.IsCustomParts) : false,
+                            FinalAgreedPrice = 0,
+                            Discount = 0,
+                            IsDiscountApply = Convert.ToBoolean(item.IsDiscountApply),
+                            IsQtyFixed = _ObjBOMTemplate != null ? _ObjBOMTemplate.IsQtyFixed : false,
+                            PriceAfterDiscount = 0,
+                            AfterDiscount = 0,
+                            BOM = _ObjBOM != null ? _ObjBOM.BOM1 : string.Empty,
+                            MaximumQty = Convert.ToDecimal(item.MaximumQty),
+                            ClosedDate = string.Empty,
+                            IsInTotal = item.IsInTotal,
+                            IsDecimalAllowed = item.IsDecimalAllowed,
+                            InkUsage = string.Empty,
+                            Stock = Convert.ToInt32(_StockInHand)
+                        });
+                    }
+
+                    //Save the missing items in oppbomlist table
+                    context.SaveChanges();
                 }
-            }*/
+
             QuoteBOMView.BOMListViewModel = BOMlst;
             return QuoteBOMView;
-            /*
-            ////using (SqlConnection conn = new SqlConnection(GetConnectionString()))
-            ////{
-            ////    //return cnn.Query<T>(sql).ToList();
-            ////    conn.Open();
-            ////    DataSet ds = new DataSet();
-            ////    string SQLSP;
 
-            ////    { SQLSP = "Get_OpportunityBOMItemsByOpportunityID"; }
-            ////    SqlCommand dCmd = new SqlCommand(SQLSP, conn);
-            ////    dCmd.CommandType = CommandType.StoredProcedure;
-            ////    dCmd.Parameters.Add(new SqlParameter("@OpportunityID", OpportunityID));
-            ////    dCmd.Parameters.Add(new SqlParameter("@BOMID", BOMID));
-            ////    dCmd.Parameters.Add(new SqlParameter("@NewBOM", NewBOM));
-            ////    dCmd.Parameters.Add(new SqlParameter("@State", State));
-            ////    dCmd.Parameters.Add(new SqlParameter("@versionnum", versionnum));
-            ////    SqlDataAdapter da = new SqlDataAdapter(dCmd);
-            ////    DataTable dt = new DataTable();
-            ////    ds.Clear();
-
-            ////    da.Fill(dt);
-            ////    conn.Close();
-
-
-            ////    if (dt != null && dt.Rows.Count > 0)
-            ////    {
-
-            ////        foreach (DataRow dr in dt.Rows)
-            ////        {
-            ////            //DL_OpportunityBOMItem BOM = new DL_OpportunityBOMItem();
-            ////            //BOM.OpportunityID = Convert.ToInt32(dr["OpportunityID"].ToString());
-            ////            //BOM.BOMID = Convert.ToInt32(dr["BOMID"].ToString());
-            ////            //BOM.BOMItemID = Convert.ToInt64(dr["BOMItemsID"].ToString());
-            ////            //BOM.Description = dr["Description"].ToString();
-            ////            //BOM.ItemPrice = Convert.ToDecimal(dr["ItemPrice"].ToString());
-            ////            //BOM.Price = Convert.ToDecimal(dr["Price"].ToString());
-            ////            //BOM.Qty = Convert.ToDecimal(dr["Qty"].ToString());
-            ////            //BOM.Category = dr["Category"].ToString();
-            ////            //BOM.CategoryOrder = Convert.ToString(dr["CategoryOrder"]).Trim().Length > 0 ? Convert.ToInt32(dr["CategoryOrder"]) : 0;
-            ////            //BOM.SubCategory = dr["SubCategory"].ToString();
-            ////            //BOM.SubCategoryOrder = Convert.ToString(dr["SubCategoryOrder"]).Trim().Length > 0 ? Convert.ToInt32(dr["SubCategoryOrder"]) : 0;
-            ////            //BOM.MatthewsCode = dr["ITEMID"].ToString();
-            ////            //BOM.OpportunityBOMListID = Convert.ToInt32(dr["OpportunityBOMListID"].ToString());
-            ////            //BOM.IsCustomParts = Convert.ToBoolean(dr["IsCustomParts"].ToString());
-            ////            //BOM.Discount = Convert.ToDecimal(dr["Discount"].ToString());
-            ////            //BOM.FinalAgreedPrice = Convert.ToDecimal(dr["Finalagreedprice"].ToString());
-            ////            //BOM.IsQtyFixed = Convert.ToBoolean(dr["IsQtyFixed"].ToString());
-            ////            //BOM.PriceAfterDiscount = Convert.ToDecimal(dr["PriceAfterDiscount"].ToString());
-            ////            //BOM.BOM = dr["BOM"].ToString();
-            ////            //BOM.MaximumQty = Convert.ToDecimal(dr["MaximumQty"].ToString());
-            ////            //BOM.ClosedDate = dr["ClosedDate"].ToString();
-            ////            //BOM.Stock = Convert.ToInt32(dr["Stock"].ToString());
-            ////            //BOM.State = State;
-            ////            //BOM.IsInTotal = Convert.ToBoolean(dr["IsInTotal"].ToString());
-            ////            //BOM.IsDecimalAllowed = Convert.ToBoolean(dr["IsDecimalAllowed"].ToString());
-
-            ////            //if (dr["IsDiscountApply"].ToString() != null && dr["IsDiscountApply"].ToString() != "")
-            ////            //{ BOM.IsDiscountApply = Convert.ToBoolean(dr["IsDiscountApply"].ToString()); }
-            ////            //else { BOM.IsDiscountApply = false; }
-
-            ////            //if (BOM.IsDiscountApply == true)
-            ////            //{
-            ////            //    BOM.AfterDiscount = ((BOM.ItemPrice) - (BOM.ItemPrice / 100) * BOM.Discount) * BOM.Qty;
-            ////            //}
-            ////            //else
-            ////            //{
-            ////            //    BOM.AfterDiscount = (BOM.ItemPrice * BOM.Qty);
-            ////            //}
-
-            ////            //BOM.InkUsage = dr["InkUsage"].ToString();
-
-            ////            //BOMlst.Add(BOM);
-
-            ////        }
-            ////        QuoteBOMView.BOMListViewModel = BOMlst;
-
-            ////    }
-            ////    return QuoteBOMView;
-            ////}*/
         }
 
         #endregion
@@ -371,10 +339,6 @@ namespace DataLibrary
         #endregion SaveBOM
     }
 }
-
-
-
-
 
 
 
