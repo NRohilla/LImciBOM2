@@ -251,6 +251,25 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SaleType" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblConsmbl_Solv_Clnr_Relations">
+          <Key>
+            <PropertyRef Name="RelationID" />
+          </Key>
+          <Property Name="RelationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConsummableID" Type="nvarchar" MaxLength="20" />
+          <Property Name="SolventID" Type="nvarchar" MaxLength="20" />
+          <Property Name="CleanerID" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tblPrntHD_Consmbl_Relations">
+          <Key>
+            <PropertyRef Name="Relationid" />
+          </Key>
+          <Property Name="Relationid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PrintHeadID" Type="nvarchar" MaxLength="20" />
+          <Property Name="PrintHeadDesc" Type="nvarchar" MaxLength="100" />
+          <Property Name="ConsummableID" Type="nvarchar" MaxLength="20" />
+          <Property Name="ConsummableDesc" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="Teritory">
           <Key>
             <PropertyRef Name="ID" />
@@ -471,6 +490,7 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           <Parameter Name="BOMID" Type="int" Mode="In" />
           <Parameter Name="NewBOM" Type="bit" Mode="In" />
           <Parameter Name="State" Type="int" Mode="In" />
+          <Parameter Name="versionnum" Type="int" Mode="In" />
         </Function>
         <Function Name="Get_OpportunityBOMList_BOMDownload" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OpportunityID" Type="int" Mode="In" />
@@ -604,6 +624,8 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           <EntitySet Name="PMFeeNotChargable" EntityType="Self.PMFeeNotChargable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PMFeeNotChargable_DEL" EntityType="Self.PMFeeNotChargable_DEL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectMilestones" EntityType="Self.ProjectMilestones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblConsmbl_Solv_Clnr_Relations" EntityType="Self.tblConsmbl_Solv_Clnr_Relations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPrntHD_Consmbl_Relations" EntityType="Self.tblPrntHD_Consmbl_Relations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teritory" EntityType="Self.Teritory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Configuration_DEL" EntityType="Self.Configuration_DEL" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1259,6 +1281,7 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
             <Parameter Name="BOMID" Mode="In" Type="Int32" />
             <Parameter Name="NewBOM" Mode="In" Type="Boolean" />
             <Parameter Name="State" Mode="In" Type="Int32" />
+            <Parameter Name="versionnum" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Get_OpportunityBOMList_BOMDownload" ReturnType="Collection(OnlineBOMModel.Get_OpportunityBOMList_BOMDownload_Result)">
             <Parameter Name="OpportunityID" Mode="In" Type="Int32" />
@@ -1373,6 +1396,8 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
             <Parameter Name="Territory1Split" Mode="In" Type="Int32" />
             <Parameter Name="Territory2Split" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="tblConsmbl_Solv_Clnr_Relations" EntityType="OnlineBOMModel.tblConsmbl_Solv_Clnr_Relations" />
+          <EntitySet Name="tblPrntHD_Consmbl_Relations" EntityType="OnlineBOMModel.tblPrntHD_Consmbl_Relations" />
         </EntityContainer>
         <ComplexType Name="Get_BOMPriceTotalsByOpportunityID_Result">
           <Property Type="Decimal" Name="TotalPrice" Nullable="true" Precision="38" Scale="3" />
@@ -1536,6 +1561,25 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           <Property Type="String" Name="SALESDISTRICTID" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="DESCRIPTION" Nullable="true" MaxLength="60" />
         </ComplexType>
+        <EntityType Name="tblConsmbl_Solv_Clnr_Relations">
+          <Key>
+            <PropertyRef Name="RelationID" />
+          </Key>
+          <Property Name="RelationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConsummableID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SolventID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CleanerID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblPrntHD_Consmbl_Relations">
+          <Key>
+            <PropertyRef Name="Relationid" />
+          </Key>
+          <Property Name="Relationid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PrintHeadID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PrintHeadDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ConsummableID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ConsummableDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2027,6 +2071,27 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           <FunctionImportMapping FunctionImportName="Update_OpportunityCustomerDetails" FunctionName="OnlineBOMModel.Store.Update_OpportunityCustomerDetails" />
           <FunctionImportMapping FunctionImportName="Update_OpportunityPMComments" FunctionName="OnlineBOMModel.Store.Update_OpportunityPMComments" />
           <FunctionImportMapping FunctionImportName="Update_OpportunityTerritorySplit" FunctionName="OnlineBOMModel.Store.Update_OpportunityTerritorySplit" />
+          <EntitySetMapping Name="tblConsmbl_Solv_Clnr_Relations">
+            <EntityTypeMapping TypeName="OnlineBOMModel.tblConsmbl_Solv_Clnr_Relations">
+              <MappingFragment StoreEntitySet="tblConsmbl_Solv_Clnr_Relations">
+                <ScalarProperty Name="CleanerID" ColumnName="CleanerID" />
+                <ScalarProperty Name="SolventID" ColumnName="SolventID" />
+                <ScalarProperty Name="ConsummableID" ColumnName="ConsummableID" />
+                <ScalarProperty Name="RelationID" ColumnName="RelationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPrntHD_Consmbl_Relations">
+            <EntityTypeMapping TypeName="OnlineBOMModel.tblPrntHD_Consmbl_Relations">
+              <MappingFragment StoreEntitySet="tblPrntHD_Consmbl_Relations">
+                <ScalarProperty Name="ConsummableDesc" ColumnName="ConsummableDesc" />
+                <ScalarProperty Name="ConsummableID" ColumnName="ConsummableID" />
+                <ScalarProperty Name="PrintHeadDesc" ColumnName="PrintHeadDesc" />
+                <ScalarProperty Name="PrintHeadID" ColumnName="PrintHeadID" />
+                <ScalarProperty Name="Relationid" ColumnName="Relationid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -42,6 +42,8 @@
         <AssociationConnector Association="OnlineBOMModel.FK_PartToCategory_ItemCategory" ManuallyRouted="false" />
         <AssociationConnector Association="OnlineBOMModel.FK_pmFeeChargable_ItemCategory" ManuallyRouted="false" />
         <AssociationConnector Association="OnlineBOMModel.FK_PartToCategory_ItemSubCategory" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="OnlineBOMModel.tblConsmbl_Solv_Clnr_Relations" Width="1.5" PointX="14.375" PointY="3.75" />
+        <EntityTypeShape EntityType="OnlineBOMModel.tblPrntHD_Consmbl_Relations" Width="1.5" PointX="7.375" PointY="14.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

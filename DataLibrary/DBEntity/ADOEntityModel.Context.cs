@@ -49,6 +49,8 @@ namespace DataLibrary.DBEntity
         public virtual DbSet<Configuration_DEL> Configuration_DEL { get; set; }
         public virtual DbSet<ImplementationAssembly> ImplementationAssemblies { get; set; }
         public virtual DbSet<SaleType> SaleTypes { get; set; }
+        public virtual DbSet<tblConsmbl_Solv_Clnr_Relations> tblConsmbl_Solv_Clnr_Relations { get; set; }
+        public virtual DbSet<tblPrntHD_Consmbl_Relations> tblPrntHD_Consmbl_Relations { get; set; }
     
         public virtual int CreateLead(string customerName, Nullable<System.DateTime> leadDate, string leadBy, string leadNumber, Nullable<int> noOfWeeks, Nullable<System.DateTime> delivaeryDate, string pONumber, string dispatchAddress, string dispatchName, string title, string phoneNumber, string email, string cRMNumber)
         {
@@ -150,7 +152,7 @@ namespace DataLibrary.DBEntity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Get_OpportunityBOMChildItemsByBOMItemID_Result>("Get_OpportunityBOMChildItemsByBOMItemID", opportunityIDParameter, bOMItemIDParameter, bOMIDParameter);
         }
     
-        public virtual ObjectResult<Get_OpportunityBOMItemsByOpportunityID_Result> Get_OpportunityBOMItemsByOpportunityID(Nullable<int> opportunityID, Nullable<int> bOMID, Nullable<bool> newBOM, Nullable<int> state)
+        public virtual ObjectResult<Get_OpportunityBOMItemsByOpportunityID_Result> Get_OpportunityBOMItemsByOpportunityID(Nullable<int> opportunityID, Nullable<int> bOMID, Nullable<bool> newBOM, Nullable<int> state, Nullable<int> versionnum)
         {
             var opportunityIDParameter = opportunityID.HasValue ?
                 new ObjectParameter("OpportunityID", opportunityID) :
@@ -168,7 +170,11 @@ namespace DataLibrary.DBEntity
                 new ObjectParameter("State", state) :
                 new ObjectParameter("State", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Get_OpportunityBOMItemsByOpportunityID_Result>("Get_OpportunityBOMItemsByOpportunityID", opportunityIDParameter, bOMIDParameter, newBOMParameter, stateParameter);
+            var versionnumParameter = versionnum.HasValue ?
+                new ObjectParameter("versionnum", versionnum) :
+                new ObjectParameter("versionnum", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Get_OpportunityBOMItemsByOpportunityID_Result>("Get_OpportunityBOMItemsByOpportunityID", opportunityIDParameter, bOMIDParameter, newBOMParameter, stateParameter, versionnumParameter);
         }
     
         public virtual ObjectResult<Get_OpportunityBOMList_BOMDownload_Result> Get_OpportunityBOMList_BOMDownload(Nullable<int> opportunityID, Nullable<int> bOMID, Nullable<int> state)
