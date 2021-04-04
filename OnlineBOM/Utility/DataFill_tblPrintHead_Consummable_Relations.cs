@@ -38,6 +38,49 @@ namespace WebApplication3.Utility
             PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1018", "8900"));
             PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1018", "8800"));
             #endregion
+            #region 1058 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1058", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1058", "8800"));
+            #endregion
+            #region 1062 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1062", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1062", "8800"));
+            #endregion
+            #region 1063 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1063", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1063", "8800"));
+            #endregion
+            #region 1065 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1065", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1065", "8800"));
+            #endregion
+            #region 1068 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1068", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1068", "8800"));
+            #endregion
+            #region 1070 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1070", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1070", "8800"));
+            #endregion
+            #region 1075 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1075", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1075", "8800"));
+            #endregion
+            #region 1077 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1240", "8900"));
+            #endregion
+            #region 1085 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1085", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1085", "8800"));
+            #endregion
+            #region 1121 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1121", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1121", "8800"));
+            #endregion
+            #region 1130 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1130", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1130", "8800"));
+            #endregion
             #region 1240 Ink Series
             PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "plus", "1240", "8900"));
             PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "plus", "1240", "8800"));
@@ -61,6 +104,63 @@ namespace WebApplication3.Utility
             #region 1290 Ink Series
             PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1290", "8900"));
             #endregion
+            #region 1291 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1291", "8900"));
+            #endregion
+            #region 1405 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "plus", "1405", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "plus", "1405", "8800"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1405", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "1405", "8800"));
+            #endregion
+            #region 2030 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "2030", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "2030", "8800"));
+            #endregion
+            #region 2035 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "2035", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "2035", "8800"));
+            #endregion
+            #region 2040 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "2040", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "2040", "8800"));
+            #endregion
+            #region 2250 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "2250", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "2250", "8800"));
+            #endregion
+            #region 3103 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "plus", "3103", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "plus", "3103", "8800"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3103", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3103", "8800"));
+            #endregion
+            #region 3123 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3123", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3123", "8800"));
+            #endregion
+            #region 3124 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3124", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3124", "8800"));
+            #endregion
+            #region 3160 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3160", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3160", "8800"));
+            #endregion
+            #region 3203 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3203", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3203", "8800"));
+            #endregion
+            #region 3240 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3240", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3240", "8800"));
+            #endregion
+            #region 3401 Ink Series
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3401", "8900"));
+            PrintHeadQuery.Add(new tblRelationsQuery("mk11", "MIDI", "", "3401", "8800"));
+            #endregion
+
+
             System.Data.SqlClient.SqlConnection sqlConn = new System.Data.SqlClient.SqlConnection(@"data source=NITINR;Initial Catalog=OnlineBOM;User ID=sa;Password=pass@123;");
             sqlConn.Open();
 
