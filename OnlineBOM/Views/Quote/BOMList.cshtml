@@ -175,52 +175,526 @@
                                                         </tr>
                                                     }
 
-                                                    <tr id="Subtr_@item.SubCategory">
+                                                    if (!(item.Category.Trim().ToLower().Equals("Consumables".ToLower())))
+                                                    {
+                                                        <tr id="Subtr_@item.SubCategory">
 
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                        <td class="pt-3-half" contenteditable="false"><div id="someotherelement"></div> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
-                                                        <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
-                                                        @if (@item.IsQtyFixed == true)
-                                                        {
-                                                            <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
-                                                        }
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                            <td class="pt-3-half" contenteditable="false"><div id="someotherelement"></div> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
+                                                            <td class="pt-3-half" contenteditable="false"> @Html.DisplayFor(modelItem => item.Description)</td>
+                                                            @if (@item.IsQtyFixed == true)
+                                                            {
+                                                                <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                            }
 
-                                                        <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                        <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
-                                                        @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                                        {
-                                                            <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                                        }
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                                        <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+                                                            <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                            <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                            @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                            {
+                                                                <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                            }
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                            <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
 
-                                                    </tr>
-                                                    <!--Inserted after the last tr-->
+                                                        </tr>
+                                                    }
 
                                                     if (item.Category.Trim().ToLower().Equals("Consumables".ToLower()))
                                                     {
                                                         ++currentConsummableCount;
+                                                        //Model._LstTblCons_Solv_Clnr
+                                                        if (currentConsummableCount == 1)
+                                                        {
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false"><div id="someotherelement"></div> @Html.DisplayFor(modelItem => item.MatthewsCode)</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <select id="DrpDwnConsummable" style=" width: 100%;font-weight: bold;">
+                                                                        @{
+                                                                            foreach (var itemCnSmClnrSlvntRltion in Model._LstTblCons_Solv_Clnr)
+                                                                            {
+                                                                                if (
+                                                                                    (!(itemCnSmClnrSlvntRltion.ConsummableID.Contains("15140083")))
+                                                                                   && (!(itemCnSmClnrSlvntRltion.ConsummableID.Contains("15140091")))
+                                                                                   )
+                                                                                {
+                                                                                    <option value="@itemCnSmClnrSlvntRltion.ConsummableID"
+                                                                                            data-SolventID="@itemCnSmClnrSlvntRltion.SolventID" data-SolventDesc="@itemCnSmClnrSlvntRltion.SolventDesc"
+                                                                                            data-cleanerID="@itemCnSmClnrSlvntRltion.CleanerID" data-cleanerDesc="@itemCnSmClnrSlvntRltion.CleanerDesc">
+                                                                                        @itemCnSmClnrSlvntRltion.ConsummableDesc
+                                                                                    </option>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    </select>
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div  id="Div_Consummable_SolventID">
+                                                                    </div>  
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="Div_Consummable_SolventDesc"> Solvent</div>
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="Div_Consummable_CleanerID">
+                                                                    </div>
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="Div_Consummable_CleanerDesc"> Solvent</div>
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+
+                                                            <tr id="Subtr_@item.SubCategory">
+                                                                <td class="pt-3-half" contenteditable="false" colspan="19"><hr /> </td>
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <b> Startup Kit 1014</b>
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="someotherelement"></div>15140083
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    Ink 1014 Blk (8900) 10 X 500ml
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false"><div id="someotherelement"></div>16140061</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="DrpDwnConsummable_Solvent"> Solvent 1505 (8900) 5 X 1L</div>
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false"><div id="someotherelement"></div>16140064</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="DrpDwnConsummable_Cleaner"> Cleaner 8900 Mek 2X500ml</div>
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+                                                                <td class="pt-3-half" contenteditable="false" colspan="19"><hr /> </td>
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <b> Startup Kit 1079 - YELLOW (8920)</b>
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="someotherelement"></div>
+                                                                    15140091
+
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    Ink 1079 Yellow (8900) 10 X 500ml
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="someotherelement"></div>
+                                                                    16140061
+                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="DrpDwnConsummable_Solvent"> Solvent 1505 (8900) 5 X 1L</div>
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                            <tr id="Subtr_@item.SubCategory">
+
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false"><div id="someotherelement"></div> 16140064</td>
+                                                                <td class="pt-3-half" contenteditable="false">
+                                                                    <div id="DrpDwnConsummable_Cleaner"> Cleaner 8900 Mek 2X500ml</div>
+                                                                </td>
+                                                                @if (@item.IsQtyFixed == true)
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                }
+
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                }
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                            </tr>
+                                                        }
 
                                                         if (currentConsummableCount == LengthConsummable)
                                                         {
+                                                            <!--Inserted after the last tr-->
                                                             <tr>
                                                                 <td colspan="5">
 
@@ -279,6 +753,23 @@
             $("tr[id='" + DataAttr + "']").each(function () {
                 $(this).toggle();
             });
+        });
+
+
+        $('#DrpDwnConsummable').change(function () {
+            debugger;
+            var GetSolventID = $(this).find(':selected').attr('data-SolventID');
+            $('#Div_Consummable_SolventID').html(GetSolventID);
+            var GetSolventDesc = $(this).find(':selected').attr('data-SolventDesc');
+            $('#Div_Consummable_SolventDesc').html(GetSolventDesc);
+            var GetcleanerID = $(this).find(':selected').attr('data-cleanerID');
+            $('#Div_Consummable_CleanerID').html(GetcleanerID);
+
+            
+            var GetcleanerDesc = $(this).find(':selected').attr('data-cleanerDesc');
+            $('#Div_Consummable_CleanerDesc').html(GetcleanerDesc);
+
+
         });
 
     });

@@ -110,6 +110,8 @@ namespace OnlineBOM.Controllers
 
             DL_OpportunityBOMItemsViewModel DLVM = new DL_OpportunityBOMItemsViewModel();
             QuoteBOMBusinessLogic BL = new QuoteBOMBusinessLogic();
+            var context = new DataLibrary.DBEntity.OnlineBOMEntities();
+
             DLVM = BL.GetOpportunityBOMItemsByOpportunityID(OpportunityID, BOMID, NewBOM, State, VersionNum);
             OpportunityBOMItemsViewModel view = PopulateBOMList(DLVM, QuoteNo);
             view.ItemMasterName = Name;
@@ -131,6 +133,7 @@ namespace OnlineBOM.Controllers
             Categories = Categories.GroupBy(p => p).Select(g => g.First()).ToList();
             TempData["Categories"] = Categories;
             TempData["CountOfConsumable"] = view.BOMListViewModel.Where(p => p.Category.Equals("Consumables")).Count();
+            view._LstTblCons_Solv_Clnr = context.tblConsmbl_Solv_Clnr_Relations.ToList();
 
             return View("BOMList", view);
         }

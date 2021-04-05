@@ -29,5 +29,6 @@ namespace OnlineBOM.Models
 
         [AllowHtml]
         public List<OpportunityBOMItem> BOMListViewModel { get; set; }
+        public List<DataLibrary.DBEntity.tblConsmbl_Solv_Clnr_Relations> _LstTblCons_Solv_Clnr;
     }
 }
