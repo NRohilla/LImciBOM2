@@ -168,6 +168,10 @@
                                         <!--Add New BOM MODAL Starts-->
                                         <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="AnchAddNewBOM" data-toggle="modal" data-target="#ADDBOMModal"
                                            style="cursor:pointer;">Add New BOM</a>
+
+                                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="AnchOnlyActiveBoms" style="cursor:pointer;">Show Only Active BOMs</a>
+                                        <a class="nav-item nav-link text-xs font-weight-bold text-primary text-uppercase mb-1" id="AnchAllBoms" style="cursor:pointer;display:none">Show All BOMs</a>
+
                                         <!-- Modal -->
                                         <div class="modal fade" id="ADDBOMModal" tabindex="-1" role="dialog" aria-labelledby="ADDBOMModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
@@ -297,10 +301,10 @@
                                                         Status
                                                     </th>
                                                     <th class="text-center">
-                                                        
+
                                                     </th>
                                                     <th class="text-center">
-                                                        
+
                                                     </th>
 
 
@@ -348,21 +352,22 @@
                                                                 @*@Html.ActionLink("Closed", "GetBOMList"
                                                                     , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = true, PMView = false, VersionNum = item.VersionNum }
                                                                     , new { data_SalesStatus = "Closed", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })*@
-                                                                <a href="#">Closed</a>
+                                                                <a href="#" data-bomid="@item.BOMID" data-opprid="@item.OpportunityID" data-salesstatus="Closed" data-attr="BOM_SalesStatusAnchor" data-VersionNum="@item.VersionNum" data-IsActive="@item.IsActive">Closed</a>
+
                                                             }
 
                                                             @if (item.FinalAgreedPrice > 0 && Model.ClosedDate == "")
                                                             {
                                                                 @Html.ActionLink("Edit BOM", "GetBOMList"
                                                                , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = false, ViewBOM = false, PMView = false, VersionNum = item.VersionNum }
-                                                               , new { data_SalesStatus = "Edit", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })
+                                                               , new { data_SalesStatus = "Edit", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID, data_VersionNum = item.VersionNum, data_IsActive = item.IsActive })
                                                             }
 
                                                             @if (Model.ClosedDate == "" && item.FinalAgreedPrice <= 0)
                                                             {
                                                                 @Html.ActionLink("New BOM", "GetBOMList"
                                                                , new { OpportunityID = Model.QuoteID, BOMID = item.BOMID, QuoteNo = Model.QuoteNo, Name = item.Name, NewBOM = true, ViewBOM = false, PMView = false, VersionNum = item.VersionNum }
-                                                               , new { data_SalesStatus = "New", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID })
+                                                               , new { data_SalesStatus = "New", data_attr = "BOM_SalesStatusAnchor", data_BOMID = item.BOMID, data_OpprID = item.OpportunityID, data_VersionNum = item.VersionNum, data_IsActive = item.IsActive })
                                                             }
                                                         </td>
 
@@ -653,6 +658,21 @@
     </script>
 }
 <script>
+    var IsOppClosed = true;
+
+    $('a[data-attr=BOM_SalesStatusAnchor]').each(function (index, value) {
+        if ($(this).attr('data-salesstatus') != 'Closed') {
+            IsOppClosed = false;
+            return false;
+        }
+    });
+
+    //If the Opp is closed
+    if (IsOppClosed) {
+        $('#AnchAllBoms').css('display', 'none');
+        $('#AnchOnlyActiveBoms').css('display', 'none');
+    }
+
     function SetDeleteAttributes(BOM, OPP, VERSION) {
         debugger;
 
@@ -785,6 +805,33 @@
                     }
                 }
             });
+        });
+
+        $('#AnchAllBoms').click(function () {
+            $('#AnchAllBoms').css('display', 'none');
+            $('#AnchOnlyActiveBoms').css('display', '');
+
+            $('a[data-attr=BOM_SalesStatusAnchor]').each(function (index, value) {
+                //Show all the rows
+                var ID = 'tr_' + $(this).attr('data-bomid') + '_' + $(this).attr('data-opprid') + '_' + $(this).attr('data-versionnum');
+                $('#' + ID).css('display', '');
+            });
+        });
+
+        $('#AnchOnlyActiveBoms').click(function () {
+            $('#AnchAllBoms').css('display', '');
+            $('#AnchOnlyActiveBoms').css('display', 'none');
+
+            $('a[data-attr=BOM_SalesStatusAnchor]').each(function (index, value) {
+                //Show all the rows
+                var ID = 'tr_' + $(this).attr('data-bomid') + '_' + $(this).attr('data-opprid') + '_' + $(this).attr('data-versionnum');
+                $('#' + ID).css('display', '');
+
+                if ($(this).attr('data-isactive') != 'True')
+                    $('#' + ID).css('display', 'none');//Hide only the Inactive Rows
+
+            });
+
         });
 
     });//document ends

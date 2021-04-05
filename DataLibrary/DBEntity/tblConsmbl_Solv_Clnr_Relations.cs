@@ -18,5 +18,8 @@ namespace DataLibrary.DBEntity
         public string ConsummableID { get; set; }
         public string SolventID { get; set; }
         public string CleanerID { get; set; }
+        public string ConsummableDesc { get; set; }
+        public string SolventDesc { get; set; }
+        public string CleanerDesc { get; set; }
     }
 }

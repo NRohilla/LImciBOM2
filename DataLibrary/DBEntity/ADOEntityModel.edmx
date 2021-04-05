@@ -257,8 +257,11 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           </Key>
           <Property Name="RelationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ConsummableID" Type="nvarchar" MaxLength="20" />
+          <Property Name="ConsummableDesc" Type="nvarchar" MaxLength="100" />
           <Property Name="SolventID" Type="nvarchar" MaxLength="20" />
+          <Property Name="SolventDesc" Type="nvarchar" MaxLength="100" />
           <Property Name="CleanerID" Type="nvarchar" MaxLength="20" />
+          <Property Name="CleanerDesc" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="tblPrntHD_Consmbl_Relations">
           <Key>
@@ -1569,6 +1572,9 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           <Property Name="ConsummableID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SolventID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CleanerID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ConsummableDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SolventDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CleanerDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblPrntHD_Consmbl_Relations">
           <Key>
@@ -2074,6 +2080,9 @@ warning 6002: The table/view 'OnlineBOM.dbo.SaleType' does not have a primary ke
           <EntitySetMapping Name="tblConsmbl_Solv_Clnr_Relations">
             <EntityTypeMapping TypeName="OnlineBOMModel.tblConsmbl_Solv_Clnr_Relations">
               <MappingFragment StoreEntitySet="tblConsmbl_Solv_Clnr_Relations">
+                <ScalarProperty Name="CleanerDesc" ColumnName="CleanerDesc" />
+                <ScalarProperty Name="SolventDesc" ColumnName="SolventDesc" />
+                <ScalarProperty Name="ConsummableDesc" ColumnName="ConsummableDesc" />
                 <ScalarProperty Name="CleanerID" ColumnName="CleanerID" />
                 <ScalarProperty Name="SolventID" ColumnName="SolventID" />
                 <ScalarProperty Name="ConsummableID" ColumnName="ConsummableID" />
