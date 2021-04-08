@@ -142,9 +142,10 @@ namespace OnlineBOM.Controllers
                 var GetAllPrintHeadsforThisCon = context.tblPrntHD_Consmbl_Relations.Where(p => p.ConsummableID == itemAllConsummableSOlRelation.ConsummableID).ToList();// Get All compatible Printheads for this consummable
                 if (GetAllPrintHeadsforThisCon.Count() > 0)
                 {
-                    var GetAllBOMPrintHeads = view.BOMListViewModel.Where(p=>p.Category.Equals("Device")).Select(p=>p.MatthewsCode).ToList();//Get list of all PrintHeadss from our Model data
-                    var filtered = GetAllPrintHeadsforThisCon.Where(i => GetAllBOMPrintHeads.Contains(i.PrintHeadID)).Select(p=>p.PrintHeadID).Distinct().ToList();// Get Filtered list of PrintHeads ONLY 
-
+                    var GetAllBOMPrintHeads = view.BOMListViewModel.Where(p => p.Category.Equals("Device")).Select(p => p.MatthewsCode).ToList();//Get list of all PrintHeadss from our Model data
+                    var filtered = GetAllPrintHeadsforThisCon.Where(i => GetAllBOMPrintHeads.Contains(i.PrintHeadID)).Select(p => p.PrintHeadID).Distinct().ToList();// Get Filtered list of PrintHeads ONLY 
+                    var GetDataOfConsumable = view.BOMListViewModel.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID ||
+                    p.MatthewsCode == itemAllConsummableSOlRelation.SolventID || p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).ToList();
 
                     System.Text.StringBuilder _stringAllPrintHeads = new System.Text.StringBuilder();
                     foreach (var ItemPC in filtered)
@@ -153,7 +154,22 @@ namespace OnlineBOM.Controllers
                     view._LstTbl_PrntHd_Cons_Solv_Clnr.Add(new PrintHead_Consummable_Relations
                     {
                         _CompatiblePrintHeads = Convert.ToString(_stringAllPrintHeads),
-                        _ConS_SolV_ClnR = itemAllConsummableSOlRelation
+                        _ConS_SolV_ClnR = itemAllConsummableSOlRelation,
+
+                        Price = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault() != null ?
+                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault().Price : 0,
+                        Quantity = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault() != null ?
+                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault().Qty : 0,
+
+                        CleanerPrice= GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault() != null ?
+                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault().Price : 0,
+                        CleanerQuantity = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault() != null ?
+                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault().Qty : 0,
+
+                        SolventPrice = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault() != null ?
+                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault().Price : 0,
+                        SolventQuantity = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault() != null ?
+                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault().Qty : 0,
                     });
                 }
             }

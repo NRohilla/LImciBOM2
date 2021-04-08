@@ -37,5 +37,13 @@ namespace OnlineBOM.Models
     {
         public DataLibrary.DBEntity.tblConsmbl_Solv_Clnr_Relations _ConS_SolV_ClnR { get; set; }
         public string _CompatiblePrintHeads { get; set; }
+        public decimal Price { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal CleanerPrice { get; set; }
+        public decimal CleanerQuantity { get; set; }
+        public decimal SolventPrice { get; set; }
+        public decimal SolventQuantity { get; set; }
+
+
     }
 }

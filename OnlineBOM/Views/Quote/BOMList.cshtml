@@ -231,8 +231,11 @@
                                                                             foreach (var itemCnSmClnrSlvntRltion in Model._LstTbl_PrntHd_Cons_Solv_Clnr)
                                                                             {
                                                                                 <option value="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.ConsummableID"
+                                                                                        data-PriceOfConsummable="@itemCnSmClnrSlvntRltion.Price" data-QtyOfConsummable="@itemCnSmClnrSlvntRltion.Quantity"
                                                                                         data-SolventID="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.SolventID" data-SolventDesc="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.SolventDesc"
+                                                                                        data-SolventPrice="@itemCnSmClnrSlvntRltion.SolventPrice" data-SolventQty="@itemCnSmClnrSlvntRltion.SolventQuantity"
                                                                                         data-cleanerID="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.CleanerID" data-cleanerDesc="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.CleanerDesc"
+                                                                                        data-CleanerPrice="@itemCnSmClnrSlvntRltion.CleanerPrice" data-CleanerQty="@itemCnSmClnrSlvntRltion.CleanerQuantity"
                                                                                         data-CompatiblePrintHeads="@itemCnSmClnrSlvntRltion._CompatiblePrintHeads" data-attr="Option_DrpDwnConsummable">
                                                                                     @itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.ConsummableDesc
                                                                                 </option>
@@ -242,15 +245,23 @@
                                                                 </td>
                                                                 @if (@item.IsQtyFixed == true)
                                                                 {
-                                                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                    <td class="allownumeric" contenteditable="false" align="center">
+                                                                        <div id="DrpDwnConsummable_Qty"></div>
+                                                                    </td>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                    <td class="allownumeric" contenteditable="true" align="center">
+                                                                        <div id="DrpDwnConsummable_Qty"></div>
+                                                                    </td>
+
+
                                                                 }
-                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_Price"></div></td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">
+                                                                    <div id="DrpDwnConsummable_FinalPrice">8888</div>
+                                                                </td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -266,6 +277,7 @@
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
                                                             </tr>
                                                             <tr id="Subtr_@item.SubCategory">
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
@@ -283,18 +295,20 @@
                                                                 @if (@item.IsQtyFixed == true)
                                                                 {
                                                                     <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
-                                                                        @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                                                        @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
+                                                                        <div id="DrpDwnConsummable_SolventQty"></div>
                                                                     </td>
                                                                 }
                                                                 else
                                                                 {
                                                                     <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
-                                                                        @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                                                        @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
+                                                                        <div id="DrpDwnConsummable_SolventQty"></div>
                                                                     </td>
                                                                 }
-                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_SolventPrice">0000</div></td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  <div id="DrpDwnConsummable_SolventFinalPrice">0000</div></td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -328,18 +342,20 @@
                                                                 @if (@item.IsQtyFixed == true)
                                                                 {
                                                                     <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
-                                                                        @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                                                        @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
+                                                                        <div id="DrpDwnConsummable_CleanerQty"></div>
                                                                     </td>
                                                                 }
                                                                 else
                                                                 {
                                                                     <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
-                                                                        @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                                                        @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
+                                                                        <div id="DrpDwnConsummable_CleanerQty"></div>
                                                                     </td>
                                                                 }
-                                                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_CleanerPrice">0000</div></td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right">  <div id="DrpDwnConsummable_CleanerFinalPrice">0000</div></td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -370,15 +386,19 @@
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
                                                                     <td class="pt-3-half" contenteditable="false">
-                                                                    <div id="DrpDwnConsummable_Additional_ItemID"></div></td>
+                                                                        <div id="DrpDwnConsummable_Additional_ItemID"></div>
+                                                                    </td>
                                                                     <td class="pt-3-half" contenteditable="false">
                                                                         <select id="DrpDwnConsummable_Additional" style=" width: 100%;font-weight: bold;">
                                                                             @{
                                                                                 foreach (var itemCnSmClnrSlvntRltion in Model._LstTbl_PrntHd_Cons_Solv_Clnr)
                                                                                 {
                                                                                     <option value="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.ConsummableID"
+                                                                                            data-PriceOfConsummable_Additional="@itemCnSmClnrSlvntRltion.Price" data-QtyOfConsummable_Additional="@itemCnSmClnrSlvntRltion.Quantity"
                                                                                             data-SolventID="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.SolventID" data-SolventDesc="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.SolventDesc"
+                                                                                            data-SolventPrice="@itemCnSmClnrSlvntRltion.SolventPrice" data-SolventQty="@itemCnSmClnrSlvntRltion.SolventQuantity"
                                                                                             data-cleanerID="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.CleanerID" data-cleanerDesc="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.CleanerDesc"
+                                                                                            data-CleanerPrice="@itemCnSmClnrSlvntRltion.CleanerPrice" data-CleanerQty="@itemCnSmClnrSlvntRltion.CleanerQuantity"
                                                                                             data-CompatiblePrintHeads="@itemCnSmClnrSlvntRltion._CompatiblePrintHeads" data-attr="Option_DrpDwnConsummable_Additional">
                                                                                         @itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.ConsummableDesc
                                                                                     </option>
@@ -388,15 +408,70 @@
                                                                     </td>
                                                                     @if (@item.IsQtyFixed == true)
                                                                     {
-                                                                        <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                        <td class="allownumeric" contenteditable="false" align="center">
+                                                                            <div id="DrpDwnConsummable_Additional_Qty"></div>
+                                                                        </td>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                                                        <td class="allownumeric" contenteditable="true" align="center">
+                                                                            <div id="DrpDwnConsummable_Additional_Qty"></div>
+                                                                        </td>
+
+
                                                                     }
-                                                                    <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_Additional_Price"></div></td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                    <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right">
+                                                                        <div id="DrpDwnConsummable_Additional_FinalPrice">8888</div>
+                                                                    </td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                                                    @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                                                    {
+                                                                        <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                                                    }
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+
+                                                                </tr>
+                                                                <tr id="Subtr_@item.SubCategory">
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                    <td class="pt-3-half" contenteditable="false">
+                                                                        <div id="DrpDwnConsummable_Additional_SolventItemID">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="pt-3-half" contenteditable="false">
+                                                                        <div id="DrpDwnConsummable_Additional_SolventDesc"></div>
+                                                                    </td>
+                                                                    @if (@item.IsQtyFixed == true)
+                                                                    {
+                                                                        <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                            @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
+                                                                            <div id="DrpDwnConsummable_Additional_SolventQty"></div>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                            @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
+                                                                            <div id="DrpDwnConsummable_Additional_SolventQty"></div>
+                                                                        </td>
+                                                                    }
+                                                                    <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_Additional_SolventPrice">0000</div></td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right">  <div id="DrpDwnConsummable_Additional_SolventFinalPrice">0000</div></td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -420,24 +495,30 @@
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
                                                                     <td class="pt-3-half" contenteditable="false">
-                                                                    <div id="DrpDwnConsummable_Additional_SolventItemID"></div> 
+                                                                        <div id="DrpDwnConsummable_Additional_CleanerItemID">
+                                                                        </div>
                                                                     </td>
-                                                                    <td class="pt-3-half" contenteditable="false"> <div id="DrpDwnConsummable_Additional_SolventDesc"></div> </td>
+                                                                    <td class="pt-3-half" contenteditable="false">
+                                                                        <div id="DrpDwnConsummable_Additional_CleanerItemDesc">
+                                                                        </div>
+                                                                    </td>
                                                                     @if (@item.IsQtyFixed == true)
                                                                     {
                                                                         <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
-                                                                            @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                                                            @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
+                                                                            <div id="DrpDwnConsummable_Additional_CleanerQty"></div>
                                                                         </td>
                                                                     }
                                                                     else
                                                                     {
                                                                         <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
-                                                                            @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                                                            @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
+                                                                            <div id="DrpDwnConsummable_Additional_CleanerQty"></div>
                                                                         </td>
                                                                     }
-                                                                    <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_Additional_CleanerPrice">0000</div></td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                    <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right">  <div id="DrpDwnConsummable_Additional_CleanerFinalPrice">0000</div></td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -454,46 +535,140 @@
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
                                                                 </tr>
-                                                                <tr id="Subtr_@item.SubCategory">
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                                    <td class="pt-3-half" contenteditable="false"><div id="DrpDwnConsummable_Additional_CleanerItemID"></div> 
-                                                                    </td>
-                                                                    <td class="pt-3-half" contenteditable="false"><div id="DrpDwnConsummable_Additional_CleanerItemDesc"></div> </td>
-                                                                    @if (@item.IsQtyFixed == true)
-                                                                    {
-                                                                        <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
-                                                                            @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
-                                                                        </td>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
-                                                                            @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
-                                                                        </td>
-                                                                    }
-                                                                    <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                    <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
-                                                                    @if (Model.ViewBOM == false && Model.ClosedDate == "")
-                                                                    {
-                                                                        <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
-                                                                    }
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
-                                                                </tr>
+
+                                                                @*<tr id="Subtr_@item.SubCategory">
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                <td class="pt-3-half" contenteditable="false">
+                                    <div id="DrpDwnConsummable_Additional_ItemID"></div>
+                                </td>
+                                <td class="pt-3-half" contenteditable="false">
+                                    <select id="DrpDwnConsummable_Additional" style=" width: 100%;font-weight: bold;">
+                                        @{
+                                            foreach (var itemCnSmClnrSlvntRltion in Model._LstTbl_PrntHd_Cons_Solv_Clnr)
+                                            {
+                                                <option value="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.ConsummableID"
+                                                        data-SolventID="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.SolventID" data-SolventDesc="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.SolventDesc"
+                                                        data-cleanerID="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.CleanerID" data-cleanerDesc="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.CleanerDesc"
+                                                        data-CompatiblePrintHeads="@itemCnSmClnrSlvntRltion._CompatiblePrintHeads" data-attr="Option_DrpDwnConsummable_Additional">
+                                                    @itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.ConsummableDesc
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                                @if (@item.IsQtyFixed == true)
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                }
+                                else
+                                {
+                                    <td class="allownumeric" contenteditable="true" align="center">  @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })</td>
+                                }
+                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                }
+                                else
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                }
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+                            </tr>
+                            <tr id="Subtr_@item.SubCategory">
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                <td class="pt-3-half" contenteditable="false">
+                                    <div id="DrpDwnConsummable_Additional_SolventItemID"></div>
+                                </td>
+                                <td class="pt-3-half" contenteditable="false"> <div id="DrpDwnConsummable_Additional_SolventDesc"></div> </td>
+                                @if (@item.IsQtyFixed == true)
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                        @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                        @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                    </td>
+                                }
+                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                }
+                                else
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                }
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+                            </tr>
+                            <tr id="Subtr_@item.SubCategory">
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                <td class="pt-3-half" contenteditable="false">
+                                    <div id="DrpDwnConsummable_Additional_CleanerItemID"></div>
+                                </td>
+                                <td class="pt-3-half" contenteditable="false"><div id="DrpDwnConsummable_Additional_CleanerItemDesc"></div> </td>
+                                @if (@item.IsQtyFixed == true)
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                        @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                        @Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })
+                                    </td>
+                                }
+                                <td class="pt-3-half" contenteditable="false" align="right"> @Html.DisplayFor(modelItem => item.ItemPrice, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" align="right">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.MaximumQty)</td>
+                                @if (Model.ViewBOM == false && Model.ClosedDate == "")
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center" style="display:none"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                }
+                                else
+                                {
+                                    <td class="pt-3-half" contenteditable="false" align="center"> @Html.DisplayFor(modelItem => item.Stock)</td>
+                                }
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.State)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsInTotal)</td>
+                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDecimalAllowed)</td>
+                            </tr>*@
                                                             }
                                                         }
 
@@ -592,7 +767,6 @@
 <script>
     $(document).ready(function () {
         $("button[data-attr='btnSub']").click(function () {
-            debugger;
             var DataAttr = $(this).attr('data-id');
             $("tr[id='" + DataAttr + "']").each(function () {
                 $(this).toggle();
@@ -600,33 +774,75 @@
         });
 
         $('#DrpDwnConsummable').change(function () {
-            debugger;
+            var GetItemIDOfCOns = $(this).find(':selected').val();
+            $('#DrpDwnConsummable_ItemID').html(GetItemIDOfCOns);
+            var GetPriceConsummable = $(this).find(':selected').attr('data-PriceOfConsummable');
+            $('#DrpDwnConsummable_Price').html(GetPriceConsummable);
+            var GetQtyOfConsummable = $(this).find(':selected').attr('data-QtyOfConsummable');
+            $('#DrpDwnConsummable_Qty').html(GetQtyOfConsummable);
+            var GetFinalPrice = parseFloat(GetPriceConsummable) * parseFloat(GetQtyOfConsummable);
+            $('#DrpDwnConsummable_FinalPrice').html(GetFinalPrice);
+
+
             var GetSolventID = $(this).find(':selected').attr('data-SolventID');
             $('#DrpDwnConsummable_SolventItemID').html(GetSolventID);
             var GetSolventDesc = $(this).find(':selected').attr('data-SolventDesc');
             $('#DrpDwnConsummable_SolventDesc').html(GetSolventDesc);
+            var GetPriceConsummableSolvent = $(this).find(':selected').attr('data-SolventPrice');
+            $('#DrpDwnConsummable_SolventPrice').html(GetPriceConsummableSolvent);
+            var GetQtyOfConsummableSolvent = $(this).find(':selected').attr('data-SolventQty');
+            $('#DrpDwnConsummable_SolventQty').html(GetQtyOfConsummableSolvent);
+            var GetFinalPriceSolvent = parseFloat(GetPriceConsummableSolvent) * parseFloat(GetQtyOfConsummableSolvent);
+            $('#DrpDwnConsummable_SolventFinalPrice').html(GetFinalPriceSolvent);
+
             var GetcleanerID = $(this).find(':selected').attr('data-cleanerID');
             $('#DrpDwnConsummable_CleanerItemID').html(GetcleanerID);
             var GetcleanerDesc = $(this).find(':selected').attr('data-cleanerDesc');
             $('#DrpDwnConsummable_CleanerItemDesc').html(GetcleanerDesc);
-            $('#DrpDwnConsummable_ItemID').html($(this).find(':selected').val());
+            var GetPriceConsummableCleaner = $(this).find(':selected').attr('data-CleanerPrice');
+            $('#DrpDwnConsummable_CleanerPrice').html(GetPriceConsummableCleaner);
+            var GetQtyOfConsummableCleaner = $(this).find(':selected').attr('data-CleanerQty');
+            $('#DrpDwnConsummable_CleanerQty').html(GetQtyOfConsummableCleaner);
+            var GetFinalPriceCleaner = parseFloat(GetPriceConsummableCleaner) * parseFloat(GetQtyOfConsummableCleaner);
+            $('#DrpDwnConsummable_CleanerFinalPrice').html(GetFinalPriceCleaner);
         });
 
+       
         $('#DrpDwnConsummable_Additional').change(function () {
-            debugger;
+            var GetItemIDOfCOns = $(this).find(':selected').val();
+            $('#DrpDwnConsummable_Additional_ItemID').html(GetItemIDOfCOns);
+            var GetPriceConsummable_Additional = $(this).find(':selected').attr('data-PriceOfConsummable_Additional');
+            $('#DrpDwnConsummable_Additional_Price').html(GetPriceConsummable_Additional);
+            var GetQtyOfConsummable_Additional = $(this).find(':selected').attr('data-QtyOfConsummable_Additional');
+            $('#DrpDwnConsummable_Additional_Qty').html(GetQtyOfConsummable_Additional);
+            var GetFinalPrice = parseFloat(GetPriceConsummable_Additional) * parseFloat(GetQtyOfConsummable_Additional);
+            $('#DrpDwnConsummable_Additional_FinalPrice').html(GetFinalPrice);
+
+
             var GetSolventID = $(this).find(':selected').attr('data-SolventID');
             $('#DrpDwnConsummable_Additional_SolventItemID').html(GetSolventID);
             var GetSolventDesc = $(this).find(':selected').attr('data-SolventDesc');
             $('#DrpDwnConsummable_Additional_SolventDesc').html(GetSolventDesc);
+            var GetPriceConsummable_AdditionalSolvent = $(this).find(':selected').attr('data-SolventPrice');
+            $('#DrpDwnConsummable_Additional_SolventPrice').html(GetPriceConsummable_AdditionalSolvent);
+            var GetQtyOfConsummable_AdditionalSolvent = $(this).find(':selected').attr('data-SolventQty');
+            $('#DrpDwnConsummable_Additional_SolventQty').html(GetQtyOfConsummable_AdditionalSolvent);
+            var GetFinalPriceSolvent = parseFloat(GetPriceConsummable_AdditionalSolvent) * parseFloat(GetQtyOfConsummable_AdditionalSolvent);
+            $('#DrpDwnConsummable_Additional_SolventFinalPrice').html(GetFinalPriceSolvent);
+
             var GetcleanerID = $(this).find(':selected').attr('data-cleanerID');
             $('#DrpDwnConsummable_Additional_CleanerItemID').html(GetcleanerID);
             var GetcleanerDesc = $(this).find(':selected').attr('data-cleanerDesc');
             $('#DrpDwnConsummable_Additional_CleanerItemDesc').html(GetcleanerDesc);
-            $('#DrpDwnConsummable_Additional_ItemID').html($(this).find(':selected').val());
+            var GetPriceConsummable_AdditionalCleaner = $(this).find(':selected').attr('data-CleanerPrice');
+            $('#DrpDwnConsummable_Additional_CleanerPrice').html(GetPriceConsummable_AdditionalCleaner);
+            var GetQtyOfConsummable_AdditionalCleaner = $(this).find(':selected').attr('data-CleanerQty');
+            $('#DrpDwnConsummable_Additional_CleanerQty').html(GetQtyOfConsummable_AdditionalCleaner);
+            var GetFinalPriceCleaner = parseFloat(GetPriceConsummable_AdditionalCleaner) * parseFloat(GetQtyOfConsummable_AdditionalCleaner);
+            $('#DrpDwnConsummable_Additional_CleanerFinalPrice').html(GetFinalPriceCleaner);
         });
 
-        
-
+        //Change event of the quantity of the device/printers
         $("td[data-type='Device'").change(function () {
             //Loop throgh the DDL Options containing all the printheads compatible
             $('option[data-attr="Option_DrpDwnConsummable"]').each(function (index) {
