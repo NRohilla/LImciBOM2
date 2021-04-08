@@ -133,8 +133,30 @@ namespace OnlineBOM.Controllers
             Categories = Categories.GroupBy(p => p).Select(g => g.First()).ToList();
             TempData["Categories"] = Categories;
             TempData["CountOfConsumable"] = view.BOMListViewModel.Where(p => p.Category.Equals("Consumables")).Count();
-            view._LstTblCons_Solv_Clnr = context.tblConsmbl_Solv_Clnr_Relations.ToList();
 
+            view._LstTbl_PrntHd_Cons_Solv_Clnr = new List<PrintHead_Consummable_Relations>();
+
+            var AllConsummableSOlRelation = context.tblConsmbl_Solv_Clnr_Relations.ToList();
+            foreach (var itemAllConsummableSOlRelation in AllConsummableSOlRelation)
+            {
+                var GetAllPrintHeadsforThisCon = context.tblPrntHD_Consmbl_Relations.Where(p => p.ConsummableID == itemAllConsummableSOlRelation.ConsummableID).ToList();// Get All compatible Printheads for this consummable
+                if (GetAllPrintHeadsforThisCon.Count() > 0)
+                {
+                    var GetAllBOMPrintHeads = view.BOMListViewModel.Where(p=>p.Category.Equals("Device")).Select(p=>p.MatthewsCode).ToList();//Get list of all PrintHeadss from our Model data
+                    var filtered = GetAllPrintHeadsforThisCon.Where(i => GetAllBOMPrintHeads.Contains(i.PrintHeadID)).Select(p=>p.PrintHeadID).Distinct().ToList();// Get Filtered list of PrintHeads ONLY 
+
+
+                    System.Text.StringBuilder _stringAllPrintHeads = new System.Text.StringBuilder();
+                    foreach (var ItemPC in filtered)
+                        _stringAllPrintHeads.Append(ItemPC + ";");
+
+                    view._LstTbl_PrntHd_Cons_Solv_Clnr.Add(new PrintHead_Consummable_Relations
+                    {
+                        _CompatiblePrintHeads = Convert.ToString(_stringAllPrintHeads),
+                        _ConS_SolV_ClnR = itemAllConsummableSOlRelation
+                    });
+                }
+            }
             return View("BOMList", view);
         }
 

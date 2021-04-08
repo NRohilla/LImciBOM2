@@ -29,6 +29,13 @@ namespace OnlineBOM.Models
 
         [AllowHtml]
         public List<OpportunityBOMItem> BOMListViewModel { get; set; }
-        public List<DataLibrary.DBEntity.tblConsmbl_Solv_Clnr_Relations> _LstTblCons_Solv_Clnr;
+
+        public List<PrintHead_Consummable_Relations> _LstTbl_PrntHd_Cons_Solv_Clnr;
+    }
+
+    public class PrintHead_Consummable_Relations
+    {
+        public DataLibrary.DBEntity.tblConsmbl_Solv_Clnr_Relations _ConS_SolV_ClnR { get; set; }
+        public string _CompatiblePrintHeads { get; set; }
     }
 }
