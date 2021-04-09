@@ -263,8 +263,9 @@
         $('.body tr').each(function () {
             var row = $(this);
             var BOMItem = {};
-            if (row.find("TD").eq(0).html().indexOf("<div") < 0) {
-
+           
+            if (row.find("TD").eq(0).html().indexOf("<div") < 0 && row.find("TD").eq(4).html().trim().toLocaleLowerCase() == "Consumables".toLocaleLowerCase()) {
+ debugger;
                 var BOMItem = {};
                 BOMItem.BOMID = GetBOMID;//1;
                 BOMItem.BOMItemID = row.find("TD").eq(3).html();//1;
@@ -292,29 +293,29 @@
                 BOMList.push(BOMItem);
             }
         });
-        debugger;
+       
 
 
-        $.ajax({
-            type: 'post',
-            dataType: 'json',
-            url: '/quote/createbom',
-            data: {
-                "BOMList": BOMList,
-                "VersionNum": GetVersionNum
-            },
-            success: function (r) {
-                if (r === '') {
-                    SucessAlert();
-                }
-                else {
-                    $('#error').text(r)
-                    ErrorAlert();
-                }
+        //$.ajax({
+        //    type: 'post',
+        //    dataType: 'json',
+        //    url: '/quote/createbom',
+        //    data: {
+        //        "BOMList": BOMList,
+        //        "VersionNum": GetVersionNum
+        //    },
+        //    success: function (r) {
+        //        if (r === '') {
+        //            SucessAlert();
+        //        }
+        //        else {
+        //            $('#error').text(r)
+        //            ErrorAlert();
+        //        }
 
 
-            }
-        });
+        //    }
+        //});
     });
 
 
