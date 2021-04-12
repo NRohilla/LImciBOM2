@@ -136,10 +136,13 @@ namespace OnlineBOM.Controllers
 
             view._LstTbl_PrntHd_Cons_Solv_Clnr = new List<PrintHead_Consummable_Relations>();
 
+            var AllBOMItems = context.BOMItems.ToList();
             var AllConsummableSOlRelation = context.tblConsmbl_Solv_Clnr_Relations.ToList();
+            var AllPrintHeadConsumableRelation = context.tblPrntHD_Consmbl_Relations;
             foreach (var itemAllConsummableSOlRelation in AllConsummableSOlRelation)
             {
-                var GetAllPrintHeadsforThisCon = context.tblPrntHD_Consmbl_Relations.Where(p => p.ConsummableID == itemAllConsummableSOlRelation.ConsummableID).ToList();// Get All compatible Printheads for this consummable
+                var GetAllPrintHeadsforThisCon = AllPrintHeadConsumableRelation
+                    .Where(p => p.ConsummableID == itemAllConsummableSOlRelation.ConsummableID).ToList();// Get All compatible Printheads for this consummable
                 if (GetAllPrintHeadsforThisCon.Count() > 0)
                 {
                     var GetAllBOMPrintHeads = view.BOMListViewModel.Where(p => p.Category.Equals("Device")).Select(p => p.MatthewsCode).ToList();//Get list of all PrintHeadss from our Model data
@@ -151,25 +154,61 @@ namespace OnlineBOM.Controllers
                     foreach (var ItemPC in filtered)
                         _stringAllPrintHeads.Append(ItemPC + ";");
 
+                    decimal _Price = 0;
+                    decimal _Quantity = 0;
+                    decimal _CleanerPrice = 0;
+                    decimal _CleanerQuantity = 0;
+                    decimal _SolventPrice = 0;
+                    decimal _SolventQuantity = 0;
+
+                    var GetDataOfConsForCons = view.BOMListViewModel.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault();
+                    var GetDataOfConsFromBOMItem = AllBOMItems.Where(p => p.ITEMID == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault();
+
+                    var GetDataOfConsForCleaner = view.BOMListViewModel.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault();
+                    var GetDataOfCleanerFromBOMItem = AllBOMItems.Where(p => p.ITEMID == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault();
+
+                    var GetDataOfConsForSolvent = view.BOMListViewModel.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault();
+                    var GetDataOfSolventFromBOMItem = AllBOMItems.Where(p => p.ITEMID == itemAllConsummableSOlRelation.SolventID).FirstOrDefault();
+
+                    if (GetDataOfConsForCons != null)
+                    {
+                        _Price = GetDataOfConsForCons.Price;
+                        _Quantity = GetDataOfConsForCons.Qty;
+                    }
+
+                    if (GetDataOfConsForCleaner != null)
+                    {
+                        _CleanerPrice = GetDataOfConsForCleaner.Price;
+                        _CleanerQuantity = GetDataOfConsForCleaner.Qty;
+                    }
+
+                    if (GetDataOfConsForSolvent != null)
+                    {
+                        _SolventPrice = GetDataOfConsForSolvent.Price;
+                        _SolventQuantity = GetDataOfConsForSolvent.Qty;
+                    }
+
                     view._LstTbl_PrntHd_Cons_Solv_Clnr.Add(new PrintHead_Consummable_Relations
                     {
                         _CompatiblePrintHeads = Convert.ToString(_stringAllPrintHeads),
                         _ConS_SolV_ClnR = itemAllConsummableSOlRelation,
 
-                        Price = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault() != null ?
-                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault().Price : 0,
-                        Quantity = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault() != null ?
-                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.ConsummableID).FirstOrDefault().Qty : 0,
+                        Price = _Price,
+                        Quantity = _Quantity,
 
-                        CleanerPrice= GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault() != null ?
-                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault().Price : 0,
-                        CleanerQuantity = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault() != null ?
-                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.CleanerID).FirstOrDefault().Qty : 0,
+                        CleanerPrice = _CleanerPrice,
+                        CleanerQuantity = _CleanerQuantity,
 
-                        SolventPrice = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault() != null ?
-                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault().Price : 0,
-                        SolventQuantity = GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault() != null ?
-                         GetDataOfConsumable.Where(p => p.MatthewsCode == itemAllConsummableSOlRelation.SolventID).FirstOrDefault().Qty : 0,
+                        SolventPrice = _SolventPrice,
+                        SolventQuantity = _SolventQuantity,
+
+                        ConsmblRecID = GetDataOfConsFromBOMItem != null ? Convert.ToString(GetDataOfConsFromBOMItem.RECID) : string.Empty,
+                        CleanerRecID = GetDataOfCleanerFromBOMItem != null ? Convert.ToString(GetDataOfCleanerFromBOMItem.RECID) : string.Empty,
+                        SolventRecID = GetDataOfSolventFromBOMItem != null ? Convert.ToString(GetDataOfSolventFromBOMItem.RECID) : string.Empty,
+
+                        _LstCleaner_BOMListViewModel = GetDataOfConsForCleaner != null ? GetDataOfConsForCleaner : new OpportunityBOMItem(),
+                        _LstConsumable_BOMListViewModel = GetDataOfConsForCons != null ? GetDataOfConsForCons : new OpportunityBOMItem(),
+                        _LstSolvent_BOMListViewModel = GetDataOfConsForSolvent != null ? GetDataOfConsForSolvent : new OpportunityBOMItem()
                     });
                 }
             }
@@ -192,6 +231,7 @@ namespace OnlineBOM.Controllers
         [HttpPost]
         public ActionResult CreateBOM(List<OpportunityBOMItem> BOMList, int VersionNum)
         {
+            //return Json("Error Saving the Records", JsonRequestBehavior.AllowGet);
             try
             {
                 if (BOMList.Count > 0)

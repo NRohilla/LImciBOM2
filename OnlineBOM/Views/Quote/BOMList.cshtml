@@ -217,11 +217,7 @@
                                                         if (currentConsummableCount == 1)
                                                         {
                                                             <tr id="Subtr_@item.SubCategory">
-                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                                                <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                <td class="pt-3-half" contenteditable="false" style="display:none" colspan="5"></td>
                                                                 <td class="pt-3-half" contenteditable="false">
                                                                 </td>
                                                                 <td class="pt-3-half" contenteditable="false">
@@ -230,9 +226,15 @@
                                                                             foreach (var itemCnSmClnrSlvntRltion in Model._LstTbl_PrntHd_Cons_Solv_Clnr)
                                                                             {
                                                                                 <option value="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.ConsummableID"
+                                                                                        data-Consumable_oppbomlistID="@itemCnSmClnrSlvntRltion._LstConsumable_BOMListViewModel.OpportunityBOMListID"
+                                                                                        data-Consumable_RECID="@itemCnSmClnrSlvntRltion._LstConsumable_BOMListViewModel.BOMItemID"
                                                                                         data-PriceOfConsummable="@itemCnSmClnrSlvntRltion.Price" data-QtyOfConsummable="@itemCnSmClnrSlvntRltion.Quantity"
+                                                                                        data-Solvent_oppbomlistID="@itemCnSmClnrSlvntRltion._LstSolvent_BOMListViewModel.OpportunityBOMListID"
+                                                                                        data-Solvent_RECID="@itemCnSmClnrSlvntRltion._LstSolvent_BOMListViewModel.BOMItemID"
                                                                                         data-SolventID="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.SolventID" data-SolventDesc="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.SolventDesc"
                                                                                         data-SolventPrice="@itemCnSmClnrSlvntRltion.SolventPrice" data-SolventQty="@itemCnSmClnrSlvntRltion.SolventQuantity"
+                                                                                        data-Cleaner_oppbomlistID="@itemCnSmClnrSlvntRltion._LstCleaner_BOMListViewModel.OpportunityBOMListID"
+                                                                                        data-Cleaner_RECID="@itemCnSmClnrSlvntRltion._LstCleaner_BOMListViewModel.BOMItemID"
                                                                                         data-cleanerID="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.CleanerID" data-cleanerDesc="@itemCnSmClnrSlvntRltion._ConS_SolV_ClnR.CleanerDesc"
                                                                                         data-CleanerPrice="@itemCnSmClnrSlvntRltion.CleanerPrice" data-CleanerQty="@itemCnSmClnrSlvntRltion.CleanerQuantity"
                                                                                         data-CompatiblePrintHeads="@itemCnSmClnrSlvntRltion._CompatiblePrintHeads" data-attr="Option_DrpDwnConsummable">
@@ -251,31 +253,25 @@
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                                <td class="pt-3-half" contenteditable="false">
-                                                                    <div id="DrpDwnConsummable_ItemID"></div>
+                                                                <td class="pt-3-half" contenteditable="false" id="td_DrpDwnConsummable_ItemID">
                                                                 </td>
-                                                                <td class="pt-3-half" contenteditable="false">
-                                                                    <div id="DrpDwnConsummable_Desc"></div>
+                                                                <td class="pt-3-half" contenteditable="false" id="td_DrpDwnConsummable_Desc">
                                                                 </td>
                                                                 @if (@item.IsQtyFixed == true)
                                                                 {
-                                                                    <td class="allownumeric" contenteditable="false" align="center">
-                                                                        <div id="DrpDwnConsummable_Qty"></div>
+                                                                    <td class="allownumeric" contenteditable="false" align="center" id="td_DrpDwnConsummable_Qty">
                                                                     </td>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td class="allownumeric" contenteditable="true" align="center">
-                                                                        <div id="DrpDwnConsummable_Qty"></div>
+                                                                    <td class="allownumeric" contenteditable="true" align="center" id="td_DrpDwnConsummable_Qty">
                                                                     </td>
 
 
                                                                 }
-                                                                <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_Price"></div></td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right" id="td_DrpDwnConsummable_Price"> </td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                <td class="pt-3-half" contenteditable="false" align="right">
-                                                                    <div id="DrpDwnConsummable_FinalPrice">8888</div>
-                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right" id="td_DrpDwnConsummable_FinalPrice"></td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -299,30 +295,27 @@
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                                <td class="pt-3-half" contenteditable="false">
-                                                                    <div id="DrpDwnConsummable_SolventItemID">
-                                                                    </div>
+                                                                <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_SolventItemID">
                                                                 </td>
-                                                                <td class="pt-3-half" contenteditable="false">
-                                                                    <div id="DrpDwnConsummable_SolventDesc"></div>
+                                                                <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_SolventDesc">
                                                                 </td>
                                                                 @if (@item.IsQtyFixed == true)
                                                                 {
-                                                                    <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode" id="DrpDwnConsummable_SolventQty">
                                                                         @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
-                                                                        <div id="DrpDwnConsummable_SolventQty"></div>
+                                                                        <div></div>
                                                                     </td>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                    <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode" id="DrpDwnConsummable_SolventQty">
                                                                         @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
-                                                                        <div id="DrpDwnConsummable_SolventQty"></div>
+                                                                        <div></div>
                                                                     </td>
                                                                 }
-                                                                <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_SolventPrice">0000</div></td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_SolventPrice"> 0000</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                <td class="pt-3-half" contenteditable="false" align="right">  <div id="DrpDwnConsummable_SolventFinalPrice">0000</div></td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_SolventFinalPrice">  0000</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -345,31 +338,25 @@
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                                <td class="pt-3-half" contenteditable="false">
-                                                                    <div id="DrpDwnConsummable_CleanerItemID">
-                                                                    </div>
-                                                                </td>
-                                                                <td class="pt-3-half" contenteditable="false">
-                                                                    <div id="DrpDwnConsummable_CleanerItemDesc">
-                                                                    </div>
-                                                                </td>
+                                                                <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_CleanerItemID"></td>
+                                                                <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_CleanerItemDesc"></td>
                                                                 @if (@item.IsQtyFixed == true)
                                                                 {
-                                                                    <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                    <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode" id="DrpDwnConsummable_CleanerQty">
                                                                         @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
-                                                                        <div id="DrpDwnConsummable_CleanerQty"></div>
+
                                                                     </td>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                    <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode" id="DrpDwnConsummable_CleanerQty">
                                                                         @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
-                                                                        <div id="DrpDwnConsummable_CleanerQty"></div>
+
                                                                     </td>
                                                                 }
-                                                                <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_CleanerPrice">0000</div></td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_CleanerPrice"> 0000</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                <td class="pt-3-half" contenteditable="false" align="right">  <div id="DrpDwnConsummable_CleanerFinalPrice">0000</div></td>
+                                                                <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_CleanerFinalPrice"> 0000</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                 <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -394,11 +381,7 @@
                                                             if (currentAdditionalConsummableCount == 1)
                                                             {
                                                                 <tr id="Subtr_@item.SubCategory">
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityID) </td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.OpportunityBOMListID)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
-                                                                    <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
+                                                                    <td class="pt-3-half" contenteditable="false" style="display:none" colspan="5"> @Html.DisplayFor(modelItem => item.Category)</td>
                                                                     <td class="pt-3-half" contenteditable="false">
                                                                     </td>
                                                                     <td class="pt-3-half" contenteditable="false">
@@ -428,31 +411,24 @@
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                                    <td class="pt-3-half" contenteditable="false">
-                                                                        <div id="DrpDwnConsummable_Additional_ItemID"></div>
-                                                                    </td>
-                                                                    <td class="pt-3-half" contenteditable="false">
-                                                                        <div id="DrpDwnConsummable_Additional_Desc"></div>
+                                                                    <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_Additional_ItemID"></td>
+                                                                    <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_Additional_Desc">
                                                                     </td>
                                                                     @if (@item.IsQtyFixed == true)
                                                                     {
-                                                                        <td class="allownumeric" contenteditable="false" align="center">
-                                                                            <div id="DrpDwnConsummable_Additional_Qty"></div>
+                                                                        <td class="allownumeric" contenteditable="false" align="center" id="DrpDwnConsummable_Additional_Qty">
                                                                         </td>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <td class="allownumeric" contenteditable="true" align="center">
-                                                                            <div id="DrpDwnConsummable_Additional_Qty"></div>
+                                                                        <td class="allownumeric" contenteditable="true" align="center" id="DrpDwnConsummable_Additional_Qty">
                                                                         </td>
 
 
                                                                     }
-                                                                    <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_Additional_Price"></div></td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_Additional_Price">0000 </td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                    <td class="pt-3-half" contenteditable="false" align="right">
-                                                                        <div id="DrpDwnConsummable_Additional_FinalPrice">8888</div>
-                                                                    </td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_Additional_FinalPrice">0000 </td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -476,30 +452,27 @@
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                                    <td class="pt-3-half" contenteditable="false">
-                                                                        <div id="DrpDwnConsummable_Additional_SolventItemID">
-                                                                        </div>
+                                                                    <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_Additional_SolventItemID">
                                                                     </td>
-                                                                    <td class="pt-3-half" contenteditable="false">
-                                                                        <div id="DrpDwnConsummable_Additional_SolventDesc"></div>
+                                                                    <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_Additional_SolventDesc">
                                                                     </td>
                                                                     @if (@item.IsQtyFixed == true)
                                                                     {
-                                                                        <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                        <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode" id="DrpDwnConsummable_Additional_SolventQty">
                                                                             @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
-                                                                            <div id="DrpDwnConsummable_Additional_SolventQty"></div>
+
                                                                         </td>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                        <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode" id="DrpDwnConsummable_Additional_SolventQty">
                                                                             @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
-                                                                            <div id="DrpDwnConsummable_Additional_SolventQty"></div>
+
                                                                         </td>
                                                                     }
-                                                                    <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_Additional_SolventPrice">0000</div></td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_Additional_SolventPrice"> 0000</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                    <td class="pt-3-half" contenteditable="false" align="right">  <div id="DrpDwnConsummable_Additional_SolventFinalPrice">0000</div></td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_Additional_SolventFinalPrice">0000</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -522,31 +495,27 @@
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMID)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.BOMItemID)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Category)</td>
-                                                                    <td class="pt-3-half" contenteditable="false">
-                                                                        <div id="DrpDwnConsummable_Additional_CleanerItemID">
-                                                                        </div>
+                                                                    <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_Additional_CleanerItemID">
                                                                     </td>
-                                                                    <td class="pt-3-half" contenteditable="false">
-                                                                        <div id="DrpDwnConsummable_Additional_CleanerItemDesc">
-                                                                        </div>
+                                                                    <td class="pt-3-half" contenteditable="false" id="DrpDwnConsummable_Additional_CleanerItemDesc">
                                                                     </td>
                                                                     @if (@item.IsQtyFixed == true)
                                                                     {
-                                                                        <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                        <td class="pt-3-half" contenteditable="false" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode" id="DrpDwnConsummable_Additional_CleanerQty">
                                                                             @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
-                                                                            <div id="DrpDwnConsummable_Additional_CleanerQty"></div>
+
                                                                         </td>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode">
+                                                                        <td class="allownumeric" contenteditable="true" align="center" data-type="@item.Category" data-PrintHeadID="@item.MatthewsCode" id="DrpDwnConsummable_Additional_CleanerQty">
                                                                             @*@Html.DisplayFor(modelItem => item.Qty, new { @class = "sell-price calc-list", @type = "number" })*@
-                                                                            <div id="DrpDwnConsummable_Additional_CleanerQty"></div>
+
                                                                         </td>
                                                                     }
-                                                                    <td class="pt-3-half" contenteditable="false" align="right"> <div id="DrpDwnConsummable_Additional_CleanerPrice">0000</div></td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_Additional_CleanerPrice"> 0000</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none">  @Html.DisplayFor(modelItem => item.Price, "{0:0.00}")</td>
-                                                                    <td class="pt-3-half" contenteditable="false" align="right">  <div id="DrpDwnConsummable_Additional_CleanerFinalPrice">0000</div></td>
+                                                                    <td class="pt-3-half" contenteditable="false" align="right" id="DrpDwnConsummable_Additional_CleanerFinalPrice"> 0000</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.IsDiscountApply)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.Discount)</td>
                                                                     <td class="pt-3-half" contenteditable="false" style="display:none"> @Html.DisplayFor(modelItem => item.AfterDiscount)</td>
@@ -659,7 +628,84 @@
     </script>
 }
 <script>
+    function SetDrpDwnConsummableValues() {
+        var GetItemIDOfCOns = $('#DrpDwnConsummable').find(':selected').val();
+        $('#td_DrpDwnConsummable_ItemID').html(GetItemIDOfCOns);
+        var GetItemDescOfCOns = $('#DrpDwnConsummable').find(':selected').text();
+        $('#td_DrpDwnConsummable_Desc').html(GetItemDescOfCOns);
+
+        var GetPriceConsummable = $('#DrpDwnConsummable').find(':selected').attr('data-PriceOfConsummable');
+        $('#td_DrpDwnConsummable_Price').html(GetPriceConsummable);
+        var GetQtyOfConsummable = $('#DrpDwnConsummable').find(':selected').attr('data-QtyOfConsummable');
+        $('#td_DrpDwnConsummable_Qty').html(GetQtyOfConsummable);
+        var GetFinalPrice = parseFloat(GetPriceConsummable) * parseFloat(GetQtyOfConsummable);
+        $('#td_DrpDwnConsummable_FinalPrice').html(GetFinalPrice);
+
+
+        var GetSolventID = $('#DrpDwnConsummable').find(':selected').attr('data-SolventID');
+        $('#DrpDwnConsummable_SolventItemID').html(GetSolventID);
+        var GetSolventDesc = $('#DrpDwnConsummable').find(':selected').attr('data-SolventDesc');
+        $('#DrpDwnConsummable_SolventDesc').html(GetSolventDesc);
+        var GetPriceConsummableSolvent = $('#DrpDwnConsummable').find(':selected').attr('data-SolventPrice');
+        $('#DrpDwnConsummable_SolventPrice').html(GetPriceConsummableSolvent);
+        var GetQtyOfConsummableSolvent = $('#DrpDwnConsummable').find(':selected').attr('data-SolventQty');
+        $('#DrpDwnConsummable_SolventQty').html(GetQtyOfConsummableSolvent);
+        var GetFinalPriceSolvent = parseFloat(GetPriceConsummableSolvent) * parseFloat(GetQtyOfConsummableSolvent);
+        $('#DrpDwnConsummable_SolventFinalPrice').html(GetFinalPriceSolvent);
+
+        var GetcleanerID = $('#DrpDwnConsummable').find(':selected').attr('data-cleanerID');
+        $('#DrpDwnConsummable_CleanerItemID').html(GetcleanerID);
+        var GetcleanerDesc = $('#DrpDwnConsummable').find(':selected').attr('data-cleanerDesc');
+        $('#DrpDwnConsummable_CleanerItemDesc').html(GetcleanerDesc);
+        var GetPriceConsummableCleaner = $('#DrpDwnConsummable').find(':selected').attr('data-CleanerPrice');
+        $('#DrpDwnConsummable_CleanerPrice').html(GetPriceConsummableCleaner);
+        var GetQtyOfConsummableCleaner = $('#DrpDwnConsummable').find(':selected').attr('data-CleanerQty');
+        $('#DrpDwnConsummable_CleanerQty').html(GetQtyOfConsummableCleaner);
+        var GetFinalPriceCleaner = parseFloat(GetPriceConsummableCleaner) * parseFloat(GetQtyOfConsummableCleaner);
+        $('#DrpDwnConsummable_CleanerFinalPrice').html(GetFinalPriceCleaner);
+    }
+    function SetDrpDwnConsummable_AdditionalValues() {
+        var GetItemIDOfCOns = $('#DrpDwnConsummable_Additional').find(':selected').val();
+        $('#DrpDwnConsummable_Additional_ItemID').html(GetItemIDOfCOns);
+        var GetItemDescOfCOns = $('#DrpDwnConsummable_Additional').find(':selected').text();
+        $('#DrpDwnConsummable_Additional_Desc').html(GetItemDescOfCOns);
+
+
+        var GetPriceConsummable_Additional = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-PriceOfConsummable_Additional');
+        $('#DrpDwnConsummable_Additional_Price').html(GetPriceConsummable_Additional);
+        var GetQtyOfConsummable_Additional = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-QtyOfConsummable_Additional');
+        $('#DrpDwnConsummable_Additional_Qty').html(GetQtyOfConsummable_Additional);
+        var GetFinalPrice = parseFloat(GetPriceConsummable_Additional) * parseFloat(GetQtyOfConsummable_Additional);
+        $('#DrpDwnConsummable_Additional_FinalPrice').html(GetFinalPrice);
+
+
+        var GetSolventID = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-SolventID');
+        $('#DrpDwnConsummable_Additional_SolventItemID').html(GetSolventID);
+        var GetSolventDesc = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-SolventDesc');
+        $('#DrpDwnConsummable_Additional_SolventDesc').html(GetSolventDesc);
+        var GetPriceConsummable_AdditionalSolvent = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-SolventPrice');
+        $('#DrpDwnConsummable_Additional_SolventPrice').html(GetPriceConsummable_AdditionalSolvent);
+        var GetQtyOfConsummable_AdditionalSolvent = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-SolventQty');
+        $('#DrpDwnConsummable_Additional_SolventQty').html(GetQtyOfConsummable_AdditionalSolvent);
+        var GetFinalPriceSolvent = parseFloat(GetPriceConsummable_AdditionalSolvent) * parseFloat(GetQtyOfConsummable_AdditionalSolvent);
+        $('#DrpDwnConsummable_Additional_SolventFinalPrice').html(GetFinalPriceSolvent);
+
+        var GetcleanerID = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-cleanerID');
+        $('#DrpDwnConsummable_Additional_CleanerItemID').html(GetcleanerID);
+        var GetcleanerDesc = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-cleanerDesc');
+        $('#DrpDwnConsummable_Additional_CleanerItemDesc').html(GetcleanerDesc);
+        var GetPriceConsummable_AdditionalCleaner = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-CleanerPrice');
+        $('#DrpDwnConsummable_Additional_CleanerPrice').html(GetPriceConsummable_AdditionalCleaner);
+        var GetQtyOfConsummable_AdditionalCleaner = $('#DrpDwnConsummable_Additional').find(':selected').attr('data-CleanerQty');
+        $('#DrpDwnConsummable_Additional_CleanerQty').html(GetQtyOfConsummable_AdditionalCleaner);
+        var GetFinalPriceCleaner = parseFloat(GetPriceConsummable_AdditionalCleaner) * parseFloat(GetQtyOfConsummable_AdditionalCleaner);
+        $('#DrpDwnConsummable_Additional_CleanerFinalPrice').html(GetFinalPriceCleaner);
+    }
+
     $(document).ready(function () {
+        SetDrpDwnConsummableValues();
+        SetDrpDwnConsummable_AdditionalValues();
+
         $("button[data-attr='btnSub']").click(function () {
             var DataAttr = $(this).attr('data-id');
             $("tr[id='" + DataAttr + "']").each(function () {
@@ -668,79 +714,12 @@
         });
 
         $('#DrpDwnConsummable').change(function () {
-            var GetItemIDOfCOns = $(this).find(':selected').val();
-            $('#DrpDwnConsummable_ItemID').html(GetItemIDOfCOns);
-            var GetItemDescOfCOns = $(this).find(':selected').text();
-            $('#DrpDwnConsummable_Desc').html(GetItemDescOfCOns);
-
-            var GetPriceConsummable = $(this).find(':selected').attr('data-PriceOfConsummable');
-            $('#DrpDwnConsummable_Price').html(GetPriceConsummable);
-            var GetQtyOfConsummable = $(this).find(':selected').attr('data-QtyOfConsummable');
-            $('#DrpDwnConsummable_Qty').html(GetQtyOfConsummable);
-            var GetFinalPrice = parseFloat(GetPriceConsummable) * parseFloat(GetQtyOfConsummable);
-            $('#DrpDwnConsummable_FinalPrice').html(GetFinalPrice);
-
-
-            var GetSolventID = $(this).find(':selected').attr('data-SolventID');
-            $('#DrpDwnConsummable_SolventItemID').html(GetSolventID);
-            var GetSolventDesc = $(this).find(':selected').attr('data-SolventDesc');
-            $('#DrpDwnConsummable_SolventDesc').html(GetSolventDesc);
-            var GetPriceConsummableSolvent = $(this).find(':selected').attr('data-SolventPrice');
-            $('#DrpDwnConsummable_SolventPrice').html(GetPriceConsummableSolvent);
-            var GetQtyOfConsummableSolvent = $(this).find(':selected').attr('data-SolventQty');
-            $('#DrpDwnConsummable_SolventQty').html(GetQtyOfConsummableSolvent);
-            var GetFinalPriceSolvent = parseFloat(GetPriceConsummableSolvent) * parseFloat(GetQtyOfConsummableSolvent);
-            $('#DrpDwnConsummable_SolventFinalPrice').html(GetFinalPriceSolvent);
-
-            var GetcleanerID = $(this).find(':selected').attr('data-cleanerID');
-            $('#DrpDwnConsummable_CleanerItemID').html(GetcleanerID);
-            var GetcleanerDesc = $(this).find(':selected').attr('data-cleanerDesc');
-            $('#DrpDwnConsummable_CleanerItemDesc').html(GetcleanerDesc);
-            var GetPriceConsummableCleaner = $(this).find(':selected').attr('data-CleanerPrice');
-            $('#DrpDwnConsummable_CleanerPrice').html(GetPriceConsummableCleaner);
-            var GetQtyOfConsummableCleaner = $(this).find(':selected').attr('data-CleanerQty');
-            $('#DrpDwnConsummable_CleanerQty').html(GetQtyOfConsummableCleaner);
-            var GetFinalPriceCleaner = parseFloat(GetPriceConsummableCleaner) * parseFloat(GetQtyOfConsummableCleaner);
-            $('#DrpDwnConsummable_CleanerFinalPrice').html(GetFinalPriceCleaner);
+            SetDrpDwnConsummableValues();
         });
 
 
         $('#DrpDwnConsummable_Additional').change(function () {
-            var GetItemIDOfCOns = $(this).find(':selected').val();
-            $('#DrpDwnConsummable_Additional_ItemID').html(GetItemIDOfCOns);
-            var GetItemDescOfCOns = $(this).find(':selected').text();
-            $('#DrpDwnConsummable_Additional_Desc').html(GetItemDescOfCOns);
-
-
-            var GetPriceConsummable_Additional = $(this).find(':selected').attr('data-PriceOfConsummable_Additional');
-            $('#DrpDwnConsummable_Additional_Price').html(GetPriceConsummable_Additional);
-            var GetQtyOfConsummable_Additional = $(this).find(':selected').attr('data-QtyOfConsummable_Additional');
-            $('#DrpDwnConsummable_Additional_Qty').html(GetQtyOfConsummable_Additional);
-            var GetFinalPrice = parseFloat(GetPriceConsummable_Additional) * parseFloat(GetQtyOfConsummable_Additional);
-            $('#DrpDwnConsummable_Additional_FinalPrice').html(GetFinalPrice);
-
-
-            var GetSolventID = $(this).find(':selected').attr('data-SolventID');
-            $('#DrpDwnConsummable_Additional_SolventItemID').html(GetSolventID);
-            var GetSolventDesc = $(this).find(':selected').attr('data-SolventDesc');
-            $('#DrpDwnConsummable_Additional_SolventDesc').html(GetSolventDesc);
-            var GetPriceConsummable_AdditionalSolvent = $(this).find(':selected').attr('data-SolventPrice');
-            $('#DrpDwnConsummable_Additional_SolventPrice').html(GetPriceConsummable_AdditionalSolvent);
-            var GetQtyOfConsummable_AdditionalSolvent = $(this).find(':selected').attr('data-SolventQty');
-            $('#DrpDwnConsummable_Additional_SolventQty').html(GetQtyOfConsummable_AdditionalSolvent);
-            var GetFinalPriceSolvent = parseFloat(GetPriceConsummable_AdditionalSolvent) * parseFloat(GetQtyOfConsummable_AdditionalSolvent);
-            $('#DrpDwnConsummable_Additional_SolventFinalPrice').html(GetFinalPriceSolvent);
-
-            var GetcleanerID = $(this).find(':selected').attr('data-cleanerID');
-            $('#DrpDwnConsummable_Additional_CleanerItemID').html(GetcleanerID);
-            var GetcleanerDesc = $(this).find(':selected').attr('data-cleanerDesc');
-            $('#DrpDwnConsummable_Additional_CleanerItemDesc').html(GetcleanerDesc);
-            var GetPriceConsummable_AdditionalCleaner = $(this).find(':selected').attr('data-CleanerPrice');
-            $('#DrpDwnConsummable_Additional_CleanerPrice').html(GetPriceConsummable_AdditionalCleaner);
-            var GetQtyOfConsummable_AdditionalCleaner = $(this).find(':selected').attr('data-CleanerQty');
-            $('#DrpDwnConsummable_Additional_CleanerQty').html(GetQtyOfConsummable_AdditionalCleaner);
-            var GetFinalPriceCleaner = parseFloat(GetPriceConsummable_AdditionalCleaner) * parseFloat(GetQtyOfConsummable_AdditionalCleaner);
-            $('#DrpDwnConsummable_Additional_CleanerFinalPrice').html(GetFinalPriceCleaner);
+            SetDrpDwnConsummable_AdditionalValues();
         });
 
         //Change event of the quantity of the device/printers

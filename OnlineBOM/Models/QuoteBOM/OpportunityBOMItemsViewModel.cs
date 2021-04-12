@@ -14,7 +14,7 @@ namespace OnlineBOM.Models
         public string ItemMasterName { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:#,#.00}")]
-        public decimal  GrandTotal { get; set; }
+        public decimal GrandTotal { get; set; }
         [DisplayFormat(DataFormatString = "{0:#,#.00}")]
         public decimal GrandTotalAfterDiscount { get; set; }
         public bool IsCustomParts { get; set; }
@@ -43,7 +43,13 @@ namespace OnlineBOM.Models
         public decimal CleanerQuantity { get; set; }
         public decimal SolventPrice { get; set; }
         public decimal SolventQuantity { get; set; }
+        public string ConsmblRecID { get; set; }
+        public string CleanerRecID { get; set; }
+        public string SolventRecID { get; set; }
 
-
+        public int OppID { get; set; }
+        public OpportunityBOMItem _LstConsumable_BOMListViewModel { get; set; }
+        public OpportunityBOMItem _LstCleaner_BOMListViewModel { get; set; }
+        public OpportunityBOMItem _LstSolvent_BOMListViewModel { get; set; }
     }
 }

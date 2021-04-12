@@ -29,7 +29,15 @@ namespace DataLibrary
             var context = new DataLibrary.DBEntity.OnlineBOMEntities();
 
             //1... Fetch all the updated list of items from the BOM template Table
-            var GetAllItemsForBomFromTemp = context.BOMTemplates.Where(p => p.BOM_ID == BOMID).ToList();
+            var GetAllBomTemppateItems = context.BOMTemplates.ToList();
+            var _ObjGetAllBOM = context.BOMs.ToList();
+            var _ObjGetAllBOMItem = context.BOMItems.ToList();
+            var _ObjGetAllPartInfo = context.PartToCategories.ToList();
+            var _ObjGetAllBOMTemplate = GetAllBomTemppateItems.ToList();
+            var _ObjGetAllOppurtunity = context.Opportunities.ToList();
+
+
+            var GetAllItemsForBomFromTemp = GetAllBomTemppateItems.Where(p => p.BOM_ID == BOMID).ToList();
             bool isActive = false;
 
             //2. Fetch all the saved BOM values from the oppBOMList Table
@@ -45,19 +53,20 @@ namespace DataLibrary
                 if (NewBOM)
                 {
                     //check and take the missing/latest BOM Item
-                    int check = GetAllItemsForBomFromTemp.FindIndex(a => a.BOMItem_ID == item.BOMItemsID);//remove the saved item from the list of template items... At the end, we will only have the remaining items 
+                    int check = GetAllItemsForBomFromTemp.FindIndex(a => a.BOMItem_ID == item.BOMItemsID);
+                    //remove the saved item from the list of template items... At the end, we will only have the remaining items 
                     if (check > -1)
                         GetAllItemsForBomFromTemp.RemoveAt(check);
                 }
 
                 isActive = item.IsActive;
-                var _ObjBOM = context.BOMs.Where(p => p.ID == item.BOMID).FirstOrDefault();
-                var _ObjBOMItem = context.BOMItems.Where(p => p.RECID == item.BOMItemsID).FirstOrDefault();
-                var _ObjPartInfo = context.PartToCategories.Where(p => p.PartID == item.BOMItemsID).FirstOrDefault();
+                var _ObjBOM = _ObjGetAllBOM.Where(p => p.ID == item.BOMID).FirstOrDefault();
+                var _ObjBOMItem = _ObjGetAllBOMItem.Where(p => p.RECID == item.BOMItemsID).FirstOrDefault();
+                var _ObjPartInfo = _ObjGetAllPartInfo.Where(p => p.PartID == item.BOMItemsID).FirstOrDefault();
                 long RecID = (_ObjBOMItem != null ? _ObjBOMItem.RECID : 0);
                 string ItemID = (_ObjBOMItem != null ? _ObjBOMItem.ITEMID : string.Empty);
-                var _ObjBOMTemplate = context.BOMTemplates.Where(p => p.BOMItem_ID == RecID).FirstOrDefault();
-                var _ObjOppurtunity = context.Opportunities.Where(p => p.ID == item.OpportunityID).FirstOrDefault();
+                var _ObjBOMTemplate = GetAllBomTemppateItems.Where(p => p.BOMItem_ID == RecID).FirstOrDefault();
+                var _ObjOppurtunity = _ObjGetAllOppurtunity.Where(p => p.ID == item.OpportunityID).FirstOrDefault();
                 Decimal _StockInHand = context.Database.SqlQuery<Decimal>("Select AVAILPHYSICAL from InventoryOnHand where ITEMID='"
                     + ItemID + "'").FirstOrDefault();
 
@@ -100,12 +109,12 @@ namespace DataLibrary
                 {
                     foreach (var item in GetAllItemsForBomFromTemp)
                     {
-                        var _ObjBOM = context.BOMs.Where(p => p.ID == item.BOMItem_ID).FirstOrDefault();
-                        var _ObjBOMItem = context.BOMItems.Where(p => p.RECID == item.BOMItem_ID).FirstOrDefault();
-                        var _ObjPartInfo = context.PartToCategories.Where(p => p.PartID == item.BOMItem_ID).FirstOrDefault();
+                        var _ObjBOM = _ObjGetAllBOM.Where(p => p.ID == item.BOMItem_ID).FirstOrDefault();
+                        var _ObjBOMItem = _ObjGetAllBOMItem.Where(p => p.RECID == item.BOMItem_ID).FirstOrDefault();
+                        var _ObjPartInfo = _ObjGetAllPartInfo.Where(p => p.PartID == item.BOMItem_ID).FirstOrDefault();
                         long RecID = (_ObjBOMItem != null ? _ObjBOMItem.RECID : 0);
                         string ItemID = (_ObjBOMItem != null ? _ObjBOMItem.ITEMID : string.Empty);
-                        var _ObjBOMTemplate = context.BOMTemplates.Where(p => p.BOMItem_ID == RecID).FirstOrDefault();
+                        var _ObjBOMTemplate = GetAllBomTemppateItems.Where(p => p.BOMItem_ID == RecID).FirstOrDefault();
                         Decimal _StockInHand = context.Database.SqlQuery<Decimal>("Select AVAILPHYSICAL from InventoryOnHand where ITEMID='"
                             + ItemID + "'").FirstOrDefault();
 
